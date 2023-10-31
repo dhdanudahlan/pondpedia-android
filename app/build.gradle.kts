@@ -77,4 +77,35 @@ dependencies {
     implementation("androidx.room:room-runtime:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2")
     ksp("androidx.room:room-compiler:2.5.2")
+
+
+
+    // Compose
+    implementation(platform("androidx.compose:compose-bom:2022.10.00"))
+    implementation("androidx.compose.ui:ui:1.4.3")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
+    implementation("androidx.compose.ui:ui-graphics:1.4.3")
+    implementation("androidx.compose.material3:material3:1.1.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
+    implementation("androidx.navigation:navigation-compose:2.6.0")
+    implementation("androidx.compose.material:material-icons-extended:1.4.3")
+    implementation("androidx.compose.foundation:foundation:1.4.3")
+    implementation("androidx.compose.runtime:runtime:1.0.0")
+
+    // Accompanist
+    implementation("com.google.accompanist:accompanist-flowlayout:0.17.0")
+    implementation("com.google.accompanist:accompanist-insets:0.30.1")
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.24.2-alpha")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.1")
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
+    // Coroutine Lifecycle Scopes
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.2.2")
 }

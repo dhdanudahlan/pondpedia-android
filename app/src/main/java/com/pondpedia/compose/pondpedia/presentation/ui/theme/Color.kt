@@ -1,4 +1,4 @@
-package com.pondpedia.compose.pondpedia.ui.theme
+package com.pondpedia.compose.pondpedia.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
