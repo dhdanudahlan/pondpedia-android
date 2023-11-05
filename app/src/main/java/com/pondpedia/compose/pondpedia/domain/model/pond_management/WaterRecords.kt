@@ -8,7 +8,7 @@ data class WaterRecords(
 
     val date: String,
 
-    val level: Int,
+    val level: String,
 
     val quality: String,
 
@@ -22,7 +22,7 @@ data class WaterRecords(
         return WaterRecordsEntity(
             recordId = recordId,
             date = date,
-            level = level,
+            level = level.toInt(),
             quality = quality,
             color = color,
             note = note,

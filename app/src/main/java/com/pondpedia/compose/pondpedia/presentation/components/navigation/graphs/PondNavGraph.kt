@@ -1,16 +1,19 @@
 package com.pondpedia.compose.pondpedia.presentation.components.navigation.graphs
 
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.pondpedia.compose.pondpedia.presentation_copy.Graph
-import com.pondpedia.compose.pondpedia.presentation_copy.PondPediaAppState
-import com.pondpedia.compose.pondpedia.presentation_copy.screens.home.TestScreen
-import com.pondpedia.compose.pondpedia.presentation_copy.screens.home.components.Screens
-import com.pondpedia.compose.pondpedia.presentation_copy.screens.home.ponds.components.viewmodel.PondViewModel
-import com.pondpedia.compose.pondpedia.presentation_copy.screens.home.ponds.components.viewmodel.PondsState
-import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.screens.details.screens.DetailsScreen
+import com.pondpedia.compose.pondpedia.presentation.Graph
+import com.pondpedia.compose.pondpedia.presentation.PondPediaAppState
+import com.pondpedia.compose.pondpedia.presentation.screens.home.TestScreen
+import com.pondpedia.compose.pondpedia.presentation.screens.home.components.Screens
+import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondDetailsEvent
+import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondDetailsViewModel
+import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondsState
+import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.screens.pond_details.screens.DetailsScreen
 
 fun NavGraphBuilder.pondNavGraph(
     homeState: PondPediaAppState,
@@ -28,16 +31,20 @@ fun NavGraphBuilder.pondNavGraph(
     ) {
 
         composable(route = Screens.Details.route) {
-            val pondViewModel = hiltViewModel<PondViewModel>()
-            val pondState = pondViewModel.state
+            val viewModel = hiltViewModel<PondDetailsViewModel>()
+            val pondManagementState by viewModel.state.collectAsState()
+            viewModel.onEvent(PondDetailsEvent.SetPondId(pondsState.selectedPondId))
+
             DetailsScreen(
                 homeState = homeState,
                 pondsState = pondsState,
-                onRouteToUpdate = { navController.navigate(Screens.Update.route) },
-                onRouteToAnalytics = { navController.navigate(Screens.Analytics.route) },
-                onPondDeleted = { pondId -> onPondDeleted(pondId); navController.popBackStack(route = Graph.HOME_PONDS, inclusive = true) },
-                setDisplayActionMenu = setDisplayActionMenu,
-                setDisplayActionScreen = setDisplayActionScreen,
+                pondDetailsState = pondManagementState,
+                onEvent = viewModel::onEvent
+//                onRouteToUpdate = { navController.navigate(Screens.Update.route) },
+//                onRouteToAnalytics = { navController.navigate(Screens.Analytics.route) },
+//                onPondDeleted = { pondId -> onPondDeleted(pondId); navController.popBackStack(route = Graph.HOME_PONDS, inclusive = true) },
+//                setDisplayActionMenu = setDisplayActionMenu,
+//                setDisplayActionScreen = setDisplayActionScreen,
             )
         }
         composable(route = Screens.Update.route) {

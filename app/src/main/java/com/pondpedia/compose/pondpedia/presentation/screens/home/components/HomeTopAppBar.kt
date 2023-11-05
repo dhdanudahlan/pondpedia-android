@@ -64,7 +64,7 @@ fun HomeTopAppBar(
 @Preview("Top App Bar")
 @Composable
 private fun HomeTopAppBarPreview() {
-    com.pondpedia.compose.pondpedia.presentation_copy.screens.home.components.HomeTopAppBar(
+    HomeTopAppBar(
         titleRes = R.string.untitled,
         actionSearchIcon = Icons.Default.Search,
         actionSearchIconContentDescription = "Navigation icon",
@@ -84,8 +84,8 @@ private fun HomeTopAppBarPreview() {
 //@Composable
 //fun HomeTopActionBarContent(
 //    mainState: MainState,
-//    pondsState: PondsState,
-//    pondCreateState: PondState,
+//    pondsState: PondDetailsState,
+//    pondCreateState: PondDetailsState,
 //    setDisplayActionMenu: (Boolean) -> Unit,
 //    setDisplayActionScreen: (Boolean) -> Unit,
 //    onRouteChanged: (String) -> Unit,

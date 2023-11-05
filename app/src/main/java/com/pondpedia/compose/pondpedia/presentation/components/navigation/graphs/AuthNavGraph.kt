@@ -4,7 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.pondpedia.compose.pondpedia.presentation_copy.Graph
+import com.pondpedia.compose.pondpedia.presentation.Graph
 
 fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
     navigation(

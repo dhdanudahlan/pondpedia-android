@@ -34,11 +34,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberAsyncImagePainter
 import com.pondpedia.compose.pondpedia.R
-import com.pondpedia.compose.pondpedia.domain_old.model.ponds.Pond
-import com.pondpedia.compose.pondpedia.presentation_copy.Graph
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.Black
+import com.pondpedia.compose.pondpedia.domain.model.pond_management.Pond
+import com.pondpedia.compose.pondpedia.presentation.Graph
+import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondsEvent
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.Black
 
 @Composable
 fun PondItemSquareCard(
@@ -51,7 +51,7 @@ fun PondItemSquareCard(
             .height(300.dp)
             .width(250.dp)
             .clickable {
-                onPondClicked(pond.pondId)
+//                onPondClicked()
             },
     ) {
         Box(
@@ -70,9 +70,7 @@ fun PondItemSquareCard(
             ) {
 
                 Image(
-                    painter = if (!pond.pondImageUrl.isNullOrEmpty()) rememberAsyncImagePainter(
-                        model = pond.pondImageUrl
-                    ) else painterResource(R.drawable.pond_image_1),
+                    painter = painterResource(R.drawable.pond_image_1),
                     contentDescription = "Pond Image",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
@@ -82,7 +80,7 @@ fun PondItemSquareCard(
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = pond.pondName,
+                    text = "pond.pondName",
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
                     color = MaterialTheme.colorScheme.onBackground,
@@ -91,14 +89,14 @@ fun PondItemSquareCard(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = pond.pondFish.fishCommonName,
+                    text = "pond.pondFish.fishCommonName",
                     fontWeight = FontWeight.Normal,
                     color = MaterialTheme.colorScheme.onBackground,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                 )
                 Text(
-                    text = pond.pondFish.fishScientificName,
+                    text = "pond.pondFish.fishScientificName",
                     fontWeight = FontWeight.Light,
                     color = MaterialTheme.colorScheme.onBackground,
                     style = TextStyle(fontStyle = Italic),
@@ -113,7 +111,7 @@ fun PondItemSquareCard(
 @Composable
 fun PondItemHexagonCard(
     pond: Pond,
-    onPondClicked: (String) -> Unit,
+    onEvent: (PondsEvent) -> Unit,
     onRouteChanged: (String) -> Unit
 ) {
     val myShape = HexagonShape()
@@ -125,7 +123,7 @@ fun PondItemHexagonCard(
             .drawWithContent {
                 drawContent()
                 drawPath(
-                    path = com.pondpedia.compose.pondpedia.presentation_copy.screens.home.ponds.components.drawCustomHexagonPath(
+                    path = drawCustomHexagonPath(
                         size
                     ),
                     color = edgeColor,
@@ -138,7 +136,7 @@ fun PondItemHexagonCard(
             }
             .wrapContentSize(),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         Image(
             painter = painterResource(id = R.drawable.bg_orange_yellow_grad),
             contentDescription = "My Hexagon Image",
@@ -153,7 +151,7 @@ fun PondItemHexagonCard(
                 .background(color = backgroundColor)
                 .alpha(.09f)
                 .size(180.dp)
-                .clickable { onPondClicked(pond.pondId); onRouteChanged(Graph.HOME_PONDS_POND)}
+                .clickable { onEvent(PondsEvent.SelectPond(pond.pondId)); onRouteChanged(Graph.HOME_PONDS_POND)}
         )
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -162,24 +160,25 @@ fun PondItemHexagonCard(
         ) {
 
             Text(
-                text = pond.pondName,
+                text = pond.name,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onBackground,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = pond.pondFish.fishCommonName,
-                fontWeight = FontWeight.Normal,
+                text = "Terakhir diperbarui:",
+                fontWeight = FontWeight.Light,
                 color = MaterialTheme.colorScheme.onBackground,
+                style = TextStyle(fontStyle = Italic),
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = pond.pondFish.fishScientificName,
+                text = pond.updatedDate,
                 fontWeight = FontWeight.Light,
                 color = MaterialTheme.colorScheme.onBackground,
                 style = TextStyle(fontStyle = Italic),

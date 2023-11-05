@@ -6,15 +6,12 @@ import com.pondpedia.compose.pondpedia.domain.model.pond_management.Category
 
 @Entity(tableName = "category_table")
 data class CategoryEntity(
-    @PrimaryKey(autoGenerate = true)
-    val categoryId: Long = 0,
-
-    val name: String,
+    @PrimaryKey(autoGenerate = false)
+    val categoryName: String,
 ) {
     fun toCategory(): Category {
         return Category(
-            categoryId = categoryId,
-            name = name
+            categoryName = categoryName,
         )
     }
 }

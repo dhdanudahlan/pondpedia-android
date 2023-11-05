@@ -8,7 +8,7 @@ data class CommodityHealthRecords(
 
     val date: String,
 
-    val death: Int,
+    val death: String,
 
     val indicator: String,
 
@@ -22,7 +22,7 @@ data class CommodityHealthRecords(
         return CommodityHealthRecordsEntity(
             recordId = recordId,
             date = date,
-            death = death,
+            death = death.toInt(),
             indicator = indicator,
             action = action,
             note = note,

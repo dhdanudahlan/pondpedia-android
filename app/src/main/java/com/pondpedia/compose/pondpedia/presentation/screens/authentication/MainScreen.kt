@@ -33,7 +33,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pondpedia.compose.pondpedia.R
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.PondPediaCustomTheme
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.Navi
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.PondPediaCustomTheme
 
 
 @Composable
@@ -114,7 +115,7 @@ fun MainScreen(
                         onClick = onSignInClick,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(R.color.navi),
+                            containerColor = Navi,
                             contentColor = Color.White
                         )
                     ) {
@@ -127,7 +128,7 @@ fun MainScreen(
                         onClick = onSignUpClick,
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(R.color.navi),
+                            containerColor = Navi,
                             contentColor = Color.White
                         )
                     ) {
@@ -164,7 +165,7 @@ fun MainScreen(
 @Composable
 fun MainPreview() {
     PondPediaCustomTheme {
-        com.pondpedia.compose.pondpedia.presentation_copy.screens.authentication.MainScreen(
+        com.pondpedia.compose.pondpedia.presentation.screens.authentication.MainScreen(
             onSignInClick = {
             },
             onSignUpClick = {

@@ -4,11 +4,11 @@ import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.PondRec
 
 data class PondRecords(
 
-    val recordId: Long,
+    val recordId: Long = 0,
 
     val date: String,
 
-    val cycle: Int,
+    val cycle: String,
 
     val note: String,
 
@@ -18,7 +18,7 @@ data class PondRecords(
         return PondRecordsEntity(
             recordId = recordId,
             date = date,
-            cycle = cycle,
+            cycle = cycle.toInt(),
             note = note,
             pondId = pondId
         )

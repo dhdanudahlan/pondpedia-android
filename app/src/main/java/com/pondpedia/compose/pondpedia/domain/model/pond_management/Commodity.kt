@@ -10,7 +10,7 @@ data class Commodity(
 
     val origin: String,
 
-    val quantity: Float,
+    val quantity: String,
 
     val name: String,
 
@@ -23,7 +23,7 @@ data class Commodity(
             commodityId = commodityId,
             date = date,
             origin = origin,
-            quantity = quantity,
+            quantity = quantity.toInt(),
             name = name,
             scientificName = scientificName,
             pondId = pondId

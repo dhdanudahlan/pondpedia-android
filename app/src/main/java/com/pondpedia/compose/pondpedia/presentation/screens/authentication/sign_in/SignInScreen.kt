@@ -45,9 +45,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pondpedia.compose.pondpedia.R
-import com.pondpedia.compose.pondpedia.presentation_copy.screens.authentication.components.AuthState
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.PondPediaCustomTheme
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.White
+import com.pondpedia.compose.pondpedia.presentation.screens.authentication.components.AuthState
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.Navi
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.PondPediaCustomTheme
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.White
 
 @Composable
 fun SignInScreen(
@@ -171,7 +172,7 @@ fun SignInScreen(
                     Button(
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(R.color.navi),
+                            containerColor = Navi,
                             contentColor = Color.White
                         ),
                         onClick = { onEmailPasswordSignInClick(email.value, password.value) }) {

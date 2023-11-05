@@ -38,6 +38,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.pondpedia.compose.pondpedia.R
+import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondsEvent
+import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondsState
 
 sealed class Screens(
     val route: String,
@@ -48,7 +50,7 @@ sealed class Screens(
     val hasUnread: Boolean,
     val badgeCount: Int?,
 ) {
-    object Ponds : Screens(
+    data object Ponds : Screens(
         route = "HOME_PONDS",
         labelTextId = R.string.ponds_label,
         titleTextId = R.string.ponds_title,
@@ -57,16 +59,16 @@ sealed class Screens(
         hasUnread = false,
         badgeCount = null,
     )
-    object Updates : Screens(
+    data object Updates : Screens(
         route = "HOME_UPDATES",
-        labelTextId = R.string.ponds_label,
-        titleTextId = R.string.ponds_title,
+        labelTextId = R.string.updates_label,
+        titleTextId = R.string.updates_title,
         selectedIcon = Icons.Filled.Update,
         unselectedIcon = Icons.Outlined.RotateRight,
         hasUnread = false,
         badgeCount = null,
     )
-    object Menu : Screens(
+    data object Menu : Screens(
         route = "HOME_MENU",
         labelTextId = R.string.menu_label,
         titleTextId = R.string.menu_title,
@@ -75,7 +77,7 @@ sealed class Screens(
         hasUnread = false,
         badgeCount = null,
     )
-    object Explore : Screens(
+    data object Explore : Screens(
         route = "HOME_EXPLORE",
         labelTextId = R.string.explore_label,
         titleTextId = R.string.explore_title,
@@ -84,7 +86,7 @@ sealed class Screens(
         hasUnread = false,
         badgeCount = null,
     )
-    object More : Screens(
+    data object More : Screens(
         route = "HOME_MORE",
         labelTextId = R.string.more_label,
         titleTextId = R.string.more_title,
@@ -94,7 +96,7 @@ sealed class Screens(
         badgeCount = null,
     )
 
-    object Create : Screens(
+    data object Create : Screens(
         route = "POND_CREATE",
         labelTextId = R.string.pond_create_title,
         titleTextId = R.string.pond_create_title,
@@ -105,7 +107,7 @@ sealed class Screens(
     )
 
 
-    object Details: Screens(
+    data object Details: Screens(
         route = "POND_DETAILS",
         labelTextId = R.string.pond_details_title,
         titleTextId = R.string.pond_details_title,
@@ -114,7 +116,7 @@ sealed class Screens(
         hasUnread = false,
         badgeCount = null,
     )
-    object Update: Screens(
+    data object Update: Screens(
         route = "POND_UPDATE",
         labelTextId = R.string.pond_update_title,
         titleTextId = R.string.pond_update_title,
@@ -123,7 +125,7 @@ sealed class Screens(
         hasUnread = false,
         badgeCount = null,
     )
-    object Analytics: Screens(
+    data object Analytics: Screens(
         route = "POND_ANALYTICS",
         labelTextId = R.string.pond_analytics_title,
         titleTextId = R.string.pond_analytics_title,
@@ -205,13 +207,15 @@ fun HomeBottomNavBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeBottomNavBar(
+    pondsState: PondsState,
+    onEvent: (PondsEvent) -> Unit,
     destinations: List<Screens>,
     destinationsWithUnreadResources: Set<Screens>,
     onNavigateToDestination: (Screens) -> Unit,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
 ) {
-    com.pondpedia.compose.pondpedia.presentation_copy.screens.home.components.HomeNavigationBar(
+    HomeNavigationBar(
         modifier = modifier
     ) {
         destinations.forEach { destination ->

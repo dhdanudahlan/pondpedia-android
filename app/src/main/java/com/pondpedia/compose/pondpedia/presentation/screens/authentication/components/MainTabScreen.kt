@@ -16,11 +16,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.Navi
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.PondPediaCustomTheme
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.White
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.Navi
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.PondPediaCustomTheme
 
  enum class Tab (val title: String) {
     TabA("A"),

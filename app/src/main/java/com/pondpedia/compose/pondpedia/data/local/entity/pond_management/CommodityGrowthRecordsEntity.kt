@@ -21,14 +21,15 @@ data class CommodityGrowthRecordsEntity(
     val note: String,
 
     val commodityId: Long,
+
 ){
     fun toCommodityGrowthRecords(): CommodityGrowthRecords {
         return CommodityGrowthRecords(
             recordId = recordId,
             date = date,
-            age = age,
-            length = length,
-            weight = weight,
+            age = age.toString(),
+            length = length.toString(),
+            weight = weight.toString(),
             note = note,
             commodityId = commodityId
         )

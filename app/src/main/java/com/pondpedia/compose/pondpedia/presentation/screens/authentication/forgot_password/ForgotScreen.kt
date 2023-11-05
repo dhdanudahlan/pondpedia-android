@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -45,9 +46,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pondpedia.compose.pondpedia.R
-import com.pondpedia.compose.pondpedia.presentation_copy.screens.authentication.components.AuthState
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.PondPediaCustomTheme
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.White
+import com.pondpedia.compose.pondpedia.presentation.screens.authentication.components.AuthState
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.PondPediaCustomTheme
 
 @Composable
 fun SignInScreen(
@@ -364,7 +364,6 @@ fun SignInScreenUI(
                     }
                 }
 
-
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
@@ -383,6 +382,6 @@ fun SignInScreenUI(
 @Composable
 fun SignInPreview() {
     PondPediaCustomTheme {
-        com.pondpedia.compose.pondpedia.presentation_copy.screens.authentication.forgot_password.SignInScreenUI()
+        SignInScreenUI()
     }
 }

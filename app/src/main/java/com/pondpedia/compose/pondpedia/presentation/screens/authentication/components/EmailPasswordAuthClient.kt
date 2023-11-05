@@ -1,10 +1,6 @@
 package com.pondpedia.compose.pondpedia.presentation.screens.authentication.components
 
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.tasks.await
-import kotlin.coroutines.cancellation.CancellationException
-
+/*
 class EmailPasswordAuthClient {
     private val auth = Firebase.auth
 
@@ -31,4 +27,4 @@ class EmailPasswordAuthClient {
             )
         }
     }
-}
+}*/

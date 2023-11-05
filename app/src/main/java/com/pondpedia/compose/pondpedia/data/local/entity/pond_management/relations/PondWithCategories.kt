@@ -10,7 +10,7 @@ data class PondWithCategories(
     @Embedded val pond: PondEntity,
     @Relation(
         parentColumn = "pondId",
-        entityColumn = "categoryId",
+        entityColumn = "categoryName",
         associateBy = Junction(PondCategoryCrossRefEntity::class)
     )
 

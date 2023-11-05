@@ -25,13 +25,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.PondPediaCustomTheme
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.PondPediaCustomTheme
 
 @Preview
 @Composable
 fun PondScreenPreview() {
     PondPediaCustomTheme(darkTheme = true) {
-        com.pondpedia.compose.pondpedia.presentation_copy.screens.home.updates.screens.UpdatesScreen()
+        UpdatesScreen()
     }
 }
 
@@ -49,14 +49,14 @@ fun UpdatesScreen(
     Column(
         modifier = Modifier.fillMaxSize(),
     ) {
-        com.pondpedia.compose.pondpedia.presentation_copy.screens.home.updates.screens.UpdatesTabs(
+       UpdatesTabs(
             tabs,
             selectedTab,
             tabIndex,
             setSelectedTab,
             setTabIndex
         )
-        com.pondpedia.compose.pondpedia.presentation_copy.screens.home.updates.screens.UpdatesLazyList(
+        UpdatesLazyList(
             tabs,
             selectedTab
         )

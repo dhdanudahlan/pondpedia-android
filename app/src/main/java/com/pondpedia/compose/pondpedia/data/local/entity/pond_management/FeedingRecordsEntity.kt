@@ -12,7 +12,7 @@ data class FeedingRecordsEntity(
 
     val date: String,
 
-    val quantity: Int,
+    val quantity: Float,
 
     val note: String,
 
@@ -24,7 +24,7 @@ data class FeedingRecordsEntity(
         return FeedingRecords(
             recordId = recordId,
             date = date,
-            quantity = quantity,
+            quantity = quantity.toString(),
             note = note,
             feedId = feedId,
             pondId = pondId

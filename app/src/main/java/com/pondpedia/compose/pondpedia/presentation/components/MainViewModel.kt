@@ -4,14 +4,14 @@ package com.pondpedia.compose.pondpedia.presentation.components
 //import androidx.compose.runtime.State
 //import androidx.compose.runtime.mutableStateOf
 //import androidx.lifecycle.ViewModel
-//import com.pondpedia.compose.pondpedia.domain.use_case.GetPondCategoriesUseCase
+//import com.pondpedia.compose.pondpedia.domain.use_case.ponds.GetCategoryListUseCase
 //import com.pondpedia.compose.pondpedia.presentation.screens.home.components.TopActionBarItem
 //import dagger.hilt.android.lifecycle.HiltViewModel
 //import javax.inject.Inject
 //
 ////@HiltViewModel
 ////class MainViewModel @Inject constructor(
-////    private val getPondCategoriesUseCase: GetPondCategoriesUseCase,
+////    private val getPondCategoriesUseCase: GetCategoryListUseCase,
 ////) : ViewModel() {
 ////    private val _state = mutableStateOf(MainState())
 ////    val state: State<MainState> = _state
@@ -61,7 +61,7 @@ package com.pondpedia.compose.pondpedia.presentation.components
 //
 //@HiltViewModel
 //class MainViewModel @Inject constructor(
-//    private val getPondCategoriesUseCase: GetPondCategoriesUseCase,
+//    private val getPondCategoriesUseCase: GetCategoryListUseCase,
 //) : ViewModel() {
 //    private val _state = mutableStateOf(MainState())
 //    val state: State<MainState> = _state

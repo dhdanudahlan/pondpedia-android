@@ -8,7 +8,7 @@ data class FeedingRecords(
 
     val date: String,
 
-    val quantity: Int,
+    val quantity: String,
 
     val note: String,
 
@@ -20,7 +20,7 @@ data class FeedingRecords(
         return FeedingRecordsEntity(
             recordId = recordId,
             date = date,
-            quantity = quantity,
+            quantity = quantity.toFloat(),
             note = note,
             feedId = feedId,
             pondId = pondId

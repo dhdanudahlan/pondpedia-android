@@ -1,10 +1,12 @@
 package com.pondpedia.compose.pondpedia.data.local.entity.pond_management
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.pondpedia.compose.pondpedia.domain.model.pond_management.Feed
 
 @Entity(tableName = "feed_table")
 data class FeedEntity(
+    @PrimaryKey(autoGenerate = true)
     val feedId: Long = 0,
 
     val date: String,

@@ -8,7 +8,7 @@ import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.PondEnt
 data class CategoryWithPonds(
     @Embedded val category: CategoryEntity,
     @Relation(
-        parentColumn = "categoryId",
+        parentColumn = "categoryName",
         entityColumn = "pondId",
         associateBy = Junction(PondCategoryCrossRefEntity::class)
     )

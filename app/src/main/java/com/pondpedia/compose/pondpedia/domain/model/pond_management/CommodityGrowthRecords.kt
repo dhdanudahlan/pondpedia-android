@@ -8,11 +8,11 @@ data class CommodityGrowthRecords(
 
     val date: String,
 
-    val age: Int,
+    val age: String,
 
-    val length: Int,
+    val length: String,
 
-    val weight: Int,
+    val weight: String,
 
     val note: String,
 
@@ -22,9 +22,9 @@ data class CommodityGrowthRecords(
         return CommodityGrowthRecordsEntity(
             recordId = recordId,
             date = date,
-            age = age,
-            length = length,
-            weight = weight,
+            age = age.toInt(),
+            length = length.toInt(),
+            weight = weight.toInt(),
             note = note,
             commodityId = commodityId
         )

@@ -26,7 +26,7 @@ data class WaterRecordsEntity(
         return WaterRecords(
             recordId = recordId,
             date = date,
-            level = level,
+            level = level.toString(),
             quality = quality,
             color = color,
             note = note,

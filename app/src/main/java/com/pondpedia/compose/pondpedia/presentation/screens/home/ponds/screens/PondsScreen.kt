@@ -17,26 +17,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.pondpedia.compose.pondpedia.domain.model.ponds.PondDummyGenerator.getDummyPondLogList
-import com.pondpedia.compose.pondpedia.presentation_copy.screens.home.ponds.components.PondItemHexagonCard
-import com.pondpedia.compose.pondpedia.presentation_copy.screens.home.ponds.components.viewmodel.PondsState
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.PondPediaCustomTheme
+import com.pondpedia.compose.pondpedia.presentation.components.navigation.graphs.AddPondDialog
+import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.PondItemHexagonCard
+import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondsEvent
+import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondsState
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.PondPediaCustomTheme
 
 @Preview(showBackground = true)
 @Composable
 fun PondScreenPreview() {
     PondPediaCustomTheme(darkTheme = false) {
         PondsScreen(
-            pondsState = PondsState(
-                pondLogList = getDummyPondLogList(5)
-            ),
+            pondsState = PondsState(),
             onTabIndexSelected = {},
-            onPondClicked = {},
             onRouteChanged = {},
             onPondListDisplayed = {},
+            onEvent = { }
         )
     }
 }
@@ -45,13 +45,11 @@ fun PondScreenPreview() {
 fun PondScreenDarkPreview() {
     PondPediaCustomTheme(darkTheme = true) {
         PondsScreen(
-            pondsState = PondsState(
-                pondLogList = getDummyPondLogList(5)
-            ),
+            pondsState = PondsState(),
             onTabIndexSelected = {},
-            onPondClicked = {},
             onRouteChanged = {},
             onPondListDisplayed = {},
+            onEvent = {}
         )
     }
 }
@@ -61,11 +59,14 @@ fun PondScreenDarkPreview() {
 fun PondsScreen(
     pondsState: PondsState,
     onTabIndexSelected: (Int) -> Unit,
-    onPondClicked :(String) -> Unit,
     onRouteChanged: (String) -> Unit,
     onPondListDisplayed : () -> Unit,
+    onEvent: (PondsEvent) -> Unit,
 ) {
     onTabIndexSelected(0)
+    if (pondsState.isAddingPond) {
+        AddPondDialog(pondsState, onEvent)
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -77,7 +78,7 @@ fun PondsScreen(
         )
         PondsLazyListContent(
             pondsState = pondsState,
-            onPondClicked = onPondClicked,
+            onEvent = onEvent,
             onRouteChanged = onRouteChanged
         )
     }
@@ -89,18 +90,25 @@ fun PondsTabs(
     onTabIndexSelected: (Int) -> Unit,
     onPondListDisplayed : () -> Unit,
 ) {
-    val selectedTabIndex = remember(pondsState.selectedTabIndex) { pondsState.selectedTabIndex }
+    val selectedCategoryIndex = remember(pondsState.selectedCategoryIndex) { pondsState.selectedCategoryIndex }
 
-    TabRow(selectedTabIndex = selectedTabIndex) {
-        pondsState.pondTabList.forEachIndexed { index, tab ->
+    TabRow(selectedTabIndex = selectedCategoryIndex) {
+        pondsState.categories.forEachIndexed { index, tab ->
             Tab(
                 text = {
-                    Text(text = tab, fontSize = 12.sp, maxLines = 1)
+                    Text(text = tab.categoryName, fontSize = 12.sp, maxLines = 1, color = Color.Cyan)
                 },
-                selected = tab == pondsState.pondTabList[0],
+                selected = tab == pondsState.categories[0],
                 onClick = { onTabIndexSelected(index) ; onPondListDisplayed()}
             )
         }
+//        Tab(
+//            text = {
+//                Text(text = "tab.categoryName", fontSize = 12.sp, maxLines = 1)
+//            },
+//            selected = "tab" == "pondsState.categories[0]",
+//            onClick = { }
+//        )
     }
 }
 
@@ -108,7 +116,7 @@ fun PondsTabs(
 @Composable
 fun PondsLazyListContent(
     pondsState: PondsState,
-    onPondClicked :(String) -> Unit,
+    onEvent: (PondsEvent) -> Unit,
     onRouteChanged: (String) -> Unit,
 ) {
 
@@ -132,40 +140,16 @@ fun PondsLazyListContent(
         horizontalArrangement = Arrangement.spacedBy((-191).dp),
         verticalItemSpacing = 107.dp,
     ) {
-        val pondLogList = pondsState.pondLogList
+        val pondList = pondsState.ponds
         item {
             Box(modifier = Modifier.height(47.dp))
         }
-        items(pondLogList.size) { index ->
+        items(pondList.size) { index ->
             PondItemHexagonCard(
-                pond = pondLogList[index].pondData,
-                onPondClicked = onPondClicked,
+                pond = pondList[index],
+                onEvent = onEvent,
                 onRouteChanged = onRouteChanged,
             )
         }
-    }
-}
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    PondPediaCustomTheme(darkTheme = true) {
-//        HomeScreen(
-//            mainState = MainState(),
-//            pondsState = PondsState(
-//                pondTabList = listOf("Semua", "Lele", "Nila"),
-//                pondLogList = getDummyPondLogList(5)
-//            ),
-//            pondCreateState = PondState(),
-//            onNavItemSelected = {},
-//            onTabIndexSelected = {},
-//            onPondClicked = {},
-//            onRouteChanged = {},
-//            onPondListDisplayed = {},
-//            setFilterCategorized = {},
-//            setFilterPrioritized = {},
-//            setFilterHarvested = {},
-//            setDisplayActionMenu = {},
-//            setDisplayActionScreen = {}
-//        )
     }
 }

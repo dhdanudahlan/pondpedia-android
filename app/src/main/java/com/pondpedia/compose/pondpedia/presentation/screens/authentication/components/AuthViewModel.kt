@@ -1,15 +1,7 @@
 package com.pondpedia.compose.pondpedia.presentation.screens.authentication.components
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.pondpedia.compose.pondpedia.core.app.PondPediaDataStore
-import com.pondpedia.compose.pondpedia.presentation_copy.screens.authentication.sign_up.EmailPasswordSignUpClient
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
-
+/*
 
 class AuthViewModel(
     private val emailPasswordAuthClient: EmailPasswordAuthClient,
@@ -58,12 +50,14 @@ class AuthViewModel(
     }
 
     fun saveLogin(userData: UserData?) {
-        viewModelScope.launch {
+        */
+/*viewModelScope.launch {
             if (userData != null) {
                 dataStore.saveLogin(userData)
             } else {
                 dataStore.saveLogin(UserData("Guest", "Guest", "Guest", "Guest@email.com"))
             }
-        }
+        }*//*
+
     }
-}
+}*/

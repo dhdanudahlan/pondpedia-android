@@ -16,13 +16,13 @@ package com.pondpedia.compose.pondpedia.presentation.screens.home.components
 //import androidx.compose.runtime.Composable
 //import androidx.compose.runtime.remember
 //import androidx.compose.ui.platform.LocalContext
-//import com.pondpedia.compose.pondpedia.presentation_copy.screens.home.ponds.components.viewmodel.PondState
-//import com.pondpedia.compose.pondpedia.presentation_copy.screens.home.ponds.components.viewmodel.PondsState
+//import com.pondpedia.compose.pondpedia.presentation_copy.screens.home.ponds.components.viewmodel.PondDetailsState
+//import com.pondpedia.compose.pondpedia.presentation_copy.screens.home.ponds.components.viewmodel.PondDetailsState
 //
 //@Composable
 //fun TopActionBar(
-//    pondsState: PondsState,
-//    pondState: PondState,
+//    pondsState: PondDetailsState,
+//    pondState: PondDetailsState,
 //    setDisplayActionMenu: (Boolean) -> Unit,
 //    setDisplayActionScreen: (Boolean) -> Unit,
 //    onRouteChanged: (String) -> Unit,
@@ -56,8 +56,8 @@ package com.pondpedia.compose.pondpedia.presentation.screens.home.components
 //
 //@Composable
 //fun TopActionBarContent(
-//    pondsState: PondsState,
-//    pondState: PondState,
+//    pondsState: PondDetailsState,
+//    pondState: PondDetailsState,
 //    setDisplayActionMenu: (Boolean) -> Unit,
 //    setDisplayActionScreen: (Boolean) -> Unit,
 //    onRouteChanged: (String) -> Unit,

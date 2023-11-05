@@ -28,9 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.pondpedia.compose.pondpedia.R
-import com.pondpedia.compose.pondpedia.presentation_copy.screens.authentication.components.UserData
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.Navi
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.White
+import com.pondpedia.compose.pondpedia.presentation.screens.authentication.components.UserData
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.Navi
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.White
 
 //private val selectedNavItem = BottomNavItem.MORE
 

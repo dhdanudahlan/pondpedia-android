@@ -41,17 +41,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pondpedia.compose.pondpedia.R
-import com.pondpedia.compose.pondpedia.presentation_copy.screens.authentication.components.AuthState
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.PondPediaCustomTheme
-import com.pondpedia.compose.pondpedia.presentation_copy.ui.theme.White
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.PondPediaCustomTheme
+import com.pondpedia.compose.pondpedia.presentation.ui.theme.White
 
 @Composable
 fun SignUpScreen(
-    state: AuthState,
+    /*state: AuthState,*/
     onEmailPasswordSignInClick: () -> Unit,
     onEmailPasswordSignUpClick: (String, String) -> Unit
 ) {
-    val context = LocalContext.current
+    /*val context = LocalContext.current
     val email = remember { mutableStateOf(state.email) }
     val password = remember { mutableStateOf(state.password) }
     LaunchedEffect(key1 = state.signInError) {
@@ -196,7 +195,7 @@ fun SignUpScreen(
                 Spacer(modifier = Modifier.height(4.dp))
             }
         }
-    }
+    }*/
 }
 
 @Composable
@@ -340,6 +339,6 @@ fun SignUpScreenUI(
 @Composable
 fun SignUpPreview() {
     PondPediaCustomTheme {
-        com.pondpedia.compose.pondpedia.presentation_copy.screens.authentication.sign_up.SignUpScreenUI()
+        SignUpScreenUI()
     }
 }

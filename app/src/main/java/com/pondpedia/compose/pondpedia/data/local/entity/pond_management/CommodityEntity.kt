@@ -14,7 +14,7 @@ data class CommodityEntity(
 
     val origin: String,
 
-    val quantity: Float,
+    val quantity: Int,
 
     val name: String,
 
@@ -27,7 +27,7 @@ data class CommodityEntity(
             commodityId = commodityId,
             date = date,
             origin = origin,
-            quantity = quantity,
+            quantity = quantity.toString(),
             name = name,
             scientificName = scientificName,
             pondId = pondId

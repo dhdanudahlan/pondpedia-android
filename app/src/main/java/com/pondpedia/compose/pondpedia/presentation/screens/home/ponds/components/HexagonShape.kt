@@ -16,7 +16,7 @@ class HexagonShape : Shape {
         density: Density
     ): Outline {
         return Outline.Generic(
-            path = com.pondpedia.compose.pondpedia.presentation_copy.screens.home.ponds.components.drawCustomHexagonPath(
+            path = com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.drawCustomHexagonPath(
                 size
             )
         )
@@ -26,7 +26,7 @@ class HexagonShape : Shape {
 fun drawCustomHexagonPath(size: Size): Path {
     return Path().apply {
         val radius = min(size.width / 2f, size.height / 2f)
-        com.pondpedia.compose.pondpedia.presentation_copy.screens.home.ponds.components.customHexagon(
+        customHexagon(
             radius,
             size
         )

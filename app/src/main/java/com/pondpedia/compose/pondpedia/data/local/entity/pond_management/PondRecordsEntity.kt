@@ -22,7 +22,7 @@ data class PondRecordsEntity(
         return PondRecords(
             recordId = recordId,
             date = date,
-            cycle = cycle,
+            cycle = cycle.toString(),
             note = note,
             pondId = pondId
         )
