@@ -6,7 +6,7 @@ import com.pondpedia.compose.pondpedia.core.util.DateGenerator
 import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.CommodityEntity
 import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.CommodityGrowthRecordsEntity
 
-data class CommodityWithGrowthRecords(
+data class CommodityWithGrowthRecordsEntity(
     @Embedded val commodity: CommodityEntity = CommodityEntity(date = DateGenerator.getCurrentDateTime(), origin = "", quantity = 0, name = "", scientificName = "", pondId = 0),
     @Relation(
         parentColumn = "commodityId",

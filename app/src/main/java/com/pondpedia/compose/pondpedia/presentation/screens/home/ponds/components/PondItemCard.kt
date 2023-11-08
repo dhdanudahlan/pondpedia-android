@@ -43,7 +43,8 @@ import com.pondpedia.compose.pondpedia.presentation.ui.theme.Black
 @Composable
 fun PondItemSquareCard(
     pond: Pond,
-    onPondClicked :(String) -> Unit
+    onEvent: (PondsEvent) -> Unit,
+    onRouteChanged: (String) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -51,7 +52,7 @@ fun PondItemSquareCard(
             .height(300.dp)
             .width(250.dp)
             .clickable {
-//                onPondClicked()
+                onEvent(PondsEvent.SelectPond(pond.pondId)); onRouteChanged(Graph.HOME_PONDS_POND)
             },
     ) {
         Box(
@@ -80,25 +81,25 @@ fun PondItemSquareCard(
 
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "pond.pondName",
+                    text = pond.name,
                     fontWeight = FontWeight.Bold,
                     fontSize = 16.sp,
-                    color = MaterialTheme.colorScheme.onBackground,
+//                    color = MaterialTheme.colorScheme.onBackground,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "pond.pondFish.fishCommonName",
+                    text = pond.createdDate,
                     fontWeight = FontWeight.Normal,
-                    color = MaterialTheme.colorScheme.onBackground,
+//                    color = MaterialTheme.colorScheme.onBackground,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
                 )
                 Text(
-                    text = "pond.pondFish.fishScientificName",
+                    text = pond.waterType,
                     fontWeight = FontWeight.Light,
-                    color = MaterialTheme.colorScheme.onBackground,
+//                    color = MaterialTheme.colorScheme.onBackground,
                     style = TextStyle(fontStyle = Italic),
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1,
@@ -151,7 +152,7 @@ fun PondItemHexagonCard(
                 .background(color = backgroundColor)
                 .alpha(.09f)
                 .size(180.dp)
-                .clickable { onEvent(PondsEvent.SelectPond(pond.pondId)); onRouteChanged(Graph.HOME_PONDS_POND)}
+                .clickable { onEvent(PondsEvent.SelectPond(pond.pondId)); onRouteChanged(Graph.HOME_PONDS_POND) }
         )
         Column(
             modifier = Modifier.fillMaxSize(),

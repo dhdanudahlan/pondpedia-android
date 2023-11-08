@@ -1,7 +1,5 @@
 package com.pondpedia.compose.pondpedia.domain.repository
 
-import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.relations.CommodityWithGrowthRecords
-import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.relations.CommodityWithHealthRecords
 import com.pondpedia.compose.pondpedia.domain.model.pond_management.Commodity
 import com.pondpedia.compose.pondpedia.domain.model.pond_management.CommodityGrowthRecords
 import com.pondpedia.compose.pondpedia.domain.model.pond_management.CommodityHealthRecords
@@ -23,9 +21,9 @@ interface PondDetailsRepository {
      
      fun getCommodityListByPondId(pondId: Long): Flow<List<Commodity>>
 
-     fun getCommodityWithGrowthRecordsByCommodityId(commodityId: Long): Flow<CommodityWithGrowthRecords>
+     fun getCommodityWithGrowthRecordsByCommodityId(commodityId: Long): Flow<List<CommodityGrowthRecords>>
 
-     fun getCommodityWithHealthRecordsByCommodityId(commodityId: Long): Flow<CommodityWithHealthRecords>
+     fun getCommodityWithHealthRecordsByCommodityId(commodityId: Long): Flow<List<CommodityHealthRecords>>
 
      suspend fun insertPondRecords(pondRecords: PondRecords): Long
 

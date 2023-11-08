@@ -9,9 +9,9 @@ import androidx.room.Upsert
 import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.CategoryEntity
 import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.PondEntity
 import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.PondRecordsEntity
-import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.relations.CategoryWithPonds
+import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.relations.CategoryWithPondsEntity
 import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.relations.PondCategoryCrossRefEntity
-import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.relations.PondWithCategories
+import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.relations.PondWithCategoriesEntity
 import kotlinx.coroutines.flow.Flow
 
 
@@ -36,14 +36,14 @@ interface PondsDao {
     suspend fun createPond(pondEntity: PondEntity): Long
 
     @Upsert
-    suspend fun upsertCategory (categoryEntity: CategoryEntity)
+    suspend fun upsertCategory (categoryEntity: CategoryEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPondCategoryCrossRef (pondCategoryCrossRefEntity: PondCategoryCrossRefEntity)
+    suspend fun insertPondCategoryCrossRef (pondCategoryCrossRefEntity: PondCategoryCrossRefEntity): Long
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertPondRecords(pondRecordsEntity: PondRecordsEntity)
+    suspend fun insertPondRecords(pondRecordsEntity: PondRecordsEntity): Long
 
 
 
@@ -60,11 +60,11 @@ interface PondsDao {
 
     @Transaction
     @Query("SELECT * FROM pond_table WHERE pondId = :pondId")
-    fun getCategoriesOfPond(pondId: Long): Flow<PondWithCategories>
+    fun getCategoriesOfPond(pondId: Long): Flow<PondWithCategoriesEntity>
 
     @Transaction
     @Query("SELECT * FROM category_table WHERE categoryName = :categoryName")
-    fun getPondsOfCategory(categoryName: String): Flow<CategoryWithPonds>
+    fun getPondsOfCategory(categoryName: String): Flow<CategoryWithPondsEntity>
 
 
 

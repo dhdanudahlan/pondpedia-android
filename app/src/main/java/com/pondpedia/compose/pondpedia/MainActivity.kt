@@ -53,17 +53,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        /*var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)*/
-
-        /*lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState
-                    .onEach {
-                        uiState = it
-                    }
-                    .collect()
-            }
-        }*/
         setContent {
 
             val systemUiController = rememberSystemUiController()

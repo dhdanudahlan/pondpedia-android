@@ -4,7 +4,7 @@ import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.Commodi
 
 data class Commodity(
 
-    val commodityId: Long,
+    val commodityId: Long = 0,
 
     val date: String,
 

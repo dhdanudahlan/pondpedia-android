@@ -73,7 +73,7 @@ fun UpdateTabs(
 
     TabRow(selectedTabIndex = selectedTabIndex) {
         pondState.pondCreateTabList.forEachIndexed { index, tab ->
-            Tab(
+            PondTab(
                 text = {
                     Text(text = tab, fontSize = 12.sp, maxLines = 1)
                 },

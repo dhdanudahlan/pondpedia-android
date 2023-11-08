@@ -3,26 +3,25 @@
 package com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.pondpedia.compose.pondpedia.presentation.components.navigation.graphs.AddPondDialog
-import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.PondItemHexagonCard
+import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.AddPondDialog
+import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.PondItemSquareCard
 import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondsEvent
 import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondsState
 import com.pondpedia.compose.pondpedia.presentation.ui.theme.PondPediaCustomTheme
@@ -96,13 +95,13 @@ fun PondsTabs(
         pondsState.categories.forEachIndexed { index, tab ->
             Tab(
                 text = {
-                    Text(text = tab.categoryName, fontSize = 12.sp, maxLines = 1, color = Color.Cyan)
+                    Text(text = tab.categoryName, fontSize = 12.sp, maxLines = 1)
                 },
                 selected = tab == pondsState.categories[0],
                 onClick = { onTabIndexSelected(index) ; onPondListDisplayed()}
             )
         }
-//        Tab(
+//        PondTab(
 //            text = {
 //                Text(text = "tab.categoryName", fontSize = 12.sp, maxLines = 1)
 //            },
@@ -119,21 +118,22 @@ fun PondsLazyListContent(
     onEvent: (PondsEvent) -> Unit,
     onRouteChanged: (String) -> Unit,
 ) {
+    Spacer(modifier = Modifier.height(8.dp))
+    val horizontalGridSize by remember { mutableStateOf(2) }
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(horizontalGridSize)
+    ) {
+        val pondList = pondsState.ponds
+        items(pondList.size) { index ->
+            PondItemSquareCard(
+                pond = pondList[index],
+                onEvent = onEvent,
+                onRouteChanged = onRouteChanged,
+            )
+        }
+    }
 
-//    val horizontalGridSize by remember { mutableStateOf(2) }
-//    LazyVerticalGrid(
-//        columns = GridCells.Fixed(horizontalGridSize)
-//    ) {
-//        val pondLogList = pondsState.pondLogList
-//        items(pondLogList.size) {
-//            PondItemSquareCard(
-//                pond = pondLogList[it].pondData,
-//                onPondClicked = onPondClicked
-//            )
-//        }
-//    }
-
-    LazyVerticalStaggeredGrid(
+    /*LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
@@ -151,5 +151,5 @@ fun PondsLazyListContent(
                 onRouteChanged = onRouteChanged,
             )
         }
-    }
+    }*/
 }

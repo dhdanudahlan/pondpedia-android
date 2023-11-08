@@ -1,21 +1,7 @@
 package com.pondpedia.compose.pondpedia.presentation.components.navigation.graphs
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -120,104 +106,6 @@ fun NavGraphBuilder.moreNavGraph(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AddPondDialog(
-    pondsState: PondsState,
-    onEvent: (PondsEvent) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    AlertDialog(
-        onDismissRequest = {
-                           onEvent(PondsEvent.HideDialog)
-                           },
-        properties = DialogProperties(dismissOnClickOutside = false),
-    ) {
-        Column(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            TextField(
-                value = pondsState.name,
-                onValueChange = {
-                    onEvent(PondsEvent.SetName(it))
-                },
-                placeholder = {
-                    Text(text = "Nama kolam")
-                }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = pondsState.area,
-                onValueChange = {
-                    onEvent(PondsEvent.SetArea(it))
-                },
-                placeholder = {
-                    Text(text = "Luas kolam")
-                }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = pondsState.depth,
-                onValueChange = {
-                    onEvent(PondsEvent.SetDepth(it))
-                },
-                placeholder = {
-                    Text(text = "Kedalaman kolam")
-                }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = pondsState.pondType,
-                onValueChange = {
-                    onEvent(PondsEvent.SetPondType(it))
-                },
-                placeholder = {
-                    Text(text = "Tipe kolam")
-                }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = pondsState.waterType,
-                onValueChange = {
-                    onEvent(PondsEvent.SetWaterType(it))
-                },
-                placeholder = {
-                    Text(text = "Tipe air")
-                }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = pondsState.location,
-                onValueChange = {
-                    onEvent(PondsEvent.SetLocation(it))
-                },
-                placeholder = {
-                    Text(text = "Lokasi")
-                }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = pondsState.description,
-                onValueChange = {
-                    onEvent(PondsEvent.SetDescription(it))
-                },
-                placeholder = {
-                    Text(text = "Deskripsi tambahan")
-                }
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Box(modifier = Modifier.fillMaxWidth()) {
-                Button(onClick = {
-                    onEvent(PondsEvent.AddPond)
-                }) {
-                    Text(text = "Create")
-                }
-            }
-        }
-    }
-}
 
 
 

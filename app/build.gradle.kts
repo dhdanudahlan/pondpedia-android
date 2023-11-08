@@ -14,8 +14,8 @@ android {
         applicationId = "com.pondpedia.compose.pondpedia"
         minSdk = 28
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -92,7 +92,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
 
     // Compose
-    implementation(platform("androidx.compose:compose-bom:2022.10.00"))
+    implementation(platform("androidx.compose:compose-bom:2023.06.01"))
     implementation("androidx.compose.ui:ui:1.4.3")
     implementation("androidx.compose.ui:ui-tooling-preview:1.4.3")
     implementation("androidx.compose.ui:ui-graphics:1.4.3")

@@ -2,8 +2,6 @@ package com.pondpedia.compose.pondpedia.data.repository
 
 import com.pondpedia.compose.pondpedia.data.local.dao.PondDetailsDao
 import com.pondpedia.compose.pondpedia.data.local.dao.PondsDao
-import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.relations.CommodityWithGrowthRecords
-import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.relations.CommodityWithHealthRecords
 import com.pondpedia.compose.pondpedia.domain.model.pond_management.Commodity
 import com.pondpedia.compose.pondpedia.domain.model.pond_management.CommodityGrowthRecords
 import com.pondpedia.compose.pondpedia.domain.model.pond_management.CommodityHealthRecords
@@ -50,39 +48,45 @@ class PondDetailsRepositoryImpl(
         }
     }
 
-    override fun getCommodityWithGrowthRecordsByCommodityId(commodityId: Long): Flow<CommodityWithGrowthRecords> {
-        return pondDetailsDao.getCommodityWithGrowthRecords(commodityId)
+    override fun getCommodityWithGrowthRecordsByCommodityId(commodityId: Long): Flow<List<CommodityGrowthRecords>> {
+        return pondDetailsDao.getCommodityWithGrowthRecords(commodityId).map { commodityWithGrowthRecords ->
+            commodityWithGrowthRecords?.growthRecords?.map { it.toCommodityGrowthRecords() } ?: emptyList()
+        }
     }
 
-    override fun getCommodityWithHealthRecordsByCommodityId(commodityId: Long): Flow<CommodityWithHealthRecords> {
-        return pondDetailsDao.getCommodityWithHealthRecords(commodityId)
+    override fun getCommodityWithHealthRecordsByCommodityId(commodityId: Long): Flow<List<CommodityHealthRecords>> {
+        return pondDetailsDao.getCommodityWithHealthRecords(commodityId).map { commodityWithHealthRecords ->
+            commodityWithHealthRecords?.healthRecords?.map { it.toCommodityHealthRecords() } ?: emptyList()
+        }
     }
 
     override suspend fun insertPondRecords(pondRecords: PondRecords): Long {
-        TODO("Not yet implemented")
+        return pondsDao.insertPondRecords(pondRecords.toPondRecordsEntity())
     }
 
     override suspend fun insertWaterRecords(waterRecords: WaterRecords): Long {
-        TODO("Not yet implemented")
+        return pondDetailsDao.insertWaterRecords(waterRecords.toWaterRecordsEntity())
     }
 
     override suspend fun insertFeedingRecords(feedingRecords: FeedingRecords): Long {
-        TODO("Not yet implemented")
+        return pondDetailsDao.insertFeedingRecords(feedingRecords.toFeedingRecordsEntity())
     }
 
     override suspend fun insertCommodity(commodity: Commodity): Long {
-        TODO("Not yet implemented")
+        return pondDetailsDao.insertCommodity(commodity.toCommodityEntity())
     }
 
     override suspend fun insertCommodityGrowthRecords(commodityGrowthRecords: CommodityGrowthRecords): Long {
-        TODO("Not yet implemented")
+        return pondDetailsDao.insertCommodityGrowthRecords(commodityGrowthRecords.toCommodityGrowthRecordsEntity())
     }
 
     override suspend fun insertCommodityHealthRecords(commodityHealthRecords: CommodityHealthRecords): Long {
-        TODO("Not yet implemented")
+        return pondDetailsDao.insertCommodityHealthRecords(commodityHealthRecords.toCommodityHealthRecordsEntity())
     }
 
     override suspend fun deletePondById(pondId: Long) {
-        TODO("Not yet implemented")
+        pondsDao.deletePondById(pondId)
+        pondsDao.deletePondRecordsByPondId(pondId)
+        pondsDao.deletePondCategoryCrossRefByPondId(pondId)
     }
 }

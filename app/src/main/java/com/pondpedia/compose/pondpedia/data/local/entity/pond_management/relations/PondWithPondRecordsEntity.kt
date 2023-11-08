@@ -1,18 +1,16 @@
 package com.pondpedia.compose.pondpedia.data.local.entity.pond_management.relations
 
 import androidx.room.Embedded
-import androidx.room.Junction
 import androidx.room.Relation
-import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.CategoryEntity
 import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.PondEntity
+import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.PondRecordsEntity
 
-data class PondWithCategories(
+data class PondWithPondRecordsEntity(
     @Embedded val pond: PondEntity,
     @Relation(
         parentColumn = "pondId",
-        entityColumn = "categoryName",
-        associateBy = Junction(PondCategoryCrossRefEntity::class)
+        entityColumn = "pondId"
     )
 
-    val categories: List<CategoryEntity>
+    val pondRecords: List<PondRecordsEntity>
 )

@@ -13,9 +13,9 @@ import com.pondpedia.compose.pondpedia.domain.use_case.ponds.GetCategoryListUseC
 import com.pondpedia.compose.pondpedia.domain.use_case.ponds.GetPondByIdUseCase
 import com.pondpedia.compose.pondpedia.domain.use_case.ponds.GetPondListByCategoryUseCase
 import com.pondpedia.compose.pondpedia.domain.use_case.ponds.UpsertCategoryUseCase
+import com.pondpedia.compose.pondpedia.domain.use_case.ponds.pond_details.GetCommodityGrowthRecordsByCommodityIdUseCase
+import com.pondpedia.compose.pondpedia.domain.use_case.ponds.pond_details.GetCommodityHealthRecordsByCommodityIdUseCase
 import com.pondpedia.compose.pondpedia.domain.use_case.ponds.pond_details.GetCommodityListByPondIdUseCase
-import com.pondpedia.compose.pondpedia.domain.use_case.ponds.pond_details.GetCommodityWithGrowthRecordsByCommodityIdUseCase
-import com.pondpedia.compose.pondpedia.domain.use_case.ponds.pond_details.GetCommodityWithHealthRecordsByCommodityIdUseCase
 import com.pondpedia.compose.pondpedia.domain.use_case.ponds.pond_details.GetFeedingRecordsByPondIdUseCase
 import com.pondpedia.compose.pondpedia.domain.use_case.ponds.pond_details.GetPondRecordsByPondIdUseCase
 import com.pondpedia.compose.pondpedia.domain.use_case.ponds.pond_details.GetWaterRecordsByPondIdUseCase
@@ -74,13 +74,13 @@ object PondManagementModule {
 
     @Provides
     @Singleton
-    fun provideGetCommodityGrowthRecordsByCommodityIdUseCase(repository: PondDetailsRepository): GetCommodityWithGrowthRecordsByCommodityIdUseCase {
-        return GetCommodityWithGrowthRecordsByCommodityIdUseCase(repository)
+    fun provideGetCommodityGrowthRecordsByCommodityIdUseCase(repository: PondDetailsRepository): GetCommodityGrowthRecordsByCommodityIdUseCase {
+        return GetCommodityGrowthRecordsByCommodityIdUseCase(repository)
     }
     @Provides
     @Singleton
-    fun provideGetCommodityHealthRecordsByCommodityIdUseCase(repository: PondDetailsRepository): GetCommodityWithHealthRecordsByCommodityIdUseCase {
-        return GetCommodityWithHealthRecordsByCommodityIdUseCase(repository)
+    fun provideGetCommodityHealthRecordsByCommodityIdUseCase(repository: PondDetailsRepository): GetCommodityHealthRecordsByCommodityIdUseCase {
+        return GetCommodityHealthRecordsByCommodityIdUseCase(repository)
     }
 
     @Provides

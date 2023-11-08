@@ -18,6 +18,7 @@ sealed interface PondDetailsEvent{
 
     data class SetCommodityDate(val commodityDate: String): PondDetailsEvent
     data class SetCommodityOrigin(val commodityOrigin: String): PondDetailsEvent
+    data class SetCommodityQuantity(val commodityQuantity: String): PondDetailsEvent
     data class SetCommodityEntity(val commodityEntity: String): PondDetailsEvent
     data class SetCommodityName(val commodityName: String): PondDetailsEvent
     data class SetCommoditySciName(val commoditySciName: String): PondDetailsEvent
@@ -53,4 +54,8 @@ sealed interface PondDetailsEvent{
     data class SetFeedDate(val feedDate: String): PondDetailsEvent
     data class SetFeedOrigin(val feedOrigin: String): PondDetailsEvent
     data class SetFeedName(val feedName: String): PondDetailsEvent
+
+
+    data object ShowDialog: PondDetailsEvent
+    data object HideDialog: PondDetailsEvent
 }

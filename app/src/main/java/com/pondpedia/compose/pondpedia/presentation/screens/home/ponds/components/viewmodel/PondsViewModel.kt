@@ -82,8 +82,8 @@ class PondsViewModel @Inject constructor(
                 val waterType = state.value.waterType
                 val location = state.value.location
                 val description = state.value.description
-                val createdDate = state.value.createdDate
-                val updatedDate = state.value.updatedDate
+                val createdDate = DateGenerator.getCurrentDate()
+                val updatedDate = DateGenerator.getCurrentDate()
                 val farmerId = state.value.farmerId
                 if (name.isBlank() || area.isBlank() || depth.isBlank() || pondType.isBlank() || waterType.isBlank()) {
                     return
@@ -102,7 +102,7 @@ class PondsViewModel @Inject constructor(
                     farmerId = farmerId
                 )
 
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     addPondUseCase(pond = pond )
                 }
 

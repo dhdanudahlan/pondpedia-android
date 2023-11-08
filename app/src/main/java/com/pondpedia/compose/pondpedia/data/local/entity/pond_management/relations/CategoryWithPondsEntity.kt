@@ -5,7 +5,7 @@ import androidx.room.Relation
 import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.CategoryEntity
 import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.PondEntity
 
-data class CategoryWithPonds(
+data class CategoryWithPondsEntity(
     @Embedded val category: CategoryEntity,
     @Relation(
         parentColumn = "categoryName",

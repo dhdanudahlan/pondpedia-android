@@ -1,8 +1,8 @@
 package com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel
 
-import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.relations.CommodityWithGrowthRecords
-import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.relations.CommodityWithHealthRecords
 import com.pondpedia.compose.pondpedia.domain.model.pond_management.Commodity
+import com.pondpedia.compose.pondpedia.domain.model.pond_management.CommodityGrowthRecords
+import com.pondpedia.compose.pondpedia.domain.model.pond_management.CommodityHealthRecords
 import com.pondpedia.compose.pondpedia.domain.model.pond_management.FeedingRecords
 import com.pondpedia.compose.pondpedia.domain.model.pond_management.Pond
 import com.pondpedia.compose.pondpedia.domain.model.pond_management.PondRecords
@@ -17,12 +17,16 @@ data class PondDetailsState(
     val feedingRecords: List<FeedingRecords> = emptyList(),
 
     val commodity: List<Commodity> = emptyList(),
-    val commodityGrowthRecords: List<CommodityWithGrowthRecords> = emptyList(),
-    val commodityHealthRecords: List<CommodityWithHealthRecords> = emptyList(),
+    val commodityGrowthRecords: List<CommodityGrowthRecords> = emptyList(),
+    val commodityHealthRecords: List<CommodityHealthRecords> = emptyList(),
+
+    val isAddingCommodity: Boolean = false,
 
     val pondId: Long = 0,
 
     val commodityId: Long = 0,
+
+    val feedId: Long = 0,
 
     val name: String = "",
 
@@ -42,6 +46,8 @@ data class PondDetailsState(
     val commodityDate: String = "",
 
     val commodityOrigin: String = "",
+
+    val commodityQuantity: String = "",
 
     val commodityEntity: String = "",
 
