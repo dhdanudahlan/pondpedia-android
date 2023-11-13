@@ -1,8 +1,8 @@
 package com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.screens.pond_details.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.pondpedia.compose.pondpedia.core.util.StringParser
 import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondDetailsEvent
 import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondDetailsState
 
@@ -109,7 +110,7 @@ fun AddPondManagementRecordsTabFeedingScreen(
             value = quantity,
             onValueChange = {
                 quantity = it
-                onEvent(PondDetailsEvent.SetFeedingRecordsQuantity(it))
+                onEvent(PondDetailsEvent.SetFeedingRecordsQuantity(StringParser.commaToDot(it)))
             },
             label = {
                 Text(text = "Jumlah Pakan yang Diberikan")
@@ -121,7 +122,7 @@ fun AddPondManagementRecordsTabFeedingScreen(
                 Text(text = "* Wajib diisi", color = androidx.compose.ui.graphics.Color.Gray)
             },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
+                keyboardType = KeyboardType.Decimal,
                 imeAction = ImeAction.Next
             )
         )
@@ -152,9 +153,9 @@ fun AddPondManagementRecordsTabFeedingScreen(
         )
         Spacer(modifier = Modifier.height(4.dp))
 
-        Box(
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.TopEnd
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(onClick = {
                 onEvent(PondDetailsEvent.AddFeedingRecords)

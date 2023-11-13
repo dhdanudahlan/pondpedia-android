@@ -22,7 +22,7 @@ data class WaterRecords(
         return WaterRecordsEntity(
             recordId = recordId,
             date = date,
-            level = level.toInt(),
+            level = level.toFloat().toInt(),
             quality = quality,
             color = color,
             note = note,

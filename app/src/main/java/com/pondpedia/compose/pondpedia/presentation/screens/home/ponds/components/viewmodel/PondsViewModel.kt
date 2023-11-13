@@ -121,6 +121,13 @@ class PondsViewModel @Inject constructor(
                     )
                 }
             }
+            is PondsEvent.DeletePond -> {
+                val pondId = event.selectedPondId
+
+                viewModelScope.launch(Dispatchers.IO) {
+                    deletePondByIdUseCase(pondId)
+                }
+            }
             PondsEvent.HideDialog -> {
                 _state.update { it.copy(
                     isAddingPond = false

@@ -1,8 +1,8 @@
 package com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +20,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -30,10 +32,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.pondpedia.compose.pondpedia.core.util.StringParser
 import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondsEvent
 import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondsState
 import kotlinx.coroutines.CoroutineScope
@@ -112,6 +117,8 @@ fun AddPondDialog(
         ) {
 
             Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Tambahkan Kolam", fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp)
+            Spacer(modifier = Modifier.height(8.dp))
 
             TextField(
                 value = name,
@@ -137,13 +144,13 @@ fun AddPondDialog(
                 value = area,
                 onValueChange = {
                     area = it
-                    onEvent(PondsEvent.SetArea(area))
+                    onEvent(PondsEvent.SetArea(StringParser.commaToDot(area)))
                 },
                 label = {
                     Text(text = "Luas kolam")
                 },
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
+                    keyboardType = KeyboardType.Decimal,
                     imeAction = ImeAction.Next
                 ),
                 supportingText = {
@@ -158,13 +165,13 @@ fun AddPondDialog(
                 value = depth,
                 onValueChange = {
                     depth = it
-                    onEvent(PondsEvent.SetDepth(depth))
+                    onEvent(PondsEvent.SetDepth(StringParser.commaToDot(depth)))
                 },
                 label = {
                     Text(text = "Kedalaman kolam")
                 },
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
+                    keyboardType = KeyboardType.Decimal,
                     imeAction = ImeAction.Next
                 ),
                 supportingText = {
@@ -302,14 +309,19 @@ fun AddPondDialog(
             )
 
             val scope = CoroutineScope(Dispatchers.Default)
-            Box(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.TopEnd
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
+                OutlinedButton(onClick = {
+                    onEvent(PondsEvent.HideDialog)
+                }) {
+                    Text(text = "Batal")
+                }
                 Button(onClick = {
                     onEvent(PondsEvent.AddPond)
                 }) {
-                    Text(text = "Buat Kolam")
+                    Text(text = "Tambah")
                 }
             }
         }

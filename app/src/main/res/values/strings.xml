@@ -25,15 +25,15 @@
 
 
     <string name="ponds_label">Ponds</string>
-    <string name="ponds_title">Pond Management</string>
+    <string name="ponds_title">Manajemen Kolam</string>
     <string name="updates_label">Updates</string>
-    <string name="updates_title">Update History</string>
+    <string name="updates_title">Riwayat Pembaruan</string>
     <string name="menu_label">Menu</string>
-    <string name="menu_title">App Menu</string>
+    <string name="menu_title">Menu Aplikasi</string>
     <string name="explore_label">Explore</string>
-    <string name="explore_title">Encyclopedia</string>
+    <string name="explore_title">FishPedia</string>
     <string name="more_label">More</string>
-    <string name="more_title">More</string>
+    <string name="more_title">Lainnya</string>
 
 
     <string name="pond_create_title">Create</string>
@@ -43,7 +43,11 @@
     <string name="pond_analytics_title">Pond Analytics</string>
 
     <string name="pond_details_overview">Overview</string>
-    <string name="pond_details_commodity">Commodity</string>
-    <string name="pond_details_water">Water</string>
-    <string name="pond_details_feeding">Feeding</string>
+    <string name="pond_details_commodity">Komoditas</string>
+    <string name="pond_details_water">Kualitas Air</string>
+    <string name="pond_details_feeding">Pakan</string>
+
+    <string name="menu_aichat_title">AIChat</string>
+    <string name="menu_aichat_label">AIChat</string>
+
 </resources>

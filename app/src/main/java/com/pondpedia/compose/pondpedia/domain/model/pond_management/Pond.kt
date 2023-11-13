@@ -31,8 +31,8 @@ data class Pond(
         return PondEntity(
             pondId = pondId,
             name = name,
-            area = area.toInt(),
-            depth = depth.toInt(),
+            area = area.toFloat().toInt(),
+            depth = depth.toFloat().toInt(),
             pondType = pondType,
             waterType = waterType,
             location = location,

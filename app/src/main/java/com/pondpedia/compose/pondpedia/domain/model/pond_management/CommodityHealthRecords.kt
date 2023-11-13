@@ -22,7 +22,7 @@ data class CommodityHealthRecords(
         return CommodityHealthRecordsEntity(
             recordId = recordId,
             date = date,
-            death = death.toInt(),
+            death = death.toFloat().toInt(),
             indicator = indicator,
             action = action,
             note = note,

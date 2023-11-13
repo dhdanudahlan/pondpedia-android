@@ -79,7 +79,7 @@ object PondGenerator {
         return WaterRecords(
             recordId = 0,
             date = currentDate,
-            level = (pond.depth.toInt() - (1 .. 10).random()).toString(),
+            level = (pond.depth.toFloat().toInt() - (1 .. 10).random()).toString(),
             quality = "{ \"ph\": $pH, \"dissolvedOxygen\": $dissolvedOxygen, \"temperature\": $temperature, \"salinity\": $salinity, \"turbidity\": $turbidity }",
             color = "CH",
             note = "Data dummy air",

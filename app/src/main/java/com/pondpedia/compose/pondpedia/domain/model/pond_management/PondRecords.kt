@@ -18,7 +18,7 @@ data class PondRecords(
         return PondRecordsEntity(
             recordId = recordId,
             date = date,
-            cycle = cycle.toInt(),
+            cycle = cycle.toFloat().toInt(),
             note = note,
             pondId = pondId
         )

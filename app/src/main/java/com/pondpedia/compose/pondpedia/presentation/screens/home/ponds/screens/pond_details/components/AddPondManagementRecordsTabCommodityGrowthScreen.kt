@@ -1,8 +1,8 @@
 package com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.screens.pond_details.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.pondpedia.compose.pondpedia.core.util.StringParser
 import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondDetailsEvent
 import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondDetailsState
 
@@ -193,7 +194,7 @@ fun AddPondManagementRecordsTabCommodityGrowthScreen(
             value = age,
             onValueChange = {
                 age = it
-                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsAge(it))
+                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsAge(StringParser.commaToDot(it)))
             },
             label = {
                 Text(text = "Umur Komoditas (Hari)")
@@ -205,7 +206,7 @@ fun AddPondManagementRecordsTabCommodityGrowthScreen(
                 Text(text = "* Wajib diisi", color = androidx.compose.ui.graphics.Color.Gray)
             },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
+                keyboardType = KeyboardType.Decimal,
                 imeAction = ImeAction.Next
             )
         )
@@ -216,7 +217,7 @@ fun AddPondManagementRecordsTabCommodityGrowthScreen(
             value = length,
             onValueChange = {
                 length = it
-                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsLength(it))
+                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsLength(StringParser.commaToDot(it)))
             },
             label = {
                 Text(text = "Panjang Komoditas")
@@ -228,7 +229,7 @@ fun AddPondManagementRecordsTabCommodityGrowthScreen(
                 Text(text = "* Wajib diisi", color = androidx.compose.ui.graphics.Color.Gray)
             },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
+                keyboardType = KeyboardType.Decimal,
                 imeAction = ImeAction.Next
             )
         )
@@ -239,7 +240,7 @@ fun AddPondManagementRecordsTabCommodityGrowthScreen(
             value = weight,
             onValueChange = {
                 weight = it
-                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsWeight(it))
+                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsWeight(StringParser.commaToDot(it)))
             },
             label = {
                 Text(text = "Berat Komoditas")
@@ -251,7 +252,7 @@ fun AddPondManagementRecordsTabCommodityGrowthScreen(
                 Text(text = "* Wajib diisi", color = androidx.compose.ui.graphics.Color.Gray)
             },
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
+                keyboardType = KeyboardType.Decimal,
                 imeAction = ImeAction.Next
             )
         )
@@ -282,9 +283,9 @@ fun AddPondManagementRecordsTabCommodityGrowthScreen(
         )
         Spacer(modifier = Modifier.height(4.dp))
 
-        Box(
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.TopEnd
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
                 enabled = isCommodityExist,

@@ -56,6 +56,8 @@ class PondPediaAppState(
             else -> null
         }
 
+    val shouldShowTopBar: Boolean
+        @Composable get() = (currentHomeScreenDestination != null)
     val shouldShowBottomBar: Boolean
         @Composable get() = (currentHomeScreenDestination != null)
 

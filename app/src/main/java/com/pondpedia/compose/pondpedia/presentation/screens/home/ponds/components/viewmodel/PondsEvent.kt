@@ -2,6 +2,7 @@ package com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.componen
 
 sealed interface PondsEvent{
     data object AddPond: PondsEvent
+    data class DeletePond(val selectedPondId: Long): PondsEvent
 
     data class SetName(val name: String): PondsEvent
 

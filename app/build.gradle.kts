@@ -84,6 +84,11 @@ dependencies {
     implementation("androidx.room:room-runtime:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2")
     ksp("androidx.room:room-compiler:2.5.2")
+//    implementation("androidx.room:room-paging:2.5.2")
+
+    // Paging
+//    implementation("androidx.paging:paging-runtime-ktx:3.1.1")
+//    implementation("androidx.paging:paging-compose:1.0.0-alpha18")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
                 onDispose {}
             }
             PondPediaCustomTheme(
-                darkTheme = darkTheme,
+//                darkTheme = darkTheme,
                 dynamicColor = isDynamicColor
             ) {
                 PondPediaApp(navController = rememberNavController())

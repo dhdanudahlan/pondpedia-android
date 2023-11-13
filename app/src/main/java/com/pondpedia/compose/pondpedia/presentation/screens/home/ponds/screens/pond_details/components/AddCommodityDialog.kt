@@ -1,8 +1,8 @@
 package com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.screens.pond_details.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +21,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -31,10 +33,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.pondpedia.compose.pondpedia.core.util.StringParser
 import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondDetailsEvent
 import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondDetailsState
 
@@ -105,6 +110,8 @@ fun AddCommodityDialog(
                 .fillMaxWidth()
         ) {
 
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Tambahkan Komoditas", fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp)
             Spacer(modifier = Modifier.height(8.dp))
 
             ExposedDropdownMenuBox(
@@ -190,13 +197,13 @@ fun AddCommodityDialog(
                 value = quantity,
                 onValueChange = {
                     quantity = it
-                    onEvent(PondDetailsEvent.SetCommodityQuantity(it))
+                    onEvent(PondDetailsEvent.SetCommodityQuantity(StringParser.commaToDot(it)))
                 },
                 label = {
                     Text(text = "Jumlah Tebar")
                 },
                 keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number,
+                    keyboardType = KeyboardType.Decimal,
                     imeAction = ImeAction.Next
                 ),
                 supportingText = {
@@ -247,10 +254,15 @@ fun AddCommodityDialog(
                 }
             )
 
-            Box(
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.TopEnd
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
+                OutlinedButton(onClick = {
+                    onEvent(PondDetailsEvent.HideDialog)
+                }) {
+                    Text(text = "Batal")
+                }
                 Button(onClick = {
                     onEvent(PondDetailsEvent.AddCommodity)
                 }) {

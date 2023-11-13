@@ -44,7 +44,7 @@ fun AddPondManagementCommmodityTabScreen(
                 .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(text = "Tambahkan Komoditas", fontWeight = FontWeight.Bold)
+            Text(text = "Komoditas", fontWeight = FontWeight.Bold)
 
             ScrollableTabRow(
                 selectedTabIndex = tabIndex,

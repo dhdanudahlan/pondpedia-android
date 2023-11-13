@@ -22,9 +22,9 @@ data class CommodityGrowthRecords(
         return CommodityGrowthRecordsEntity(
             recordId = recordId,
             date = date,
-            age = age.toInt(),
-            length = length.toInt(),
-            weight = weight.toInt(),
+            age = age.toFloat().toInt(),
+            length = length.toFloat().toInt(),
+            weight = weight.toFloat().toInt(),
             note = note,
             commodityId = commodityId
         )

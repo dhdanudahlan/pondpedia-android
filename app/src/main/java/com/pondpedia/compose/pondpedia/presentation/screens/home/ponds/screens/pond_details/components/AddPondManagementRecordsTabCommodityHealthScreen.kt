@@ -1,8 +1,8 @@
 package com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.screens.pond_details.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.pondpedia.compose.pondpedia.core.util.StringParser
 import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondDetailsEvent
 import com.pondpedia.compose.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondDetailsState
 
@@ -198,7 +199,7 @@ fun AddPondManagementRecordsTabCommodityHealthScreen(
             value = death,
             onValueChange = {
                 death = it
-                onEvent(PondDetailsEvent.SetCommodityHealthRecordsDeath(it))
+                onEvent(PondDetailsEvent.SetCommodityHealthRecordsDeath(StringParser.commaToDot(it)))
             },
             label = {
                 Text(text = "Jumlah Kematian")
@@ -287,9 +288,9 @@ fun AddPondManagementRecordsTabCommodityHealthScreen(
         )
         Spacer(modifier = Modifier.height(4.dp))
 
-        Box(
+        Row(
             modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.TopEnd
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
                 enabled = isCommodityExist,

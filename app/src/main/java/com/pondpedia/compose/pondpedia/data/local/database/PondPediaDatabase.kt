@@ -29,6 +29,7 @@ import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.relatio
         PondRecordsEntity::class,
         WaterRecordsEntity::class,
         PondCategoryCrossRefEntity::class,
+//        ChatResponseEntity::class
     ],
     version = 1,
     exportSchema = false
@@ -37,4 +38,5 @@ import com.pondpedia.compose.pondpedia.data.local.entity.pond_management.relatio
 abstract class PondPediaDatabase : RoomDatabase() {
     abstract val pondsDao: PondsDao
     abstract val pondDetailsDao: PondDetailsDao
+//    abstract val chatDao: AiChatDao
 }

@@ -23,7 +23,7 @@ data class Commodity(
             commodityId = commodityId,
             date = date,
             origin = origin,
-            quantity = quantity.toInt(),
+            quantity = quantity.toFloat().toInt(),
             name = name,
             scientificName = scientificName,
             pondId = pondId

@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pondpedia.compose.pondpedia.presentation.PondPediaAppState
@@ -38,21 +40,48 @@ fun HomeScreen(
     homeState: PondPediaAppState = rememberPondPediaAppState(),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val homeDestination = homeState.currentHomeScreenDestination
 
     var showSettingsDialog by rememberSaveable {
         mutableStateOf(false)
     }
-    
+
     var showSearchBar by rememberSaveable {
+        mutableStateOf(false)
+    }
+    var showTopAppBar by rememberSaveable {
         mutableStateOf(false)
     }
     val unreadDestinations = emptySet<Screens>()
 
+
     val viewModel = hiltViewModel<PondsViewModel>()
     val pondsState by viewModel.state.collectAsState()
 
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
     Scaffold(
+        modifier = Modifier.fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { SnackbarHost(snackbarHostState) },
+        topBar = {
+            if (homeState.shouldShowBottomBar) {
+                HomeTopAppBar(
+                    titleRes = homeDestination?.titleTextId ?: Screens.More.titleTextId,
+                    actionSearchIcon = Icons.Default.Search,
+                    actionSearchIconContentDescription = stringResource(
+                        id = homeDestination?.titleTextId ?: Screens.More.titleTextId,
+                    ),
+                    actionOptionsIcon = Icons.Default.FilterList,
+                    actionOptionsIconContentDescription = stringResource(
+                        id = homeDestination?.titleTextId ?: Screens.More.titleTextId,
+                    ),
+                    onActionSearchClick =  { showSearchBar = true },
+                    onActionOptionsClick = { showSettingsDialog = true },
+                    scrollBehavior = scrollBehavior
+                )
+            }
+        },
         bottomBar = {
             if (homeState.shouldShowBottomBar) {
                 HomeBottomNavBar(
@@ -79,22 +108,6 @@ fun HomeScreen(
             Column(
                 Modifier.fillMaxSize()
             ) {
-                val homeDestination = homeState.currentHomeScreenDestination
-                if (homeDestination != null) {
-                    HomeTopAppBar(
-                        titleRes = homeDestination.titleTextId,
-                        actionSearchIcon = Icons.Default.Search,
-                        actionSearchIconContentDescription = stringResource(
-                            id = homeDestination.titleTextId,
-                        ),
-                        actionOptionsIcon = Icons.Default.FilterList,
-                        actionOptionsIconContentDescription = stringResource(
-                            id = homeDestination.titleTextId,
-                        ),
-                        onActionSearchClick =  { showSearchBar = true },
-                        onActionOptionsClick = { showSettingsDialog = true }
-                    )
-                }
 
                 HomeBottomNavGraph(
                     homeState = homeState,
