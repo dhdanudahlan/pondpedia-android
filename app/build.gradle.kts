@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.pondpedia.compose.pondpedia"
+    namespace = "com.pondpedia.android.pondpedia"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.pondpedia.compose.pondpedia"
+        applicationId = "com.pondpedia.android.pondpedia"
         minSdk = 28
         targetSdk = 34
         versionCode = 2

@@ -1,4 +1,4 @@
-package com.pondpedia.compose.pondpedia
+package com.pondpedia.android.pondpedia
 
 import org.junit.Test
 
