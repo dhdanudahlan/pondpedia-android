@@ -1,0 +1,84 @@
+{
+  "project_info": {
+    "project_number": "120180449168",
+    "project_id": "pondpedia-9fa56",
+    "storage_bucket": "pondpedia-9fa56.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120180449168:android:aacf3b9b7ee338466d9d15",
+        "android_client_info": {
+          "package_name": "com.bangkit.pondpedia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "120180449168-ins88i5ljekol0gg4haelk52du62rk48.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKVy8xvxosUJN-raV8tDRpSDAc6za9xqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "120180449168-ins88i5ljekol0gg4haelk52du62rk48.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:120180449168:android:c7dd7f5da5702d9c6d9d15",
+        "android_client_info": {
+          "package_name": "com.pondpedia.android.pondpedia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "120180449168-org6h1is7pu9mlsg6k83fnuir9d80rq8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pondpedia.android.pondpedia",
+            "certificate_hash": "f8fecc54ea746c7051b4823582752befc4571263"
+          }
+        },
+        {
+          "client_id": "120180449168-unfnspj1410f5gaollgoeghaopttn53n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pondpedia.android.pondpedia",
+            "certificate_hash": "3ed3fec1647926e329556e42c3785c354649b9a6"
+          }
+        },
+        {
+          "client_id": "120180449168-ins88i5ljekol0gg4haelk52du62rk48.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKVy8xvxosUJN-raV8tDRpSDAc6za9xqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "120180449168-ins88i5ljekol0gg4haelk52du62rk48.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

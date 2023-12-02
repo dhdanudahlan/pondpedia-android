@@ -175,7 +175,7 @@ fun SignInScreen(
                             contentColor = Color.White
                         ),
                         onClick = { onEmailPasswordSignInClick(email.value, password.value) }) {
-                        Text(text = stringResource(id = R.string.login), maxLines = 1)
+                        Text(text = stringResource(id = R.string.signin), maxLines = 1)
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -192,7 +192,7 @@ fun SignInScreen(
                             ),
                             onClick = onGuestSignInClick
                         ) {
-                            Text(text = stringResource(id = R.string.login_guest), maxLines = 1)
+                            Text(text = stringResource(id = R.string.signin_guest), maxLines = 1)
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(
@@ -203,7 +203,7 @@ fun SignInScreen(
                             ),
                             onClick = onGoogleSignInClick
                         ) {
-                            Text(text = stringResource(id = R.string.login_google), maxLines = 1)
+                            Text(text = stringResource(id = R.string.signin_google), maxLines = 1)
                         }
                     }
                 }
@@ -331,7 +331,7 @@ fun SignInScreenUI(
                             contentColor = Color.White
                         ),
                         onClick = { }) {
-                        Text(text = stringResource(id = R.string.login))
+                        Text(text = stringResource(id = R.string.signin))
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -348,7 +348,7 @@ fun SignInScreenUI(
                             ),
                             onClick = { }
                         ) {
-                            Text(text = stringResource(id = R.string.login_guest), maxLines = 1)
+                            Text(text = stringResource(id = R.string.signin_guest), maxLines = 1)
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Button(
@@ -359,7 +359,7 @@ fun SignInScreenUI(
                             ),
                             onClick = { }
                         ) {
-                            Text(text = stringResource(id = R.string.login_google), maxLines = 1)
+                            Text(text = stringResource(id = R.string.signin_google), maxLines = 1)
                         }
                     }
                 }

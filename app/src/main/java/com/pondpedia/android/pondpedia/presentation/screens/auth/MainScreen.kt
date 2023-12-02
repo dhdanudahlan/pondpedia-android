@@ -1,4 +1,4 @@
-package com.pondpedia.android.pondpedia.presentation.screens.authentication
+package com.pondpedia.android.pondpedia.presentation.screens.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -16,8 +16,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +32,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pondpedia.android.pondpedia.R
-import com.pondpedia.android.pondpedia.presentation.ui.theme.Navi
 import com.pondpedia.android.pondpedia.presentation.ui.theme.PondPediaCustomTheme
 
 
@@ -42,10 +41,10 @@ fun MainScreen(
     onSignUpClick: () -> Unit,
 ) {
     Image(
-        painter = painterResource(R.drawable.underwater_light_blue),
+        painter = painterResource(R.drawable.blue_wallpaper),
         contentDescription = "Background Image",
         contentScale = ContentScale.FillBounds,
-        modifier = Modifier.fillMaxHeight()
+        modifier = Modifier.fillMaxSize()
     )
 
     Column(
@@ -103,58 +102,50 @@ fun MainScreen(
                     }
                 }
 
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Button(
-                        onClick = onSignInClick,
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Navi,
-                            contentColor = Color.White
-                        )
-                    ) {
-                        Text(text = stringResource(id = R.string.signin))
-                    }
-
-                    Spacer(modifier = Modifier.width(16.dp))
-
-                    Button(
-                        onClick = onSignUpClick,
-                        modifier = Modifier.weight(1f),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Navi,
-                            contentColor = Color.White
-                        )
-                    ) {
-                        Text(text = stringResource(id = R.string.signup))
-                    }
-
-                }
+//                Spacer(modifier = Modifier.height(32.dp))
             }
         }
         Spacer(modifier = Modifier.weight(1f))
 
-        Image(
-            painter = painterResource(R.drawable.underwater_bubble), // Replace with your bubble drawable
-            contentDescription = "Bubble",
-            modifier = Modifier
-                .size(200.dp)
-                .align(Alignment.CenterHorizontally)
-                .alpha(0.75f)
-        )
-
         Spacer(modifier = Modifier.weight(1f))
 
-        Text(
-            text = stringResource(id = R.string.copyright),
-            fontSize = 14.sp,
-            color = Color.White
-        )
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button(
+                    onClick = onSignInClick,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(text = stringResource(id = R.string.signin))
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Button(
+                    onClick = onSignUpClick,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(text = stringResource(id = R.string.signup))
+                }
+
+                TextButton(
+                    onClick = {  },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.signin_guest),
+                        fontSize = 14.sp,
+                        color = Color.White
+                    )
+                }
+
+            }
+        }
+
 
         Spacer(modifier = Modifier.height(4.dp))
     }
@@ -164,7 +155,7 @@ fun MainScreen(
 @Composable
 fun MainPreview() {
     PondPediaCustomTheme {
-        com.pondpedia.android.pondpedia.presentation.screens.authentication.MainScreen(
+        MainScreen(
             onSignInClick = {
             },
             onSignUpClick = {

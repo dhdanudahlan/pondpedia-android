@@ -3,13 +3,18 @@ package com.pondpedia.android.pondpedia
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.DisposableEffect
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavHostController
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.pondpedia.android.pondpedia.core.app.PondPediaApplication
-import com.pondpedia.android.pondpedia.presentation.PondPediaApp
+import com.pondpedia.android.pondpedia.navigation.NavGraph
+import com.pondpedia.android.pondpedia.navigation.Screen
 import com.pondpedia.android.pondpedia.presentation.ui.theme.PondPediaCustomTheme
 import dagger.hilt.android.AndroidEntryPoint
+import com.pondpedia.android.pondpedia.presentation.screens.auth.AuthViewModel
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,8 +53,10 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val dataStore by lazy { (application as PondPediaApplication).pondPediaDataStore }
 
-    /*val viewModel: MainActivityViewModel by viewModels()*/
+    private lateinit var navController: NavHostController
+    private val viewModel by viewModels<AuthViewModel>()
 
+    @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -69,10 +76,22 @@ class MainActivity : ComponentActivity() {
 //                darkTheme = darkTheme,
                 dynamicColor = isDynamicColor
             ) {
-                PondPediaApp(navController = rememberNavController())
+//                PondPediaApp(navController = rememberNavController())
+                navController = rememberAnimatedNavController()
+                NavGraph(
+                    navController = navController
+                )
+                checkAuthState()
             }
         }
     }
+    private fun checkAuthState() {
+        if(viewModel.isUserAuthenticated) {
+            navigateToProfileScreen()
+        }
+    }
+
+    private fun navigateToProfileScreen() = navController.navigate(Screen.ProfileScreen.route)
 }
 /*
 

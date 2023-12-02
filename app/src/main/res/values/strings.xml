@@ -1,14 +1,19 @@
 <resources>
     <string name="app_name">PondPedia</string>
-    <string name="web_client_id">973580810637-lpcphjcuqlggh493dg2nlrcd4741bfrp.apps.googleusercontent.com</string>
+    <string name="web_client_id">120180449168-ins88i5ljekol0gg4haelk52du62rk48.apps.googleusercontent.com</string>
 
-    <string name="signin">Sign In</string>
-    <string name="signup">Sign Up</string>
-    <string name="login">Login</string>
-    <string name="register">Register</string>
-    <string name="login_guest">Guest Account</string>
-    <string name="login_google">Google Account</string>
+    <string name="signin">Masuk</string>
+    <string name="signup">Daftar</string>
+    <string name="signin_guest">Login tanpa akun</string>
+    <string name="signin_google">Google Account</string>
+    <string name="signin_offer">Sudah punya akun?</string>
+    <string name="signup_offer">Belum punya akun?</string>
     <string name="logout">Logout</string>
+
+
+    //Menu Items
+    <string name="revoke_access_item">Revoke Access</string>
+    <string name="sign_out_item">Sign-out</string>
 
     <string name="email">Email</string>
     <string name="password">Password</string>
