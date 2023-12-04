@@ -40,13 +40,13 @@ fun HomeTopAppBar(
     CenterAlignedTopAppBar(
         title = { Text(text = stringResource(id = titleRes)) },
         navigationIcon = {
-            IconButton(onClick = onActionSearchClick) {
+            /*IconButton(onClick = onActionSearchClick) {
                 Icon(
                     imageVector = actionSearchIcon,
                     contentDescription = actionSearchIconContentDescription,
                     tint = MaterialTheme.colorScheme.onSurface,
                 )
-            }
+            }*/
         },
         actions = {
             IconButton(onClick = onActionOptionsClick) {

@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.pondpedia.android.pondpedia.R
-import com.pondpedia.android.pondpedia.presentation.screens.authentication.components.UserData
+import com.pondpedia.android.pondpedia.domain.model.auth.Farmer
 import com.pondpedia.android.pondpedia.presentation.ui.theme.Navi
 import com.pondpedia.android.pondpedia.presentation.ui.theme.White
 
@@ -36,7 +36,7 @@ import com.pondpedia.android.pondpedia.presentation.ui.theme.White
 
 @Composable
 fun MoreScreenA(
-    userData: UserData?,
+    userData: Farmer?,
     onSignOut: () -> Unit
 ) {
     Column(
@@ -46,7 +46,7 @@ fun MoreScreenA(
     ) {
         if (userData != null) {
             AsyncImage(
-                model = if(userData.pictureUrl != "GUEST") userData.pictureUrl else R.drawable.pondpedia_1,
+                model = if(userData.photoUrl != "GUEST") userData.photoUrl else R.drawable.pondpedia_1,
                 contentDescription = "Profile picture",
                 modifier = Modifier
                     .size(150.dp)
@@ -66,11 +66,10 @@ fun MoreScreenA(
         Spacer(modifier = Modifier.height(16.dp))
         if (userData != null) {
             Text(
-                text = userData.username!!,
+                text = userData.name,
                 textAlign = TextAlign.Center,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Navi
             )
         } else {
             Text(
@@ -78,17 +77,15 @@ fun MoreScreenA(
                 textAlign = TextAlign.Center,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Navi
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
         if (userData != null) {
             Text(
-                text = userData.userEmail!!,
+                text = userData.email,
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Navi
             )
         } else {
 
@@ -97,7 +94,6 @@ fun MoreScreenA(
                 textAlign = TextAlign.Center,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = Navi
             )
         }
         Spacer(modifier = Modifier.height(16.dp))

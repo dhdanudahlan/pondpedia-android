@@ -34,7 +34,7 @@ fun PondFeedingScreen(
 ) {
     val listOfRecords = pondDetailsState.feedingRecords.sortedBy { it.date }
     val scrollState = rememberScrollState()
-    var listOfRecordsReversed = listOfRecords.reversed()
+    val listOfRecordsReversed = listOfRecords.reversed()
     Row(
         Modifier
             .fillMaxSize()
