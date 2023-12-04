@@ -4,8 +4,9 @@
 
     <string name="signin">Masuk</string>
     <string name="signup">Daftar</string>
-    <string name="signin_guest">Login tanpa akun</string>
-    <string name="signin_google">Google Account</string>
+    <string name="signin_guest">Masuk tanpa akun</string>
+    <string name="signin_google">Masuk dengan Google</string>
+    <string name="signin_facebook">Masuk dengan Facebook</string>
     <string name="signin_offer">Sudah punya akun?</string>
     <string name="signup_offer">Belum punya akun?</string>
     <string name="logout">Logout</string>
@@ -15,8 +16,45 @@
     <string name="revoke_access_item">Revoke Access</string>
     <string name="sign_out_item">Sign-out</string>
 
-    <string name="email">Email</string>
-    <string name="password">Password</string>
+
+    <string name="name_label">Nama Lengkap</string>
+    <string name="number_label">Nomor Telepon</string>
+    <string name="email_label">Email</string>
+    <string name="password_label">Kata Sandi</string>
+    <string name="password_confirmation_label">Ulang Kata Sandi</string>
+    <string name="occupation_label">Pekerjaan</string>
+    <string name="information_source_label">Dari mana anda mengetahui tentang PondPedia?</string>
+    <string name="choose_label">Pilih</string>
+
+    <string name="occupation_type_farmer">Pembudidaya</string>
+    <string name="occupation_type_farmer_1">Pemilik Tambak</string>
+    <string name="occupation_type_farmer_2">Teknisi Tambak</string>
+    <string name="occupation_type_farmer_3">Asisten Teknisi</string>
+    <string name="occupation_type_farmer_4">Admin Tambak</string>
+    <string name="occupation_type_farmer_5">Anak Kolam (Tambak)</string>
+    <string name="occupation_type_farmer_6">Laboran</string>
+    <string name="occupation_type_farmer_7">Lainnya</string>
+
+    <string name="occupation_type_non_farmer">Non Pembudidaya</string>
+    <string name="occupation_type_non_farmer_1">Penyuluh</string>
+    <string name="occupation_type_non_farmer_2">Pegawai Pemerintah/PNS/ASN</string>
+    <string name="occupation_type_non_farmer_3">Pegawai Swasta</string>
+    <string name="occupation_type_non_farmer_4">Dosen/Akademisi</string>
+    <string name="occupation_type_non_farmer_5">Pelajar/Mahasiswa</string>
+    <string name="occupation_type_non_farmer_6">Sales</string>
+    <string name="occupation_type_non_farmer_7">Supplier</string>
+    <string name="occupation_type_non_farmer_8">Lainnya</string>
+
+    <string name="information_source_1">Acara Online (Webinar)</string>
+    <string name="information_source_2">Acara Offline</string>
+    <string name="information_source_3">Blog/Artikel/Website</string>
+    <string name="information_source_4">Email</string>
+    <string name="information_source_5">Media Sosial (Facebook, Instagram, TikTok, Youtube)</string>
+    <string name="information_source_6">Atribut Fisik (Brosur, Katalog, Spanduk, Merchandise)</string>
+    <string name="information_source_7">Rekomendasi Orang Lain</string>
+    <string name="information_source_8">Komunitas</string>
+    <string name="information_source_9">Lainnya</string>
+
 
     <string name="title_welcome_page">PondPedia</string>
     <string name="message_welcome_page">Memajukan praktik akuakultur!</string>
@@ -55,4 +93,14 @@
     <string name="menu_aichat_title">AIChat</string>
     <string name="menu_aichat_label">AIChat</string>
 
+
+
+    <string name="auth_slide_title_1">PondPedia</string>
+    <string name="auth_slide_content_1">Memajukan praktik Akuakultur!</string>
+    <string name="auth_slide_title_2">Offline Mode</string>
+    <string name="auth_slide_content_2">Tidak perlu akses internet!</string>
+    <string name="auth_slide_title_3">Manajemen Kolam Digital</string>
+    <string name="auth_slide_content_3">Pencatatan digital untuk meningkatkan keamanan data!</string>
+    <string name="auth_slide_title_4">AI Chat</string>
+    <string name="auth_slide_content_4">Analisa data kolam dengan bantuan kecerdasan buatan!</string>
 </resources>

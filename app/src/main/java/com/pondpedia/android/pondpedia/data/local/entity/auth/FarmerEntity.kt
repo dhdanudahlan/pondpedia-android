@@ -11,6 +11,16 @@ data class FarmerEntity(
 
     val email: String,
 
+    val password: String,
+
+    val occupation: String,
+
+    val informationSource: String,
+
+    val photoUrl: String,
+
+    val firabaseId: String,
+
     val preferences: String
 ) {
     fun toFarmer(): Farmer {
@@ -19,6 +29,10 @@ data class FarmerEntity(
             name = name,
             phoneNumber = phoneNumber,
             email = email,
+            occupation = occupation,
+            informationSource = informationSource,
+            photoUrl = photoUrl,
+            firabaseId = firabaseId,
             preferences = preferences
         )
     }

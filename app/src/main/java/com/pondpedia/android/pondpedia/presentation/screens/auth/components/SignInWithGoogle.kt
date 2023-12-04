@@ -5,7 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pondpedia.android.pondpedia.components.ProgressBar
 import com.pondpedia.android.pondpedia.domain.model.Response.*
-import com.pondpedia.android.pondpedia.presentation.screens.auth.AuthViewModel
+import com.pondpedia.android.pondpedia.presentation.screens.auth.components.viewmodel.AuthViewModel
 
 @Composable
 fun SignInWithGoogle(

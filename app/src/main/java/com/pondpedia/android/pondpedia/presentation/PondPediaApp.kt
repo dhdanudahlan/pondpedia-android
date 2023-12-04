@@ -1,34 +1,48 @@
 package com.pondpedia.android.pondpedia.presentation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
 import com.pondpedia.android.pondpedia.presentation.components.navigation.graphs.authNavGraph
 import com.pondpedia.android.pondpedia.presentation.screens.home.HomeScreen
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PondPediaApp(
     navController: NavHostController
 ) {
-    NavHost(
+//    HomeScreen()
+    AnimatedNavHost(
         navController = navController,
-        route = Graph.ROOT,
-        startDestination = Graph.HOME
+        startDestination = Graph.AUTHENTICATION,
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None }
     ) {
         authNavGraph(
             navController = navController
         )
-        composable(route = Graph.HOME) {
+        composable(
+            route = Graph.HOME
+        ) {
             HomeScreen()
         }
     }
+
 }
 
 object Graph {
     const val ROOT = "root_graph"
     const val AUTHENTICATION = "auth_graph"
+    const val SIGNIN = "auth_signin_graph"
+    const val SIGNUP = "auth_signup_graph"
     const val HOME = "home_graph"
+    const val HOMED = "homed_graph"
 
 
     const val HOME_PONDS = "home_ponds_graph"

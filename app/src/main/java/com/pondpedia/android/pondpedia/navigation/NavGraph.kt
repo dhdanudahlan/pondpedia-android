@@ -7,10 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.pondpedia.android.pondpedia.navigation.Screen.AuthScreen
-import com.pondpedia.android.pondpedia.navigation.Screen.ProfileScreen
+import com.pondpedia.android.pondpedia.presentation.Graph
 import com.pondpedia.android.pondpedia.presentation.screens.auth.AuthScreen
-import ro.alexmamo.firebasesigninwithgoogle.presentation.profile.ProfileScreen
+import com.pondpedia.android.pondpedia.presentation.screens.auth.sign_in.SignInScreen
+import com.pondpedia.android.pondpedia.presentation.screens.auth.sign_up.SignUpScreen
+import com.pondpedia.android.pondpedia.presentation.screens.auth.components.data.AuthState
+import com.pondpedia.android.pondpedia.presentation.ui.theme.PondPediaCustomTheme
 
 @Composable
 @ExperimentalAnimationApi
@@ -19,28 +21,63 @@ fun NavGraph(
 ) {
     AnimatedNavHost(
         navController = navController,
-        startDestination = AuthScreen.route,
+        startDestination = Graph.AUTHENTICATION,
         enterTransition = {EnterTransition.None },
         exitTransition = { ExitTransition.None }
     ) {
         composable(
-            route = AuthScreen.route
+            route = Graph.AUTHENTICATION
         ) {
-            AuthScreen(
-                navigateToProfileScreen = {
-                    navController.navigate(ProfileScreen.route)
-                }
-            )
+            PondPediaCustomTheme ( darkTheme = false ) {
+                AuthScreen(
+                    navigateToSignInScreen = {
+                        navController.navigate(Graph.SIGNIN)
+                    },
+                    navigateToSignUpScreen = {
+                        navController.navigate(Graph.SIGNUP)
+                    },
+                    onGuestSignIn = {
+                        navController.navigate(Graph.SIGNUP)
+                    }
+                )
+            }
         }
         composable(
-            route = ProfileScreen.route
+            route = Graph.SIGNIN
         ) {
-            ProfileScreen(
-                navigateToAuthScreen = {
-                    navController.popBackStack()
-                    navController.navigate(AuthScreen.route)
-                }
-            )
+
+            PondPediaCustomTheme ( darkTheme = false ) {
+                SignInScreen(
+                    state = AuthState(),
+                    navigateToAuthScreen = {
+                        navController.popBackStack()
+                        navController.navigate(Graph.AUTHENTICATION)
+                    },
+                    navigateToSignUpScreen = {
+                        navController.navigate(Graph.SIGNUP)
+                    },
+                    onGoogleSignInClick = {},
+                    onEmailPasswordSignInClick = { _, _ -> }
+                )
+            }
+        }
+        composable(
+            route = Graph.SIGNUP
+        ) {
+
+            PondPediaCustomTheme ( darkTheme = false ) {
+                SignUpScreen(
+                    state = AuthState(),
+                    navigateToAuthScreen = {
+                        navController.popBackStack()
+                        navController.navigate(Graph.AUTHENTICATION)
+                    },
+                    navigateToSignInScreen = {
+                        navController.navigate(Graph.SIGNIN)
+                    },
+                    onEmailPasswordSignUpClick = { _, _ -> }
+                )
+            }
         }
     }
 }

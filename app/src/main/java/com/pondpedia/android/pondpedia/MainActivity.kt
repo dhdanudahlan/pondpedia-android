@@ -10,11 +10,11 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.pondpedia.android.pondpedia.core.app.PondPediaApplication
-import com.pondpedia.android.pondpedia.navigation.NavGraph
 import com.pondpedia.android.pondpedia.navigation.Screen
+import com.pondpedia.android.pondpedia.presentation.PondPediaApp
 import com.pondpedia.android.pondpedia.presentation.ui.theme.PondPediaCustomTheme
 import dagger.hilt.android.AndroidEntryPoint
-import com.pondpedia.android.pondpedia.presentation.screens.auth.AuthViewModel
+import com.pondpedia.android.pondpedia.presentation.screens.auth.components.viewmodel.AuthViewModel
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,12 +76,9 @@ class MainActivity : ComponentActivity() {
 //                darkTheme = darkTheme,
                 dynamicColor = isDynamicColor
             ) {
-//                PondPediaApp(navController = rememberNavController())
                 navController = rememberAnimatedNavController()
-                NavGraph(
-                    navController = navController
-                )
-                checkAuthState()
+                PondPediaApp(navController = navController)
+//                checkAuthState()
             }
         }
     }
