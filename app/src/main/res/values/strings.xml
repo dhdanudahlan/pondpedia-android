@@ -24,6 +24,7 @@
     <string name="password_confirmation_label">Ulang Kata Sandi</string>
     <string name="occupation_label">Pekerjaan</string>
     <string name="information_source_label">Dari mana anda mengetahui tentang PondPedia?</string>
+    <string name="accept_terms_label">Saya menyetujui dengan TOS</string>
     <string name="choose_label">Pilih</string>
 
     <string name="occupation_type_farmer">Pembudidaya</string>
@@ -89,6 +90,7 @@
     <string name="pond_details_commodity">Komoditas</string>
     <string name="pond_details_water">Kualitas Air</string>
     <string name="pond_details_feeding">Pakan</string>
+    <string name="pond_details_add_records">Tambah Catatan</string>
 
     <string name="menu_aichat_title">AIChat</string>
     <string name="menu_aichat_label">AIChat</string>

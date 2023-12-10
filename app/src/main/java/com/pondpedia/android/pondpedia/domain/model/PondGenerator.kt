@@ -4,7 +4,7 @@ import com.pondpedia.android.pondpedia.domain.model.pond_management.Commodity
 import com.pondpedia.android.pondpedia.domain.model.pond_management.CommodityGrowthRecords
 import com.pondpedia.android.pondpedia.domain.model.pond_management.CommodityHealthRecords
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Feed
-import com.pondpedia.android.pondpedia.domain.model.pond_management.FeedingRecords
+import com.pondpedia.android.pondpedia.domain.model.pond_management.new_model.FeedingRecords
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Pond
 import com.pondpedia.android.pondpedia.domain.model.pond_management.PondRecords
 import com.pondpedia.android.pondpedia.domain.model.pond_management.WaterRecords
@@ -30,7 +30,7 @@ object PondGenerator {
     fun GenerateCommodity(pond: Pond): Commodity {
         val uuid = UUID.randomUUID()
         val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm")
-        val currentDate = LocalDateTime.now().format(formatter)
+        val currentDate = LocalDateTime.now().toString()
         return Commodity(
             commodityId = 0,
             date = currentDate,
@@ -44,7 +44,7 @@ object PondGenerator {
     fun GenerateFeed(): Feed {
         val uuid = UUID.randomUUID()
         val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm")
-        val currentDate = LocalDateTime.now().format(formatter)
+        val currentDate = LocalDateTime.now().toString()
         return Feed(
             feedId = 0,
             date = currentDate,
@@ -56,7 +56,7 @@ object PondGenerator {
 
     fun GeneratePondRecords(pond: Pond): PondRecords {
         val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm")
-        val currentDate = LocalDateTime.now().format(formatter)
+        val currentDate = LocalDateTime.now().toString()
         return PondRecords(
             recordId = 0,
             date = currentDate,
@@ -68,7 +68,7 @@ object PondGenerator {
 
     fun GenerateWaterRecords(pond: Pond): WaterRecords {
         val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm")
-        val currentDate = LocalDateTime.now().format(formatter)
+        val currentDate = LocalDateTime.now().toString()
 
         val pH = ((6 .. 8).random().toFloat() + ((0 .. 99).random().toFloat() / 100.0))
         val dissolvedOxygen = ((5 .. 8).random().toFloat() + ((0 .. 99).random().toFloat() / 100.0))
@@ -86,9 +86,10 @@ object PondGenerator {
             pondId = pond.pondId
         )
     }
-    fun GenerateFeedingRecords(pond: Pond, feed: Feed = Feed(0, "Unspecified", "Unspecified", "Unspecified", "Unspecified")): FeedingRecords {
+    fun GenerateFeedingRecords(pond: Pond, feed: Feed = Feed(0, LocalDateTime.now().toString(), "Unspecified", "Unspecified", "Unspecified")): FeedingRecords {
+
         val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm")
-        val currentDate = LocalDateTime.now().format(formatter)
+        val currentDate = LocalDateTime.now().toString()
 
         return FeedingRecords(
             recordId = 0,
@@ -102,7 +103,7 @@ object PondGenerator {
 
     fun generateCommodityGrowthRecords(commodity: Commodity, age: Int = 1): CommodityGrowthRecords {
         val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm")
-        val currentDate = LocalDateTime.now().format(formatter)
+        val currentDate = LocalDateTime.now().toString()
         return CommodityGrowthRecords(
             recordId = 0,
             date = currentDate,
@@ -115,7 +116,7 @@ object PondGenerator {
     }
     fun generateCommodityHealthRecords(commodity: Commodity, death: Int = 0): CommodityHealthRecords {
         val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm")
-        val currentDate = LocalDateTime.now().format(formatter)
+        val currentDate = LocalDateTime.now().toString()
         return CommodityHealthRecords(
             recordId = 0,
             date = currentDate,

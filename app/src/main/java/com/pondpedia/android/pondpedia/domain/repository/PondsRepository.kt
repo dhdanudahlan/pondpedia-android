@@ -5,7 +5,7 @@ import com.pondpedia.android.pondpedia.data.local.entity.pond_management.relatio
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Category
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Pond
 import com.pondpedia.android.pondpedia.domain.model.pond_management.PondRecords
-import com.pondpedia.android.pondpedia.presentation.screens.home.ponds.components.viewmodel.SortType
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.SortType
 import kotlinx.coroutines.flow.Flow
 
 interface PondsRepository {

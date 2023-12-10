@@ -1,7 +1,7 @@
 package com.pondpedia.android.pondpedia.domain.use_case.ponds.pond_details
 
 import com.pondpedia.android.pondpedia.core.util.DateGenerator
-import com.pondpedia.android.pondpedia.domain.model.pond_management.FeedingRecords
+import com.pondpedia.android.pondpedia.domain.model.pond_management.new_model.FeedingRecords
 import com.pondpedia.android.pondpedia.domain.repository.PondDetailsRepository
 
 class AddFeedingRecordsUseCase (

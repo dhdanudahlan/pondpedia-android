@@ -10,11 +10,11 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.pondpedia.android.pondpedia.core.app.PondPediaApplication
-import com.pondpedia.android.pondpedia.navigation.Screen
+import com.pondpedia.android.pondpedia.presentation.navigation.Screen
 import com.pondpedia.android.pondpedia.presentation.PondPediaApp
-import com.pondpedia.android.pondpedia.presentation.ui.theme.PondPediaCustomTheme
+import com.pondpedia.android.pondpedia.presentation.theme.PondPediaCustomTheme
 import dagger.hilt.android.AndroidEntryPoint
-import com.pondpedia.android.pondpedia.presentation.screens.auth.components.viewmodel.AuthViewModel
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel.AuthViewModel
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {

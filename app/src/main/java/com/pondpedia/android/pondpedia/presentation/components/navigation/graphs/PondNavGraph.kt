@@ -8,12 +8,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.pondpedia.android.pondpedia.presentation.Graph
 import com.pondpedia.android.pondpedia.presentation.PondPediaAppState
-import com.pondpedia.android.pondpedia.presentation.screens.home.TestScreen
-import com.pondpedia.android.pondpedia.presentation.screens.home.components.Screens
-import com.pondpedia.android.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondDetailsEvent
-import com.pondpedia.android.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondDetailsViewModel
-import com.pondpedia.android.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondsState
-import com.pondpedia.android.pondpedia.presentation.screens.home.ponds.screens.pond_details.screens.DetailsScreen
+import com.pondpedia.android.pondpedia.presentation.ui.home.TestScreen
+import com.pondpedia.android.pondpedia.presentation.ui.home.components.Screens
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondDetailsEvent
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondDetailsViewModel
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsState
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.screens.pond_details.screens.DetailsScreen
 
 fun NavGraphBuilder.pondNavGraph(
     homeState: PondPediaAppState,

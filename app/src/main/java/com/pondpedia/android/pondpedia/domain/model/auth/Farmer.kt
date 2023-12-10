@@ -19,7 +19,7 @@ data class Farmer(
 
     val photoUrl: String,
 
-    val firabaseId: String,
+    val firebaseId: String,
 
     val preferences: String
 ) {
@@ -33,7 +33,7 @@ data class Farmer(
             occupation = occupation,
             informationSource = informationSource,
             photoUrl = photoUrl,
-            firabaseId = firabaseId,
+            firebaseId = firebaseId,
             preferences = preferences
         )
     }

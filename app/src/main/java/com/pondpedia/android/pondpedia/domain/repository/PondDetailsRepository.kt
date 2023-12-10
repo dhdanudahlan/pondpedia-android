@@ -3,7 +3,7 @@ package com.pondpedia.android.pondpedia.domain.repository
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Commodity
 import com.pondpedia.android.pondpedia.domain.model.pond_management.CommodityGrowthRecords
 import com.pondpedia.android.pondpedia.domain.model.pond_management.CommodityHealthRecords
-import com.pondpedia.android.pondpedia.domain.model.pond_management.FeedingRecords
+import com.pondpedia.android.pondpedia.domain.model.pond_management.new_model.FeedingRecords
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Pond
 import com.pondpedia.android.pondpedia.domain.model.pond_management.PondRecords
 import com.pondpedia.android.pondpedia.domain.model.pond_management.WaterRecords
