@@ -4,13 +4,15 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.pondpedia.android.pondpedia.presentation.components.navigation.graphs.authNavGraph
-import com.pondpedia.android.pondpedia.presentation.screens.home.HomeScreen
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel.AuthViewModel
+import com.pondpedia.android.pondpedia.presentation.ui.home.HomeScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -18,14 +20,19 @@ fun PondPediaApp(
     navController: NavHostController
 ) {
 //    HomeScreen()
+
+    val authViewModel = hiltViewModel<AuthViewModel>()
+    val authState by authViewModel.state.collectAsState()
     AnimatedNavHost(
         navController = navController,
-        startDestination = Graph.AUTHENTICATION,
+        startDestination = Graph.HOME,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None }
     ) {
         authNavGraph(
-            navController = navController
+            navController = navController,
+            viewModel = authViewModel,
+            state = authState
         )
         composable(
             route = Graph.HOME

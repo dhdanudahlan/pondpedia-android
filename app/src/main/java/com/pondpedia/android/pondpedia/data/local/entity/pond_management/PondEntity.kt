@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.pondpedia.android.pondpedia.core.util.DateGenerator
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Pond
+import java.time.LocalDateTime
 
 @Entity(tableName = "pond_table")
 data class PondEntity(

@@ -11,11 +11,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.pondpedia.android.pondpedia.presentation.Graph
 import com.pondpedia.android.pondpedia.presentation.PondPediaAppState
-import com.pondpedia.android.pondpedia.presentation.screens.home.components.Screens
-import com.pondpedia.android.pondpedia.presentation.screens.home.menu.screens.MenuScreen
-import com.pondpedia.android.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondsEvent
-import com.pondpedia.android.pondpedia.presentation.screens.home.ponds.components.viewmodel.PondsState
-import com.pondpedia.android.pondpedia.presentation.screens.home.ponds.screens.PondsScreen
+import com.pondpedia.android.pondpedia.presentation.ui.home.components.Screens
+import com.pondpedia.android.pondpedia.presentation.ui.home.menu.screens.MenuScreen
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsEvent
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsState
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.screens.PondsScreen
 
 @Composable
 fun HomeBottomNavGraph(

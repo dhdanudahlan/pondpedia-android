@@ -2,7 +2,7 @@ package com.pondpedia.android.pondpedia.data.local.entity.pond_management.relati
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.pondpedia.android.pondpedia.data.local.entity.pond_management.FeedingRecordsEntity
+import com.pondpedia.android.pondpedia.data.local.entity.pond_management.new_model.FeedingRecordsEntity
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.PondEntity
 
 data class PondWithFeedingRecordsEntity(

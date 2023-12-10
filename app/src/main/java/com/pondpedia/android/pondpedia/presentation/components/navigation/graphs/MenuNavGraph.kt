@@ -5,10 +5,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.pondpedia.android.pondpedia.presentation.Graph
 import com.pondpedia.android.pondpedia.presentation.PondPediaAppState
-import com.pondpedia.android.pondpedia.presentation.screens.home.components.Screens
-import com.pondpedia.android.pondpedia.presentation.screens.home.menu.components.MenuScreens
-import com.pondpedia.android.pondpedia.presentation.screens.home.menu.screens.MenuScreen
-import com.pondpedia.android.pondpedia.presentation.screens.home.menu.screens.ai_chat.AiChatScreen
+import com.pondpedia.android.pondpedia.presentation.ui.home.components.Screens
+import com.pondpedia.android.pondpedia.presentation.ui.home.menu.components.MenuScreens
+import com.pondpedia.android.pondpedia.presentation.ui.home.menu.screens.MenuScreen
+import com.pondpedia.android.pondpedia.presentation.ui.home.menu.screens.ai_chat.AiChatScreen
 
 fun NavGraphBuilder.menuNavGraph(
     homeState: PondPediaAppState,

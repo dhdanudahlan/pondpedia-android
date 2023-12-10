@@ -2,7 +2,7 @@ package com.pondpedia.android.pondpedia.domain.use_case.ponds
 
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Pond
 import com.pondpedia.android.pondpedia.domain.repository.PondsRepository
-import com.pondpedia.android.pondpedia.presentation.screens.home.ponds.components.viewmodel.SortType
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.SortType
 import kotlinx.coroutines.flow.Flow
 
 class GetPondListByCategoryUseCase (

@@ -4,7 +4,7 @@ import com.pondpedia.android.pondpedia.data.local.dao.PondDetailsDao
 import com.pondpedia.android.pondpedia.data.local.dao.PondsDao
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Pond
 import com.pondpedia.android.pondpedia.domain.repository.PondsRepository
-import com.pondpedia.android.pondpedia.presentation.screens.home.ponds.components.viewmodel.SortType
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.SortType
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.CategoryEntity
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.relations.PondCategoryCrossRefEntity
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Category

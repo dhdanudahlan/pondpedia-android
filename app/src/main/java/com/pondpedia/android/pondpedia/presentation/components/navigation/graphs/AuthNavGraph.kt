@@ -1,19 +1,25 @@
 package com.pondpedia.android.pondpedia.presentation.components.navigation.graphs
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.navigation
 import com.google.accompanist.navigation.animation.composable
 import com.pondpedia.android.pondpedia.presentation.Graph
-import com.pondpedia.android.pondpedia.presentation.screens.auth.AuthScreen
-import com.pondpedia.android.pondpedia.presentation.screens.auth.sign_in.SignInScreen
-import com.pondpedia.android.pondpedia.presentation.screens.auth.sign_up.SignUpScreen
-import com.pondpedia.android.pondpedia.presentation.screens.auth.components.data.AuthState
-import com.pondpedia.android.pondpedia.presentation.ui.theme.PondPediaCustomTheme
+import com.pondpedia.android.pondpedia.presentation.ui.auth.AuthScreen
+import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_up.SignUpScreen
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.data.AuthState
+import com.pondpedia.android.pondpedia.presentation.theme.PondPediaCustomTheme
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel.AuthViewModel
+import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_in.SignInScreen
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsViewModel
 
 @OptIn(ExperimentalAnimationApi::class)
-fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
+fun NavGraphBuilder.authNavGraph(navController: NavHostController, viewModel: AuthViewModel, state: AuthState) {
+
     navigation(
         route = Graph.AUTHENTICATION,
         startDestination = AuthScreens.Auth.route
@@ -41,7 +47,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
 
             PondPediaCustomTheme ( darkTheme = false ) {
                 SignInScreen(
-                    state = AuthState(),
+                    state = state,
                     navigateToAuthScreen = {
                         navController.popBackStack()
                         navController.navigate(Graph.AUTHENTICATION)
@@ -57,10 +63,11 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
         composable(
             route = AuthScreens.SignUp.route
         ) {
+            val authState by viewModel.state.collectAsState()
 
             PondPediaCustomTheme ( darkTheme = false ) {
                 SignUpScreen(
-                    state = AuthState(),
+                    state = authState,
                     navigateToAuthScreen = {
                         navController.popBackStack()
                         navController.navigate(Graph.AUTHENTICATION)
@@ -68,7 +75,8 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController) {
                     navigateToSignInScreen = {
                         navController.navigate(AuthScreens.SignIn.route)
                     },
-                    onEmailPasswordSignUpClick = { _, _ -> }
+                    onEmailPasswordSignUpClick = { _, _ -> },
+                    onEvent = viewModel::onEvent
                 )
             }
         }

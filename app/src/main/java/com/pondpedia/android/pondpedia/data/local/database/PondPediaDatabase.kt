@@ -11,7 +11,7 @@ import com.pondpedia.android.pondpedia.data.local.entity.pond_management.Commodi
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.CommodityGrowthRecordsEntity
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.CommodityHealthRecordsEntity
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.FeedEntity
-import com.pondpedia.android.pondpedia.data.local.entity.pond_management.FeedingRecordsEntity
+import com.pondpedia.android.pondpedia.data.local.entity.pond_management.new_model.FeedingRecordsEntity
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.PondEntity
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.PondRecordsEntity
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.WaterRecordsEntity
