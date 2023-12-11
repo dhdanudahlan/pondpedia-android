@@ -538,42 +538,42 @@ fun SignUpScreenLightMode(
                         }
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.CenterStart
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                horizontalAlignment = Alignment.Start
-                            ) {
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-
-                                    Checkbox(
-                                        checked = state.acceptedTerms,
-                                        onCheckedChange = {
-                                            acceptedTerms = it
-                                            onEvent(SetAcceptTerms(it))
-                                        }
-                                    )
-                                    Text(
-                                        text = stringResource(id = R.string.accept_terms_label),
-                                        maxLines = 2,
-                                    )
-                                }
-
-                                if (state.acceptedTermsError != null) {
-                                    Text(
-                                        text = state.acceptedTermsError,
-                                        maxLines = 2,
-                                        color = MaterialTheme.colorScheme.error
-                                    )
-                                }
-                            }
-                        }
+//                        Box(
+//                            modifier = Modifier
+//                                .fillMaxWidth(),
+//                            contentAlignment = Alignment.CenterStart
+//                        ) {
+//                            Column(
+//                                modifier = Modifier
+//                                    .fillMaxSize(),
+//                                horizontalAlignment = Alignment.Start
+//                            ) {
+//                                Row(
+//                                    verticalAlignment = Alignment.CenterVertically
+//                                ) {
+//
+//                                    Checkbox(
+//                                        checked = state.acceptedTerms,
+//                                        onCheckedChange = {
+//                                            acceptedTerms = it
+//                                            onEvent(SetAcceptTerms(it))
+//                                        }
+//                                    )
+//                                    Text(
+//                                        text = stringResource(id = R.string.accept_terms_label),
+//                                        maxLines = 2,
+//                                    )
+//                                }
+//
+//                                if (state.acceptedTermsError != null) {
+//                                    Text(
+//                                        text = state.acceptedTermsError,
+//                                        maxLines = 2,
+//                                        color = MaterialTheme.colorScheme.error
+//                                    )
+//                                }
+//                            }
+//                        }
                     }
                 }
                 Spacer(modifier = Modifier.height(16.dp))

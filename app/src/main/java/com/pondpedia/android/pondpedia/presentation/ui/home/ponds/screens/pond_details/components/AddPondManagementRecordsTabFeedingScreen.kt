@@ -110,7 +110,7 @@ fun AddPondManagementRecordsTabFeedingScreen(
             value = quantity,
             onValueChange = {
                 quantity = it
-                onEvent(PondDetailsEvent.SetFeedingRecordsQuantity(StringParser.commaToDot(it)))
+                onEvent(PondDetailsEvent.SetFeedingRecordsQuantity(StringParser.toInt(it).toString()))
             },
             label = {
                 Text(text = "Jumlah Pakan yang Diberikan")

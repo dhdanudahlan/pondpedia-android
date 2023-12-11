@@ -89,9 +89,21 @@ data class PondDetailsState(
 
     val waterRecordsLevel: String = "",
 
-    val waterRecordsQuality: String = "",
-
     val waterRecordsColor: String = "",
+
+    val waterRecordsPH: String = "",
+
+    val waterRecordsTemperature: String = "",
+
+    val waterRecordsWeather: String = "",
+
+    val waterRecordsDissolvedOxygen: String = "",
+
+    val waterRecordsSalinity: String = "",
+
+    val waterRecordsTurbidity: String = "",
+
+    val waterRecordsClarity: String = "",
 
     val waterRecordsNote: String = "",
 

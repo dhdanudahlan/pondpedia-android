@@ -145,7 +145,7 @@ fun AddPondDialog(
                 value = area,
                 onValueChange = {
                     area = it
-                    onEvent(PondsEvent.SetArea(StringParser.commaToDot(area)))
+                    onEvent(PondsEvent.SetArea(StringParser.toInt(area).toString()))
                 },
                 label = {
                     Text(text = "Luas kolam")
@@ -166,7 +166,7 @@ fun AddPondDialog(
                 value = depth,
                 onValueChange = {
                     depth = it
-                    onEvent(PondsEvent.SetDepth(StringParser.commaToDot(depth)))
+                    onEvent(PondsEvent.SetDepth(StringParser.toInt(depth).toString()))
                 },
                 label = {
                     Text(text = "Kedalaman kolam")

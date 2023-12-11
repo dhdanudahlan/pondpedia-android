@@ -70,17 +70,24 @@ object PondGenerator {
         val formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm")
         val currentDate = LocalDateTime.now().toString()
 
-        val pH = ((6 .. 8).random().toFloat() + ((0 .. 99).random().toFloat() / 100.0))
-        val dissolvedOxygen = ((5 .. 8).random().toFloat() + ((0 .. 99).random().toFloat() / 100.0))
-        val temperature = (25 .. 35).random()
-        val salinity = (500 .. 3500).random()
-        val turbidity = (80 .. 120).random()
+        val pH = ((6 .. 8).random().toFloat() + ((0 .. 99).random().toFloat() / 100.0)).toFloat()
+        val dissolvedOxygen = ((5 .. 8).random().toFloat() + ((0 .. 99).random().toFloat() / 100.0)).toFloat()
+        val temperature = (25 .. 35).random().toFloat()
+        val salinity = (500 .. 3500).random().toFloat()
+        val turbidity = (80 .. 120).random().toFloat()
+        val clarity = (80 .. 120).random().toFloat()
 
         return WaterRecords(
             recordId = 0,
             date = currentDate,
-            level = (pond.depth.toFloat().toInt() - (1 .. 10).random()).toString(),
-            quality = "{ \"ph\": $pH, \"dissolvedOxygen\": $dissolvedOxygen, \"temperature\": $temperature, \"salinity\": $salinity, \"turbidity\": $turbidity }",
+            level = (pond.depth.toFloat().toInt() - (1 .. 10).random()),
+            pH = pH,
+            temperature = temperature,
+            weather = "Clear",
+            dissolvedOxygen = dissolvedOxygen,
+            salinity = salinity,
+            turbidity = turbidity,
+            clarity = clarity,
             color = "CH",
             note = "Data dummy air",
             pondId = pond.pondId
@@ -94,7 +101,7 @@ object PondGenerator {
         return FeedingRecords(
             recordId = 0,
             date = currentDate,
-            quantity = ((1 .. 1000).random().toFloat() + ((0 .. 99).random().toFloat() / 100)).toString(),
+            quantity = ((1 .. 1000).random().toFloat() + ((0 .. 99).random().toFloat() / 100)),
             note = "Data dummy pakan",
             feedId = feed.feedId,
             pondId = pond.pondId
@@ -107,9 +114,9 @@ object PondGenerator {
         return CommodityGrowthRecords(
             recordId = 0,
             date = currentDate,
-            age = age.toString(),
-            length = (1 .. 300).random().toString(),
-            weight = (1 .. 5000).random().toString(),
+            age = age,
+            length = (1 .. 300).random(),
+            weight = (1 .. 5000).random(),
             note = "Data dummy pertumbuhan komoditas",
             commodityId = commodity.commodityId
         )
@@ -120,7 +127,7 @@ object PondGenerator {
         return CommodityHealthRecords(
             recordId = 0,
             date = currentDate,
-            death = death.toString(),
+            death = death,
             indicator = "Data dummy indikator kesehatan komoditas",
             action = "Data dummy aksi kesehatan komoditas",
             note = "Data dummy kesehatan komoditas",

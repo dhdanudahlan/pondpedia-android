@@ -48,11 +48,17 @@ sealed interface PondDetailsEvent{
     data class SetPondRecordsCycle(val pondRecordsCycle: String): PondDetailsEvent
     data class SetPondRecordsNote(val pondRecordsNote: String): PondDetailsEvent
 
-    data class SetWaterRecordsDate(val waterRecordsDate: String): PondDetailsEvent
-    data class SetWaterRecordsLevel(val waterRecordsLevel: String): PondDetailsEvent
-    data class SetWaterRecordsQuality(val waterRecordsQuality: String): PondDetailsEvent
-    data class SetWaterRecordsColor(val waterRecordsColor: String): PondDetailsEvent
-    data class SetWaterRecordsNote(val waterRecordsNote: String): PondDetailsEvent
+    data class SetWaterRecordsDate(val value: String): PondDetailsEvent
+    data class SetWaterRecordsLevel(val value: String): PondDetailsEvent
+    data class SetWaterRecordsPH(val value: String): PondDetailsEvent
+    data class SetWaterRecordsTemperature(val value: String): PondDetailsEvent
+    data class SetWaterRecordsWeather(val value: String): PondDetailsEvent
+    data class SetWaterRecordsDissolvedOxygen(val value: String): PondDetailsEvent
+    data class SetWaterRecordsSalinity(val value: String): PondDetailsEvent
+    data class SetWaterRecordsTurbidity(val value: String): PondDetailsEvent
+    data class SetWaterRecordsClarity(val value: String): PondDetailsEvent
+    data class SetWaterRecordsColor(val value: String): PondDetailsEvent
+    data class SetWaterRecordsNote(val value: String): PondDetailsEvent
 
     data class SetFeedingRecordsDate(val feedingRecordsDate: String): PondDetailsEvent
     data class SetFeedingRecordsQuantity(val feedingRecordsQuantity: String): PondDetailsEvent

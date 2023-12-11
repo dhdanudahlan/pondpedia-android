@@ -24,7 +24,7 @@ data class FeedingRecordsEntity(
         return FeedingRecords(
             recordId = recordId,
             date = date,
-            quantity = quantity.toString(),
+            quantity = quantity,
             note = note,
             feedId = feedId,
             pondId = pondId

@@ -25,7 +25,7 @@ fun PondPediaApp(
     val authState by authViewModel.state.collectAsState()
     AnimatedNavHost(
         navController = navController,
-        startDestination = Graph.HOME,
+        startDestination = Graph.AUTHENTICATION,
         enterTransition = { EnterTransition.None },
         exitTransition = { ExitTransition.None }
     ) {

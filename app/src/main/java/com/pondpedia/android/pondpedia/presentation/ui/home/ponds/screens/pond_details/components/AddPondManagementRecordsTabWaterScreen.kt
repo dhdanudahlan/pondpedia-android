@@ -1,5 +1,6 @@
 package com.pondpedia.android.pondpedia.presentation.ui.home.ponds.screens.pond_details.components
 
+import android.health.connect.datatypes.units.Temperature
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarToday
+import androidx.compose.material.icons.outlined.Cloud
 import androidx.compose.material.icons.outlined.InvertColors
 import androidx.compose.material.icons.outlined.StickyNote2
 import androidx.compose.material3.Button
@@ -54,16 +56,45 @@ fun AddPondManagementRecordsTabWaterScreen(
     var level by rememberSaveable {
         mutableStateOf("")
     }
-    var color by rememberSaveable {
+    var ph by rememberSaveable {
         mutableStateOf("")
     }
+    var temperature by rememberSaveable {
+        mutableStateOf("")
+    }
+    var weather by rememberSaveable {
+        mutableStateOf("")
+    }
+    var dissolvedOxygen by rememberSaveable {
+        mutableStateOf("")
+    }
+    var salinity by rememberSaveable {
+        mutableStateOf("")
+    }
+    var turbidity by rememberSaveable {
+        mutableStateOf("")
+    }
+    var clarity by rememberSaveable {
+        mutableStateOf("")
+    }
+
     var note by rememberSaveable {
+        mutableStateOf("")
+    }
+    var color by rememberSaveable {
         mutableStateOf("")
     }
 
     fun reset(){
         date = ""
         level = ""
+        ph = ""
+        temperature = ""
+        weather = ""
+        dissolvedOxygen = ""
+        salinity = ""
+        turbidity = ""
+        clarity = ""
         color = ""
         note = ""
     }
@@ -113,7 +144,7 @@ fun AddPondManagementRecordsTabWaterScreen(
             value = level,
             onValueChange = {
                 level = it
-                onEvent(PondDetailsEvent.SetWaterRecordsLevel(StringParser.commaToDot(it)))
+                onEvent(PondDetailsEvent.SetWaterRecordsLevel(StringParser.toInt(it).toString()))
             },
             label = {
                 Text(text = "Ketinggian Air")
@@ -151,6 +182,162 @@ fun AddPondManagementRecordsTabWaterScreen(
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next
+            )
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+
+        TextField(
+            value = ph,
+            onValueChange = {
+                ph = it
+                onEvent(PondDetailsEvent.SetWaterRecordsPH(it))
+            },
+            label = {
+                Text(text = "pH Air")
+            },
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.InvertColors,
+                    contentDescription = "ph"
+                )
+            },
+            supportingText = {
+                Text(text = "* Wajib diisi", color = androidx.compose.ui.graphics.Color.Gray)
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal,
+                imeAction = ImeAction.Next
+            )
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+
+        TextField(
+            value = temperature,
+            onValueChange = {
+                temperature = it
+                onEvent(PondDetailsEvent.SetWaterRecordsTemperature(it))
+            },
+            label = {
+                Text(text = "Suhu Air")
+            },
+            suffix = {
+                Text(text = "°C")
+            },
+            supportingText = {
+                Text(text = "* Wajib diisi", color = androidx.compose.ui.graphics.Color.Gray)
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal,
+                imeAction = ImeAction.Next
+            )
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+
+        TextField(
+            value = weather,
+            onValueChange = {
+                weather = it
+                onEvent(PondDetailsEvent.SetWaterRecordsWeather(it))
+            },
+            label = {
+                Text(text = "Cuaca")
+            },
+            trailingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.Cloud,
+                    contentDescription = "Color"
+                )
+            },
+            supportingText = {
+                Text(text = "* Wajib diisi", color = androidx.compose.ui.graphics.Color.Gray)
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next
+            )
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+
+        TextField(
+            value = dissolvedOxygen,
+            onValueChange = {
+                dissolvedOxygen = it
+                onEvent(PondDetailsEvent.SetWaterRecordsDissolvedOxygen(it))
+            },
+            label = {
+                Text(text = "Oksigen Terlarut Air")
+            },
+            trailingIcon = {
+            },
+            supportingText = {
+                Text(text = "* Opsional", color = androidx.compose.ui.graphics.Color.Gray)
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal,
+                imeAction = ImeAction.Next
+            )
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+
+        TextField(
+            value = salinity,
+            onValueChange = {
+                salinity = it
+                onEvent(PondDetailsEvent.SetWaterRecordsSalinity(it))
+            },
+            label = {
+                Text(text = "Salinitas Air")
+            },
+            trailingIcon = {
+            },
+            supportingText = {
+                Text(text = "* Opsional", color = androidx.compose.ui.graphics.Color.Gray)
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal,
+                imeAction = ImeAction.Next
+            )
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+
+        TextField(
+            value = turbidity,
+            onValueChange = {
+                turbidity = it
+                onEvent(PondDetailsEvent.SetWaterRecordsTurbidity(it))
+            },
+            label = {
+                Text(text = "Kekeruhan Air")
+            },
+            trailingIcon = {
+            },
+            supportingText = {
+                Text(text = "* Opsional", color = androidx.compose.ui.graphics.Color.Gray)
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal,
+                imeAction = ImeAction.Next
+            )
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+
+        TextField(
+            value = clarity,
+            onValueChange = {
+                clarity = it
+                onEvent(PondDetailsEvent.SetWaterRecordsClarity(it))
+            },
+            label = {
+                Text(text = "Warna Air")
+            },
+            trailingIcon = {
+            },
+            supportingText = {
+                Text(text = "* Opsional", color = androidx.compose.ui.graphics.Color.Gray)
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Decimal,
                 imeAction = ImeAction.Next
             )
         )

@@ -197,7 +197,7 @@ fun AddCommodityDialog(
                 value = quantity,
                 onValueChange = {
                     quantity = it
-                    onEvent(PondDetailsEvent.SetCommodityQuantity(StringParser.commaToDot(it)))
+                    onEvent(PondDetailsEvent.SetCommodityQuantity(StringParser.toInt(it).toString()))
                 },
                 label = {
                     Text(text = "Jumlah Tebar")

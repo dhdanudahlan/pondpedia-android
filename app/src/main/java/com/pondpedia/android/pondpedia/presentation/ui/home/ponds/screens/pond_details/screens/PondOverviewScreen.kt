@@ -258,7 +258,6 @@ fun DetailsTabScreen(
 
                 if (pondDetailsState.waterRecords.isNotEmpty()) {
                     DetailsScreenWater(pondDetailsState = pondDetailsState)
-
                 } else {
                     Box(
                         modifier = Modifier
@@ -390,13 +389,44 @@ fun DetailsScreenWater(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "${records.date}",
+                    text = records.date,
                     fontWeight = FontWeight.SemiBold
                 )
-                Text(text = "Ketinggian Air : ${records.level}")
-                Text(text = "Kualitas Air : ${records.quality}")
-                Text(text = "Warna Air : ${records.color}")
-                Text(text = "Catatan : ${records.note}")
+                if (records.pH != null) {
+                    Text(text = "PH Air : ${records.pH}")
+                }
+
+                if (records.temperature != null) {
+                    Text(text = "Suhu Air : ${records.temperature}")
+                }
+
+                if ((records.weather != "null") || (records.weather.isBlank()) ) {
+                    Text(text = "Cuaca : ${records.weather}")
+                }
+
+                if ((records.color != "null") || (records.color.isBlank()) ) {
+                    Text(text = "Warna Air : ${records.color}")
+                }
+
+                if (records.dissolvedOxygen != null) {
+                    Text(text = "Oksigen Terlarut : ${records.dissolvedOxygen}")
+                }
+
+                if (records.salinity != null) {
+                    Text(text = "Salinitas : ${records.salinity}")
+                }
+
+                if (records.turbidity != null) {
+                    Text(text = "Kekeruhan : ${records.turbidity}")
+                }
+
+                if (records.clarity != null) {
+                    Text(text = "Kecerahan : ${records.clarity}")
+                }
+
+                if (records.note.isNotBlank()) {
+                    Text(text = "Catatan : ${records.note}")
+                }
             }
 
         }
