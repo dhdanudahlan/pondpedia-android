@@ -35,7 +35,7 @@ fun PondWaterScreen(
     
     val listOfRecords = pondDetailsState.waterRecords.sortedBy { it.date }
     val scrollState = rememberScrollState()
-    var listOfRecordsReversed = listOfRecords.reversed()
+    val listOfRecordsReversed = listOfRecords.reversed()
     Row(
         Modifier
             .fillMaxSize()
@@ -65,14 +65,49 @@ fun PondWaterScreen(
                                 text = "Kolam: ${pondDetailsState.pond.name}",
                                 fontWeight = FontWeight.Bold
                             )
+
                             Text(
-                                text = "${waterRecords.date}",
+                                text = waterRecords.date,
                                 fontWeight = FontWeight.SemiBold
                             )
+
                             Text(text = "Ketinggian Air : ${waterRecords.level}")
-                            Text(text = "Kualitas Air : ${waterRecords.quality}")
-                            Text(text = "Warna Air : ${waterRecords.color}")
-                            Text(text = "Catatan : ${waterRecords.note}")
+
+                            if (waterRecords.pH != null) {
+                                Text(text = "PH Air : ${waterRecords.pH}")
+                            }
+
+                            if (waterRecords.temperature != null) {
+                                Text(text = "Suhu Air : ${waterRecords.temperature}")
+                            }
+
+                            if ((waterRecords.weather != "null") || (waterRecords.weather.isBlank()) ) {
+                                Text(text = "Cuaca : ${waterRecords.weather}")
+                            }
+
+                            if ((waterRecords.color != "null") || (waterRecords.color.isBlank()) ) {
+                                Text(text = "Warna Air : ${waterRecords.color}")
+                            }
+
+                            if (waterRecords.dissolvedOxygen != null) {
+                                Text(text = "Oksigen Terlarut : ${waterRecords.dissolvedOxygen}")
+                            }
+
+                            if (waterRecords.salinity != null) {
+                                Text(text = "Salinitas : ${waterRecords.salinity}")
+                            }
+
+                            if (waterRecords.turbidity != null) {
+                                Text(text = "Kekeruhan : ${waterRecords.turbidity}")
+                            }
+
+                            if (waterRecords.clarity != null) {
+                                Text(text = "Kecerahan : ${waterRecords.clarity}")
+                            }
+
+                            if (waterRecords.note.isNotBlank()) {
+                                Text(text = "Catatan : ${waterRecords.note}")
+                            }
                         }
                     }
                 }

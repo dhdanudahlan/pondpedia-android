@@ -154,7 +154,7 @@ fun AuthScreenLightMode(
                             onClick = onGuestSignIn,
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Blue)
+//                            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Blue)
                         ) {
                             Text(
                                 text = stringResource(id = R.string.signin_guest),
@@ -297,17 +297,17 @@ sealed class AuthSlideScreens(
     data object SlideOfflineMode : AuthSlideScreens(
         titleTextId = R.string.auth_slide_title_2,
         contentTextId = R.string.auth_slide_content_2,
-        imageId = R.drawable.pond_image_1,
+        imageId = R.drawable.pondpedia_logo,
     )
     data object SlidePondManagement : AuthSlideScreens(
         titleTextId = R.string.auth_slide_title_3,
         contentTextId = R.string.auth_slide_content_3,
-        imageId = R.drawable.pondpedia_1,
+        imageId = R.drawable.pondpedia_logo,
     )
     data object SlideAiChat : AuthSlideScreens(
         titleTextId = R.string.auth_slide_title_4,
         contentTextId = R.string.auth_slide_content_4,
-        imageId = R.drawable.brush,
+        imageId = R.drawable.pondpedia_logo,
     )
 }
 

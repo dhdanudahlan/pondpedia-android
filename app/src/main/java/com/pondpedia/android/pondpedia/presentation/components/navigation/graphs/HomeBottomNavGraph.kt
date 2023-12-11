@@ -84,19 +84,6 @@ fun NavGraphBuilder.updatesNavGraph(
         }
     }
 }
-fun NavGraphBuilder.menuNavGraph2(
-    homeState: PondPediaAppState,
-) {
-
-    val navController = homeState.navController
-    composable(route = Screens.Menu.route) {
-        MenuScreen(
-            onRouteChanged = { route ->
-                navController.navigate(route)
-            },
-        )
-    }
-}
 fun NavGraphBuilder.exploreNavGraph(
     homeState: PondPediaAppState,
 ) {

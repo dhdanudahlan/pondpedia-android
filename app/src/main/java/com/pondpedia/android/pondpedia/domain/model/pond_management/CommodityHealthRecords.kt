@@ -9,7 +9,7 @@ data class CommodityHealthRecords(
 
     val date: String,
 
-    val death: String,
+    val death: Int,
 
     val indicator: String,
 

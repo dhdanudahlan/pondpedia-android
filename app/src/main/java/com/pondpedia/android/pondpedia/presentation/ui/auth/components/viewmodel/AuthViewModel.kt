@@ -181,7 +181,7 @@ class AuthViewModel @Inject constructor(
         val repeatedPasswordResult = validateRepeatedPasswordUseCase(state.value.password, state.value.repeatedPassword)
         val occupationResult = validateOccupationUseCase(state.value.occupation)
         val informationSourceResult = validateInformationSourceUseCase(state.value.informationSource)
-        val acceptedTermsResult = validateTermsUseCase(state.value.acceptedTerms)
+//        val acceptedTermsResult = validateTermsUseCase(state.value.acceptedTerms)
 
         val hasError = listOf(
             nameResult,
@@ -191,7 +191,7 @@ class AuthViewModel @Inject constructor(
             repeatedPasswordResult,
             occupationResult,
             informationSourceResult,
-            acceptedTermsResult
+//            acceptedTermsResult
         ).any {!it.successful}
 
         if (hasError) {
@@ -203,7 +203,7 @@ class AuthViewModel @Inject constructor(
                 repeatedPasswordError = repeatedPasswordResult.errorMessage,
                 occupationError = occupationResult.errorMessage,
                 informationSourceError = informationSourceResult.errorMessage,
-                acceptedTermsError = acceptedTermsResult.errorMessage,
+//                acceptedTermsError = acceptedTermsResult.errorMessage,
             ) }
 
             Log.d("AuthViewModel", state.value.name)

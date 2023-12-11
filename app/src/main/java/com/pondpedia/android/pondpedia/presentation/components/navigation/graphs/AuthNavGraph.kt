@@ -44,10 +44,11 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController, viewModel: Au
         composable(
             route = AuthScreens.SignIn.route
         ) {
+            val authState by viewModel.state.collectAsState()
 
             PondPediaCustomTheme ( darkTheme = false ) {
                 SignInScreen(
-                    state = state,
+                    state = authState,
                     navigateToAuthScreen = {
                         navController.popBackStack()
                         navController.navigate(Graph.AUTHENTICATION)
@@ -56,7 +57,8 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController, viewModel: Au
                         navController.navigate(AuthScreens.SignUp.route)
                     },
                     onGoogleSignInClick = {},
-                    onEmailPasswordSignInClick = { _, _ -> }
+                    onEmailPasswordSignInClick = { _, _ -> },
+                    onEvent = viewModel::onEvent
                 )
             }
         }

@@ -28,9 +28,9 @@ data class CommodityGrowthRecordsEntity(
         return CommodityGrowthRecords(
             recordId = recordId,
             date = date,
-            age = age.toString(),
-            length = length.toString(),
-            weight = weight.toString(),
+            age = age,
+            length = length,
+            weight = weight,
             note = note,
             commodityId = commodityId
         )

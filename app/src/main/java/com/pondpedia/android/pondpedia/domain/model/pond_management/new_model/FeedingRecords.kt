@@ -8,7 +8,7 @@ data class FeedingRecords(
 
     val date: String,
 
-    val quantity: String,
+    val quantity: Float,
 
     val note: String,
 

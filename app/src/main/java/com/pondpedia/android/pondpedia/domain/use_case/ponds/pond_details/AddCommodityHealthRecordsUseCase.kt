@@ -7,7 +7,7 @@ import com.pondpedia.android.pondpedia.domain.repository.PondDetailsRepository
 class AddCommodityHealthRecordsUseCase (
     private val repository: PondDetailsRepository
 ) {
-    suspend operator fun invoke(commodityHealthRecords: CommodityHealthRecords = CommodityHealthRecords(0, DateGenerator.getCurrentDateTime(), "0", "", "", "", 0)) {
+    suspend operator fun invoke(commodityHealthRecords: CommodityHealthRecords = CommodityHealthRecords(0, DateGenerator.getCurrentDateTime(), 0, "", "", "", 0)) {
         repository.insertCommodityHealthRecords(
             commodityHealthRecords = commodityHealthRecords,
         )

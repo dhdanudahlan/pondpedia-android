@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pondpedia.android.pondpedia.core.util.StringParser
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Commodity
 import com.pondpedia.android.pondpedia.domain.model.pond_management.CommodityGrowthRecords
 import com.pondpedia.android.pondpedia.domain.model.pond_management.CommodityHealthRecords
@@ -26,6 +29,7 @@ import com.pondpedia.android.pondpedia.domain.use_case.ponds.pond_details.GetPon
 import com.pondpedia.android.pondpedia.domain.use_case.ponds.pond_details.GetWaterRecordsByPondIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -162,9 +166,17 @@ class PondDetailsViewModel @Inject constructor(
 
                 val note = state.value.commodityGrowthRecordsNote
 
-                val pondId = state.value.pond.pondId
+                val commodityId = state.value.commodityId
 
-                val commodityGrowthRecords = CommodityGrowthRecords(0, date, age, length, weight, note, pondId)
+                val commodityGrowthRecords = CommodityGrowthRecords(
+                    recordId = 0,
+                    date = date,
+                    age = StringParser.toIntAbs(age) ?: 0,
+                    length = StringParser.toIntAbs(length) ?: 0,
+                    weight = StringParser.toIntAbs(weight) ?: 0,
+                    note = note,
+                    commodityId = commodityId
+                )
 
                 if (date.isBlank() || age.isBlank() || length.isBlank() || weight.isBlank()) {
                     return
@@ -196,9 +208,17 @@ class PondDetailsViewModel @Inject constructor(
 
                 val note = state.value.commodityHealthRecordsNote
 
-                val pondId = state.value.pond.pondId
+                val commodityId = state.value.commodityId
 
-                val commodityHealthRecords = CommodityHealthRecords(0, date, death, indicator, action, note, pondId)
+                val commodityHealthRecords = CommodityHealthRecords(
+                    recordId = 0,
+                    date = date,
+                    death = StringParser.toIntAbs(death) ?: 0,
+                    indicator = indicator,
+                    action = action,
+                    note = note,
+                    commodityId = commodityId
+                )
 
                 if (date.isBlank() || death.isBlank() || indicator.isBlank() || action.isBlank()) {
                     return
@@ -234,7 +254,14 @@ class PondDetailsViewModel @Inject constructor(
 
                 val pondId = state.value.pond.pondId
 
-                val feedingRecordsUseCase = FeedingRecords(0, date, quantity, note, feedId, pondId)
+                val feedingRecordsUseCase = FeedingRecords(
+                    recordId = 0,
+                    date = date,
+                    quantity = StringParser.toFloatAbs(quantity) ?: 0.toFloat(),
+                    note = note,
+                    feedId = feedId,
+                    pondId = pondId
+                )
 
                 if (date.isBlank() || quantity.isBlank()) {
                     return
@@ -292,15 +319,41 @@ class PondDetailsViewModel @Inject constructor(
 
                 val level = state.value.waterRecordsLevel
 
-                val quality = state.value.waterRecordsQuality
-
                 val color = state.value.waterRecordsColor
+
+                val pH = state.value.waterRecordsPH
+
+                val temperature = state.value.waterRecordsTemperature
+
+                val weather = state.value.waterRecordsWeather
+
+                val dissolvedOxygen = state.value.waterRecordsDissolvedOxygen
+
+                val salinity = state.value.waterRecordsSalinity
+
+                val turbidity = state.value.waterRecordsTurbidity
+
+                val clarity = state.value.waterRecordsClarity
 
                 val note = state.value.waterRecordsNote
 
                 val pondId = state.value.pond.pondId
 
-                val waterRecords = WaterRecords(0, date, level, quality, color, note, pondId)
+                val waterRecords = WaterRecords(
+                    0,
+                    date = date,
+                    level = StringParser.toInt(level)!!,
+                    pH = StringParser.toFloat(pH),
+                    temperature = StringParser.toFloat(temperature),
+                    weather = if (weather.isNotBlank()) weather else "Cerah",
+                    dissolvedOxygen = StringParser.toFloat(dissolvedOxygen),
+                    salinity = StringParser.toFloat(salinity),
+                    turbidity = StringParser.toFloat(turbidity),
+                    clarity = StringParser.toFloat(clarity),
+                    color = color,
+                    note = note,
+                    pondId = pondId
+                )
 
                 if (date.isBlank() || level.isBlank() || color.isBlank()) {
                     return
@@ -314,7 +367,13 @@ class PondDetailsViewModel @Inject constructor(
                     it.copy(
                         waterRecordsDate = "",
                         waterRecordsLevel = "",
-                        waterRecordsQuality = "",
+                        waterRecordsPH = "",
+                        waterRecordsTemperature = "",
+                        waterRecordsWeather = "",
+                        waterRecordsDissolvedOxygen = "",
+                        waterRecordsSalinity = "",
+                        waterRecordsTurbidity = "",
+                        waterRecordsClarity = "",
                         waterRecordsColor = "",
                         waterRecordsNote = "",
                     )
@@ -546,7 +605,7 @@ class PondDetailsViewModel @Inject constructor(
             is PondDetailsEvent.SetWaterRecordsColor -> {
                 _state.update {
                     it.copy(
-                        waterRecordsColor = event.waterRecordsColor
+                        waterRecordsColor = event.value
                     )
                 }
             }
@@ -554,7 +613,7 @@ class PondDetailsViewModel @Inject constructor(
             is PondDetailsEvent.SetWaterRecordsDate -> {
                 _state.update {
                     it.copy(
-                        waterRecordsDate = event.waterRecordsDate
+                        waterRecordsDate = event.value
                     )
                 }
             }
@@ -562,7 +621,7 @@ class PondDetailsViewModel @Inject constructor(
             is PondDetailsEvent.SetWaterRecordsLevel -> {
                 _state.update {
                     it.copy(
-                        waterRecordsLevel = event.waterRecordsLevel
+                        waterRecordsLevel = event.value
                     )
                 }
             }
@@ -570,15 +629,63 @@ class PondDetailsViewModel @Inject constructor(
             is PondDetailsEvent.SetWaterRecordsNote -> {
                 _state.update {
                     it.copy(
-                        waterRecordsNote = event.waterRecordsNote
+                        waterRecordsNote = event.value
                     )
                 }
             }
 
-            is PondDetailsEvent.SetWaterRecordsQuality -> {
+            is PondDetailsEvent.SetWaterRecordsPH -> {
                 _state.update {
                     it.copy(
-                        waterRecordsQuality = event.waterRecordsQuality
+                        waterRecordsPH = event.value
+                    )
+                }
+            }
+
+            is PondDetailsEvent.SetWaterRecordsTemperature -> {
+                _state.update {
+                    it.copy(
+                        waterRecordsTemperature = event.value
+                    )
+                }
+            }
+
+            is PondDetailsEvent.SetWaterRecordsWeather -> {
+                _state.update {
+                    it.copy(
+                        waterRecordsWeather = event.value
+                    )
+                }
+            }
+
+            is PondDetailsEvent.SetWaterRecordsDissolvedOxygen -> {
+                _state.update {
+                    it.copy(
+                        waterRecordsDissolvedOxygen = event.value
+                    )
+                }
+            }
+
+            is PondDetailsEvent.SetWaterRecordsSalinity -> {
+                _state.update {
+                    it.copy(
+                        waterRecordsSalinity = event.value
+                    )
+                }
+            }
+
+            is PondDetailsEvent.SetWaterRecordsTurbidity -> {
+                _state.update {
+                    it.copy(
+                        waterRecordsTurbidity = event.value
+                    )
+                }
+            }
+
+            is PondDetailsEvent.SetWaterRecordsClarity -> {
+                _state.update {
+                    it.copy(
+                        waterRecordsClarity = event.value
                     )
                 }
             }

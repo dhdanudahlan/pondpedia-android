@@ -7,7 +7,7 @@ import com.pondpedia.android.pondpedia.domain.repository.PondDetailsRepository
 class AddWaterRecordsUseCase (
     private val repository: PondDetailsRepository
 ) {
-    suspend operator fun invoke(waterRecords: WaterRecords = WaterRecords(0, DateGenerator.getCurrentDateTime(), "0", "", "", "", 0)) {
+    suspend operator fun invoke(waterRecords: WaterRecords = WaterRecords(0, DateGenerator.getCurrentDateTime(), color = "", note = "", pondId = 0)) {
         repository.insertWaterRecords(
             waterRecords = waterRecords,
         )

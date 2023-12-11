@@ -27,7 +27,7 @@ data class CommodityHealthRecordsEntity(
         return CommodityHealthRecords(
             recordId = recordId,
             date = date,
-            death = death.toString(),
+            death = death,
             indicator = indicator,
             action = action,
             note = note,

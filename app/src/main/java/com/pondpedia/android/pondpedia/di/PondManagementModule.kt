@@ -124,7 +124,7 @@ object PondManagementModule {
         val database = Room.databaseBuilder(
             app,
             PondPediaDatabase::class.java,
-            "pond_database_1.0"
+            "pond_database_1.2"
         ).build()
 
         return database
