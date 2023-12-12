@@ -28,9 +28,10 @@ import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.vie
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondDetailsState
 
 @Composable
-fun AddPondManagementCommmodityTabScreen(
+fun AddPondManagementCommodityTabScreen(
     pondDetailsState: PondDetailsState,
-    onEvent: (PondDetailsEvent) -> Unit
+    onEvent: (PondDetailsEvent) -> Unit,
+    onNavigateToAddCommodityScreen: () -> Unit
 ) {
     var tabIndex by rememberSaveable { mutableStateOf(0) }
     val commodityTabs = pondDetailsState.commodity
@@ -63,14 +64,20 @@ fun AddPondManagementCommmodityTabScreen(
 
                     Tab(
                         selected = true,
-                        onClick = { onEvent(PondDetailsEvent.ShowDialog) }
+                        onClick = {
+                            /*onEvent(PondDetailsEvent.ShowDialog)*/
+                            onNavigateToAddCommodityScreen()
+                        }
                     ) {
                         Icon(imageVector = Icons.Outlined.Add, contentDescription = "Add Commodity")
                     }
                 } else {
                     Tab(
                         selected = true,
-                        onClick = { onEvent(PondDetailsEvent.ShowDialog) },
+                        onClick = {
+                            /*onEvent(PondDetailsEvent.ShowDialog) */
+                            onNavigateToAddCommodityScreen()
+                      },
                         modifier = Modifier.height(24.dp)
                     ) {
                         Icon(imageVector = Icons.Outlined.Add, contentDescription = "Add Commodity")

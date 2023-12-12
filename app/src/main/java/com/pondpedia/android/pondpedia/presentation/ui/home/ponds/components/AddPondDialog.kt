@@ -117,9 +117,6 @@ fun AddPondDialog(
                 .fillMaxWidth()
         ) {
 
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Tambahkan Kolam", fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp)
-            Spacer(modifier = Modifier.height(8.dp))
 
             TextField(
                 value = name,

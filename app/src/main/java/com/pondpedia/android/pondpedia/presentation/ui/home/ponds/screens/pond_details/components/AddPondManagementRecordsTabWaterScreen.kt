@@ -30,9 +30,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.pondpedia.android.pondpedia.R
 import com.pondpedia.android.pondpedia.core.util.StringParser
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondDetailsEvent
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondDetailsState
@@ -41,7 +43,8 @@ import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.vie
 @Composable
 fun AddPondManagementRecordsTabWaterScreen(
     pondDetailsState: PondDetailsState,
-    onEvent: (PondDetailsEvent) -> Unit
+    onEvent: (PondDetailsEvent) -> Unit,
+    onNavigateToOverviewScreen: () -> Unit
 ) {
 
     var showDatePicker by remember {
@@ -372,13 +375,20 @@ fun AddPondManagementRecordsTabWaterScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Button(onClick = {
-                onEvent(PondDetailsEvent.AddWaterRecords)
-                reset()
-            }) {
-                Text(text = "Simpan")
+            Button(
+                enabled = validateForm(date, level, ph, temperature, weather, color),
+                onClick = {
+                    onEvent(PondDetailsEvent.AddWaterRecords)
+                    reset()
+                    onNavigateToOverviewScreen()
+                }
+            ) {
+                Text(text = stringResource(R.string.button_save))
             }
         }
     }
+}
+private fun validateForm(date: String, level: String, ph: String, temperature: String, weather: String, color: String): Boolean {
+    return !(date.isBlank() || level.isBlank() || ph.isBlank() || temperature.isBlank() || weather.isBlank() || color.isBlank())
 }
 

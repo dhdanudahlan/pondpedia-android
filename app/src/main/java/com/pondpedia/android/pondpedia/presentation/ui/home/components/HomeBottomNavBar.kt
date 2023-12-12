@@ -96,10 +96,10 @@ sealed class Screens(
         badgeCount = null,
     )
 
-    data object Create : Screens(
-        route = "POND_CREATE",
-        labelTextId = R.string.pond_create_title,
-        titleTextId = R.string.pond_create_title,
+    data object Add : Screens(
+        route = "POND_ADD",
+        labelTextId = R.string.pond_add_title,
+        titleTextId = R.string.pond_add_title,
         selectedIcon = Icons.Filled.Add,
         unselectedIcon = Icons.Outlined.Add,
         hasUnread = false,

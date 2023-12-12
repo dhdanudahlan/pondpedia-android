@@ -1,3 +1,5 @@
+import com.android.build.api.variant.BuildConfigField
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -26,6 +28,7 @@ android {
 
     buildTypes {
         release {
+            BuildConfigField("String", "BASE_URL", "\"https://main.devapi-pondpedia.com/\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -138,7 +141,9 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+        // Dependency for the Firebase SDK for Google Analytics
+    implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
 

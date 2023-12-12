@@ -116,7 +116,10 @@ fun PondItemSquareCard(
                             interactionSource.emit(press)
                             tryAwaitRelease()
                             interactionSource.emit(PressInteraction.Release(press))
-                            onEvent(PondsEvent.SelectPond(pond.pondId)); onRouteChanged(Graph.HOME_PONDS_POND)
+                            onEvent(PondsEvent.SelectPond(pond.pondId))
+                            if (!isContextMenuVisible) {
+                                onRouteChanged(Graph.HOME_PONDS_POND)
+                            }
                         }
                     )
                 }
@@ -131,7 +134,7 @@ fun PondItemSquareCard(
             ) {
 
                 Image(
-                    painter = painterResource(R.drawable.pond_image_1),
+                    painter = painterResource(R.drawable.pondpedia_logo),
                     contentDescription = "Pond Image",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier

@@ -48,6 +48,7 @@ import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.vie
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondDetailsState
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsState
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.screens.pond_details.components.AddCommodityDialog
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.screens.pond_details.components.AddCommodityScreen
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.screens.pond_details.components.PondNavigationItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -69,18 +70,18 @@ fun DetailsScreen(
         PondNavigationItem.Commodity,
         PondNavigationItem.Feeding,
         PondNavigationItem.Water,
+        PondNavigationItem.AddCommodity,
         PondNavigationItem.AddRecords
     )
     
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
     var isAddRecordsSheetOpen by rememberSaveable {
         mutableStateOf(false)
     }
     var isAddCommoditySheetOpen by rememberSaveable {
         mutableStateOf(false)
     }
-
 
     val scope = rememberCoroutineScope()
     var selectedItemIndex by rememberSaveable {
@@ -96,7 +97,7 @@ fun DetailsScreen(
             ModalDrawerSheet {
                 Spacer(modifier = Modifier.height(16.dp))
                 items.forEachIndexed { index, item ->
-                    if (item.route != "POND_ADD_RECORDS") {
+                    if (index < items.lastIndex - 1) {
                         NavigationDrawerItem(
                             label = {
                                 Text(text = stringResource(item.titleTextId))
@@ -188,7 +189,8 @@ fun DetailsScreen(
                     floatingActionButton = {
                         FloatingActionButton(
                             onClick = {
-                                isAddRecordsSheetOpen = true
+                                /*isAddRecordsSheetOpen = true*/
+                                selectedItemIndex = items.indexOf(PondNavigationItem.AddRecords)
                             }
                         ) {
                             Icon(
@@ -218,7 +220,10 @@ fun DetailsScreen(
                             pondsState = pondsState,
                             pondDetailsState = pondDetailsState,
                             onEvent = onEvent,
-                            innerPadding = innerPadding
+                            innerPadding = innerPadding,
+                            onNavigateToAddCommodityScreen = {
+                                selectedItemIndex = items.indexOf(PondNavigationItem.AddCommodity)
+                            }
                         )
                     } else {
                         Box(
@@ -244,7 +249,10 @@ fun DetailsScreen(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Button(
-                                        onClick = { onEvent(PondDetailsEvent.ShowDialog) }
+                                        onClick = {
+                                            /*onEvent(PondDetailsEvent.ShowDialog)*/
+                                            selectedItemIndex = items.indexOf(PondNavigationItem.AddCommodity)
+                                        }
                                     ) {
                                         Text(text = "Tambah Komoditas")
                                     }
@@ -294,10 +302,36 @@ fun DetailsScreen(
                     }
                 }
                 PondNavigationItem.AddRecords -> {
-                    AddPondManagementRecordsTabScreen(pondDetailsState = pondDetailsState, onEvent = onEvent)
+                    Box(
+                        modifier = Modifier
+                            .padding(innerPadding),
+                    ) {
+                        AddPondManagementRecordsTabScreen(
+                            pondDetailsState = pondDetailsState,
+                            onEvent = onEvent,
+                            onNavigateToOverviewScreen = {
+                                selectedItemIndex = 0
+                            }
+                        )
+                    }
+                }
+
+                PondNavigationItem.AddCommodity -> {
+                    Box(
+                        modifier = Modifier
+                            .padding(innerPadding),
+                    ) {
+                        AddCommodityScreen(
+                            pondDetailsState = pondDetailsState,
+                            onEvent = onEvent,
+                            onNavigateToOverviewScreen = {
+                                selectedItemIndex = 0
+                            }
+                        )
+                    }
                 }
             }
-            if (isAddRecordsSheetOpen) {
+            /*if (isAddRecordsSheetOpen) {
                 ModalBottomSheet(
                     sheetState = sheetState,
                     onDismissRequest = {
@@ -307,7 +341,7 @@ fun DetailsScreen(
                 ) {
                     AddPondManagementRecordsTabScreen(pondDetailsState = pondDetailsState, onEvent = onEvent)
                 }
-            }
+            }*/
             if (isAddCommoditySheetOpen) {
                 ModalBottomSheet(
                     sheetState = sheetState,
@@ -318,9 +352,13 @@ fun DetailsScreen(
                 ) {
 
                     if (pondDetailsState.commodity.isNotEmpty()) {
-                        AddPondManagementCommmodityTabScreen(
+                        AddPondManagementCommodityTabScreen(
                             pondDetailsState = pondDetailsState,
-                            onEvent = onEvent
+                            onEvent = onEvent,
+                            onNavigateToAddCommodityScreen = {
+                                selectedItemIndex = items.indexOf(PondNavigationItem.AddCommodity)
+                                isAddCommoditySheetOpen = false
+                            }
                         )
                     } else {
                         Column {
@@ -341,7 +379,11 @@ fun DetailsScreen(
                                 contentAlignment = Alignment.Center
                             ) {
                                 Button(
-                                    onClick = { onEvent(PondDetailsEvent.ShowDialog) }
+                                    onClick = {
+                                        /*onEvent(PondDetailsEvent.ShowDialog)*/
+                                        isAddCommoditySheetOpen = false
+                                        selectedItemIndex = items.indexOf(PondNavigationItem.AddCommodity)
+                                    }
                                 ) {
                                     Text(text = "Tambah Komoditas")
                                 }
@@ -351,7 +393,6 @@ fun DetailsScreen(
                 }
             }
         }
-
     }
 }
 

@@ -61,7 +61,8 @@ fun HomeScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
@@ -96,7 +97,8 @@ fun HomeScreen(
         },
         floatingActionButton = {
             if (homeState.shouldShowFloatingActionButton) {
-                FloatingActionButtonCompose(onEvent = viewModel::onEvent )
+//                FloatingActionButtonCompose(onEvent = viewModel::onEvent )
+                FloatingActionButtonCompose(onNavigateToDestination = homeState:: navigateToHomeScreenDestination)
             }
         },
     ) { innerPadding ->

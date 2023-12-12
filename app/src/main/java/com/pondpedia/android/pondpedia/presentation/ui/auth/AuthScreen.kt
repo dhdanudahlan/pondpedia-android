@@ -206,7 +206,7 @@ fun AuthSlideScreen() {
             ) {
                 HorizontalPager(
                     state = pagerState,
-                    key = { tabItems[it].imageId },
+                    key = { tabItems[it].titleTextId },
                     pageSize = PageSize.Fill,
                     verticalAlignment = Alignment.Bottom
                 ) { index ->

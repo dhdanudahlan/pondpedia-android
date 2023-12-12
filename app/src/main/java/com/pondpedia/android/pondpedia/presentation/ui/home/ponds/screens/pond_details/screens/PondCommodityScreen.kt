@@ -41,7 +41,8 @@ fun PondCommodityScreen(
     pondsState: PondsState,
     pondDetailsState: PondDetailsState,
     onEvent: (PondDetailsEvent) -> Unit,
-    innerPadding: PaddingValues
+    innerPadding: PaddingValues,
+    onNavigateToAddCommodityScreen: () -> Unit
 ) {
     val listOfCommodity = pondDetailsState.commodity
     val listOfRecords = listOf(
@@ -78,7 +79,10 @@ fun PondCommodityScreen(
             } else {
                 Tab(
                     selected = true,
-                    onClick = { onEvent(PondDetailsEvent.ShowDialog) }
+                    onClick = {
+                        /*onEvent(PondDetailsEvent.ShowDialog)*/
+                        onNavigateToAddCommodityScreen()
+                    }
                 ) {
                     Icon(imageVector = Icons.Outlined.Add, contentDescription = "Add Commodity")
                 }
@@ -119,7 +123,7 @@ fun CommodityGrowthScreen(
 ) {
     val listOfRecords = pondDetailsState.commodityGrowthRecords.sortedBy { it.date }
     val scrollState = rememberScrollState()
-    var listOfRecordsReversed = listOfRecords.reversed()
+    val listOfRecordsReversed = listOfRecords.reversed()
     Row(
         Modifier
             .fillMaxSize()

@@ -80,7 +80,7 @@
     <string name="more_title">Lainnya</string>
 
 
-    <string name="pond_create_title">Create</string>
+    <string name="pond_add_title">Tambah Kolam</string>
 
     <string name="pond_details_title">Pond Details</string>
     <string name="pond_update_title">Update Pond Data</string>
@@ -91,9 +91,13 @@
     <string name="pond_details_water">Kualitas Air</string>
     <string name="pond_details_feeding">Pakan</string>
     <string name="pond_details_add_records">Tambah Catatan</string>
+    <string name="pond_details_add_commodity">Tambah Komoditas</string>
 
     <string name="menu_aichat_title">AIChat</string>
     <string name="menu_aichat_label">AIChat</string>
+
+    <string name="button_save">Simpan</string>
+
 
 
 

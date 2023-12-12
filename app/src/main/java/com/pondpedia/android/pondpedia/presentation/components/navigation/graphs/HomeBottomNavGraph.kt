@@ -13,6 +13,7 @@ import com.pondpedia.android.pondpedia.presentation.Graph
 import com.pondpedia.android.pondpedia.presentation.PondPediaAppState
 import com.pondpedia.android.pondpedia.presentation.ui.home.components.Screens
 import com.pondpedia.android.pondpedia.presentation.ui.home.menu.screens.MenuScreen
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.AddPondScreen
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsEvent
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsState
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.screens.PondsScreen
@@ -51,6 +52,12 @@ fun HomeBottomNavGraph(
             setDisplayActionScreen = {},
             setDisplayActionMenu = {}
         )
+        addPondNavGraph(
+            homeState = homeState,
+            pondsState = pondsState,
+            onEvent = onEvent,
+        )
+
     }
 }
 
@@ -100,6 +107,20 @@ fun NavGraphBuilder.moreNavGraph(
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text(text = "Under Construction...")
         }
+    }
+}
+fun NavGraphBuilder.addPondNavGraph(
+    homeState: PondPediaAppState,
+    pondsState: PondsState,
+    onEvent: (PondsEvent) -> Unit,
+) {
+    val navController = homeState.navController
+    composable(route = Screens.Add.route) {
+        AddPondScreen(
+            pondsState = pondsState,
+            onEvent = onEvent,
+            onNavigateToDestination = homeState::navigateToHomeScreenDestination,
+        )
     }
 }
 

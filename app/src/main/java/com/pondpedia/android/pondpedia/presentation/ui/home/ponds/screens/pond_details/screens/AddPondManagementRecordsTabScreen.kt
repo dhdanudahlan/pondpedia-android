@@ -28,7 +28,8 @@ import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.screens.pond_d
 @Composable
 fun AddPondManagementRecordsTabScreen(
     pondDetailsState: PondDetailsState,
-    onEvent: (PondDetailsEvent) -> Unit
+    onEvent: (PondDetailsEvent) -> Unit,
+    onNavigateToOverviewScreen: () -> Unit
 ) {
     var selectedTab by rememberSaveable { mutableStateOf(AddPondManagementRecordsTab.AddPondManagementRecordsTabWater) }
     var tabIndex by rememberSaveable { mutableStateOf(0) }
@@ -47,7 +48,6 @@ fun AddPondManagementRecordsTabScreen(
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(text = "Tambahkan Catatan", fontWeight = FontWeight.Bold)
             ScrollableTabRow(
                 selectedTabIndex = tabIndex,
                 modifier = Modifier.fillMaxWidth()
@@ -67,28 +67,31 @@ fun AddPondManagementRecordsTabScreen(
                 AddPondManagementRecordsTab.AddPondManagementRecordsTabCommodityGrowth -> {
                     AddPondManagementRecordsTabCommodityGrowthScreen(
                         pondDetailsState = pondDetailsState,
-                        onEvent = onEvent
+                        onEvent = onEvent,
+                        onNavigateToOverviewScreen = onNavigateToOverviewScreen
                     )
                 }
                 AddPondManagementRecordsTab.AddPondManagementRecordsTabCommodityHealth -> {
                     AddPondManagementRecordsTabCommodityHealthScreen(
                         pondDetailsState = pondDetailsState,
-                        onEvent = onEvent
+                        onEvent = onEvent,
+                        onNavigateToOverviewScreen = onNavigateToOverviewScreen
                     )
                 }
                 AddPondManagementRecordsTab.AddPondManagementRecordsTabFeeding -> {
                     AddPondManagementRecordsTabFeedingScreen(
                         pondDetailsState = pondDetailsState,
-                        onEvent = onEvent
+                        onEvent = onEvent,
+                        onNavigateToOverviewScreen = onNavigateToOverviewScreen
                     )
                 }
                 AddPondManagementRecordsTab.AddPondManagementRecordsTabWater -> {
                     AddPondManagementRecordsTabWaterScreen(
                         pondDetailsState = pondDetailsState,
-                        onEvent = onEvent
+                        onEvent = onEvent,
+                        onNavigateToOverviewScreen = onNavigateToOverviewScreen
                     )
                 }
-
             }
         }
     }
