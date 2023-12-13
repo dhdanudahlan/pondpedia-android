@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
-import com.pondpedia.android.pondpedia.domain.model.Response.*
+import com.pondpedia.android.pondpedia.domain.model.auth.Response.*
 import com.pondpedia.android.pondpedia.domain.repository.AuthRepository
 import com.pondpedia.android.pondpedia.domain.repository.OneTapSignInResponse
 import com.pondpedia.android.pondpedia.domain.repository.SignInWithGoogleResponse
@@ -62,6 +62,7 @@ class AuthViewModel @Inject constructor(
     fun oneTapSignIn() = viewModelScope.launch {
         oneTapSignInResponse = Loading
         oneTapSignInResponse = repo.oneTapSignInWithGoogle()
+        Log.d("AuthViewModel", "Sign In with Google")
     }
 
     fun signInWithGoogle(googleCredential: AuthCredential) = viewModelScope.launch {
@@ -163,12 +164,23 @@ class AuthViewModel @Inject constructor(
                 }
             }
             is AuthEvent.SignIn -> {
-                Log.d("AuthViewModel", "OnEvent(SignIn) being Called")
 
             }
             is AuthEvent.SignUp -> {
-                Log.d("AuthViewModel", "OnEvent(SignUp) being Called")
                 signUp()
+            }
+            is AuthEvent.Reset -> {
+                _state.update {
+                    it.copy(
+                        name = "",
+                        phoneNumber = "",
+                        email = "",
+                        password = "",
+                        repeatedPassword = "",
+                        occupation = "",
+                        informationSource = ""
+                    )
+                }
             }
         }
     }
@@ -206,14 +218,6 @@ class AuthViewModel @Inject constructor(
 //                acceptedTermsError = acceptedTermsResult.errorMessage,
             ) }
 
-            Log.d("AuthViewModel", state.value.name)
-            Log.d("AuthViewModel", state.value.email)
-            Log.d("AuthViewModel", state.value.phoneNumber)
-            Log.d("AuthViewModel", state.value.password)
-            Log.d("AuthViewModel", state.value.repeatedPassword)
-            Log.d("AuthViewModel", state.value.occupation)
-            Log.d("AuthViewModel", state.value.informationSource)
-            Log.d("AuthViewModel", state.value.acceptedTerms.toString())
             return
         }
         viewModelScope.launch {

@@ -1,28 +1,29 @@
 package com.pondpedia.android.pondpedia.presentation
 
+import android.util.Log
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
+import com.pondpedia.android.pondpedia.MainViewModel
 import com.pondpedia.android.pondpedia.presentation.components.navigation.graphs.authNavGraph
+import com.pondpedia.android.pondpedia.presentation.navigation.Screen
 import com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel.AuthViewModel
 import com.pondpedia.android.pondpedia.presentation.ui.home.HomeScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PondPediaApp(
-    navController: NavHostController
+    viewModel: MainViewModel = hiltViewModel(),
+    authViewModel: AuthViewModel = hiltViewModel(),
+    navController: NavHostController,
 ) {
-//    HomeScreen()
 
-    val authViewModel = hiltViewModel<AuthViewModel>()
-    val authState by authViewModel.state.collectAsState()
     AnimatedNavHost(
         navController = navController,
         startDestination = Graph.AUTHENTICATION,
@@ -32,15 +33,77 @@ fun PondPediaApp(
         authNavGraph(
             navController = navController,
             viewModel = authViewModel,
-            state = authState
         )
         composable(
             route = Graph.HOME
         ) {
-            HomeScreen()
+            HomeScreen(
+                navigateToAuthScreen = {
+                    navController.popBackStack()
+                    navController.navigate(Graph.AUTHENTICATION)
+                }
+            )
         }
     }
+    AuthState(
+        viewModel = viewModel,
+        navController = navController
+    )
 
+}
+@Composable
+private fun AuthState(
+    viewModel: MainViewModel,
+    navController: NavHostController
+) {
+    val isUserSignedOut = viewModel.getAuthState().collectAsState().value
+    if (isUserSignedOut) {
+        NavigateToAuthScreen(
+            navController = navController
+        )
+    } else {
+        NavigateToHomeScreen(
+            navController = navController
+        )
+    }
+}
+
+@Composable
+private fun NavigateToHomeScreen(
+    navController: NavHostController
+) = navController.navigate(Graph.HOME) {
+    Log.d("MainActivity", "Navigate to Home Screen")
+    popUpTo(navController.graph.id) {
+        inclusive = true
+    }
+}
+@Composable
+private fun NavigateToAuthScreen(
+    navController: NavHostController
+) = navController.navigate(Graph.AUTHENTICATION) {
+    Log.d("MainActivity", "Navigate to Auth Screen")
+    popUpTo(navController.graph.id) {
+        inclusive = true
+    }
+}
+
+@Composable
+private fun NavigateToProfileScreen(
+    navController: NavHostController
+) = navController.navigate(Screen.ProfileScreen.route) {
+    popUpTo(navController.graph.id) {
+        inclusive = true
+    }
+}
+
+@Composable
+private fun NavigateToVerifyEmailScreen(
+    navController: NavHostController
+) = navController.navigate(Screen.VerifyEmailScreen.route) {
+    Log.d("MainActivity", "Navigate to Verify Email Screen")
+    popUpTo(navController.graph.id) {
+        inclusive = true
+    }
 }
 
 object Graph {

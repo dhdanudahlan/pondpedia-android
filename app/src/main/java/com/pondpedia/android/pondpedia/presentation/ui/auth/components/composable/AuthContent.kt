@@ -1,4 +1,4 @@
-package com.pondpedia.android.pondpedia.presentation.ui.auth.components
+package com.pondpedia.android.pondpedia.presentation.ui.auth.components.composable
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues

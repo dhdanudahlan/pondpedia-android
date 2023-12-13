@@ -1,4 +1,4 @@
-package com.pondpedia.android.pondpedia.presentation.ui.auth.components
+package com.pondpedia.android.pondpedia.presentation.ui.auth.components.composable
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text

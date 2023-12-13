@@ -6,15 +6,23 @@
     <string name="signup">Daftar</string>
     <string name="signin_guest">Masuk tanpa akun</string>
     <string name="signin_google">Masuk dengan Google</string>
+    <string name="google">Google</string>
     <string name="signin_facebook">Masuk dengan Facebook</string>
+    <string name="facebook">Facebook</string>
     <string name="signin_offer">Sudah punya akun?</string>
     <string name="signup_offer">Belum punya akun?</string>
     <string name="logout">Logout</string>
 
+    <string name="sign_in_with">ATAU</string>
+    <string name="verify_email_message">We\'ve sent you an email with a link to verify the email.</string>
+
+    <string name="verify_profile_label">Verify Profile</string>
+    <string name="edit_profile_label">Edit Profile</string>
+
 
     //Menu Items
-    <string name="revoke_access_item">Revoke Access</string>
-    <string name="sign_out_item">Sign-out</string>
+    <string name="revoke_access_item">Hapus Akun</string>
+    <string name="sign_out_item">Keluar dari Akun</string>
 
 
     <string name="name_label">Nama Lengkap</string>
@@ -64,6 +72,7 @@
     <string name="title_signup_page">Daftar Akun</string>
     <string name="message_signup_page">Masukkan Data Registrasi</string>
     <string name="copyright">PondPedia™</string>
+    <string name="verified">Verified</string>
     <string name="message_main_page">Selamat Berjuang.</string>
     <string name="title_activity_home">HomeActivity</string>
 
@@ -95,6 +104,14 @@
 
     <string name="menu_aichat_title">AIChat</string>
     <string name="menu_aichat_label">AIChat</string>
+
+    <string name="more_profile_title">Profil</string>
+    <string name="more_profile_label">Profil</string>
+    <string name="more_settings_title">Pengaturan</string>
+    <string name="more_settings_label">Pengaturan</string>
+
+    <string name="more_category_common">Common</string>
+    <string name="more_category_uncommon">Uncommon</string>
 
     <string name="button_save">Simpan</string>
 

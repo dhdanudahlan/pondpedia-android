@@ -1,4 +1,4 @@
-package com.pondpedia.android.pondpedia.domain.model
+package com.pondpedia.android.pondpedia.domain.model.auth
 
 sealed class Response<out T> {
     data object Loading: Response<Nothing>()

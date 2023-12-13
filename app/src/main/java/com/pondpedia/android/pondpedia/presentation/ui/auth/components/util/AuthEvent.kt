@@ -19,4 +19,6 @@ sealed interface AuthEvent {
     data class SetSignInId(val value: String): AuthEvent
     data class SetSignInPassword(val value: String): AuthEvent
 
+    data object Reset: AuthEvent
+
 }

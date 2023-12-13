@@ -1,18 +1,15 @@
-package com.pondpedia.android.pondpedia.presentation.ui.home.profile.components
+package com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.components
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pondpedia.android.pondpedia.components.ProgressBar
-import com.pondpedia.android.pondpedia.domain.model.Response.*
-import com.pondpedia.android.pondpedia.presentation.ui.home.profile.ProfileViewModel
+import com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.ProfileViewModel
 
 @Composable
 fun SignOut(
     viewModel: ProfileViewModel = hiltViewModel(),
     navigateToAuthScreen: (signedOut: Boolean) -> Unit
 ) {
-    when(val signOutResponse = viewModel.signOutResponse) {
+    /*when(val signOutResponse = viewModel.signOutResponse) {
         is Loading -> ProgressBar()
         is Success -> signOutResponse.data?.let { signedOut ->
             LaunchedEffect(signedOut) {
@@ -22,5 +19,5 @@ fun SignOut(
         is Failure -> LaunchedEffect(Unit) {
             print(signOutResponse.e)
         }
-    }
+    }*/
 }

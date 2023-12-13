@@ -7,13 +7,17 @@ import androidx.compose.material.icons.filled.Analytics
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Analytics
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.RotateRight
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -131,6 +135,24 @@ sealed class Screens(
         titleTextId = R.string.pond_analytics_title,
         selectedIcon = Icons.Filled.Add,
         unselectedIcon = Icons.Outlined.Add,
+        hasUnread = false,
+        badgeCount = null,
+    )
+    data object Profile: Screens(
+        route = "MORE_PROFILE",
+        labelTextId = R.string.more_profile_label,
+        titleTextId = R.string.more_profile_title,
+        selectedIcon = Icons.Filled.Person,
+        unselectedIcon = Icons.Outlined.Person,
+        hasUnread = false,
+        badgeCount = null,
+    )
+    data object Settings: Screens(
+        route = "MORE_SETTINGS",
+        labelTextId = R.string.more_settings_label,
+        titleTextId = R.string.more_settings_title,
+        selectedIcon = Icons.Filled.Settings,
+        unselectedIcon = Icons.Outlined.Settings,
         hasUnread = false,
         badgeCount = null,
     )

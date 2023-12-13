@@ -5,9 +5,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.pondpedia.android.pondpedia.core.util.Constants.USERS
-import com.pondpedia.android.pondpedia.domain.model.Response.*
+import com.pondpedia.android.pondpedia.domain.model.auth.Response.Failure
+import com.pondpedia.android.pondpedia.domain.model.auth.Response.Success
 import com.pondpedia.android.pondpedia.domain.repository.ProfileRepository
-import com.pondpedia.android.pondpedia.domain.repository.RevokeAccessResponse
+import com.pondpedia.android.pondpedia.domain.repository.RevokeAccessResponseGoogle
 import com.pondpedia.android.pondpedia.domain.repository.SignOutResponse
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -33,7 +34,7 @@ class ProfileRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun revokeAccess(): RevokeAccessResponse {
+    override suspend fun revokeAccess(): RevokeAccessResponseGoogle {
         return try {
             auth.currentUser?.apply {
                 db.collection(USERS).document(uid).delete().await()

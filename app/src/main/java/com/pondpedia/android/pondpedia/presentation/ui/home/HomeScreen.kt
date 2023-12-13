@@ -38,6 +38,7 @@ import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.vie
 @Composable
 fun HomeScreen(
     homeState: PondPediaAppState = rememberPondPediaAppState(),
+    navigateToAuthScreen: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val homeDestination = homeState.currentHomeScreenDestination
@@ -115,6 +116,7 @@ fun HomeScreen(
                     homeState = homeState,
                     pondsState = pondsState,
                     onEvent = viewModel::onEvent,
+                    navigateToAuthScreen = navigateToAuthScreen
                 )
             }
         }

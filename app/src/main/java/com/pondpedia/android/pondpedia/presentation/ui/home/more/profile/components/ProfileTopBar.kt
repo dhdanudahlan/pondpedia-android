@@ -1,6 +1,7 @@
-package com.pondpedia.android.pondpedia.presentation.ui.home.profile.components
+@file:OptIn(ExperimentalMaterial3Api::class)
 
-import androidx.compose.material.*
+package com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.components
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.DropdownMenu
@@ -10,12 +11,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import com.pondpedia.android.pondpedia.core.util.Constants.PROFILE_SCREEN
 import com.pondpedia.android.pondpedia.core.util.Constants.REVOKE_ACCESS
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_OUT
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileTopBar(
     signOut: () -> Unit,
@@ -47,25 +51,25 @@ fun ProfileTopBar(
                 }
             ) {
                 DropdownMenuItem(
-                    onClick = {
-                        signOut()
-                        openMenu = !openMenu
-                    },
                     text = {
                         Text(
                             text = SIGN_OUT
                         )
+                    },
+                    onClick = {
+                        signOut()
+                        openMenu = !openMenu
                     }
                 )
                 DropdownMenuItem(
-                    onClick = {
-                        revokeAccess()
-                        openMenu = !openMenu
-                    },
                     text = {
                         Text(
                             text = REVOKE_ACCESS
                         )
+                    },
+                    onClick = {
+                        revokeAccess()
+                        openMenu = !openMenu
                     }
                 )
             }

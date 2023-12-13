@@ -1,15 +1,26 @@
 package com.pondpedia.android.pondpedia
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.pondpedia.android.pondpedia.core.app.PondPediaApplication
+import com.pondpedia.android.pondpedia.presentation.Graph
 import com.pondpedia.android.pondpedia.presentation.navigation.Screen
 import com.pondpedia.android.pondpedia.presentation.PondPediaApp
 import com.pondpedia.android.pondpedia.presentation.theme.PondPediaCustomTheme
@@ -54,7 +65,6 @@ class MainActivity : ComponentActivity() {
     private val dataStore by lazy { (application as PondPediaApplication).pondPediaDataStore }
 
     private lateinit var navController: NavHostController
-    private val viewModel by viewModels<AuthViewModel>()
 
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,19 +87,65 @@ class MainActivity : ComponentActivity() {
                 dynamicColor = isDynamicColor
             ) {
                 navController = rememberAnimatedNavController()
-                PondPediaApp(navController = navController)
-//                checkAuthState()
+                PondPediaApp(
+                    navController = navController,
+                )
+
+//                Button(
+//                    onClick = {
+//                        if (checkForInternet(this)) {
+//                            Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
+//                        } else {
+//                            Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//                ) {
+//                    Text(text = "Check Internet Access")
+//                }
             }
         }
     }
-    private fun checkAuthState() {
-        if(viewModel.isUserAuthenticated) {
-            navigateToProfileScreen()
-        }
-    }
 
-    private fun navigateToProfileScreen() = navController.navigate(Screen.ProfileScreen.route)
+
+//    @Composable
+//    private fun NavigateToVerifyEmailScreen() = navController.navigate(VerifyEmailScreen.route) {
+//        popUpTo(navController.graph.id) {
+//            inclusive = true
+//        }
+//    }
 }
+
+private fun checkForInternet(context: Context): Boolean {
+
+    // register activity with the connectivity manager service
+    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    // if the android version is equal to M
+    // or greater we need to use the
+    // NetworkCapabilities to check what type of
+    // network has the internet connection
+
+    // Returns a Network object corresponding to
+    // the currently active default data network.
+    val network = connectivityManager.activeNetwork ?: return false
+
+    // Representation of the capabilities of an active network.
+    val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+    return when {
+        // Indicates this network uses a Wi-Fi transport,
+        // or WiFi has network connectivity
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+
+        // Indicates this network uses a Cellular transport. or
+        // Cellular has network connectivity
+        activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+
+        // else return false
+        else -> false
+    }
+}
+
 /*
 
 @Composable
