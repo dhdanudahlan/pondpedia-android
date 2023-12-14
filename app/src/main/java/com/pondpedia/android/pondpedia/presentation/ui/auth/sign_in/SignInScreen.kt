@@ -78,9 +78,7 @@ fun SignInScreen(
     navigateToAuthScreen: () -> Unit,
     navigateToSignUpScreen: () -> Unit,
     navigateToHomeScreen: () -> Unit,
-    onEmailPasswordSignInClick: (String, String) -> Unit,
-    onEvent: (AuthEvent) -> Unit,
-    viewModel: AuthViewModel = hiltViewModel()
+    viewModel: SignInViewModel = hiltViewModel()
 ) {
 
     PondPediaCustomTheme (darkTheme = false) {
@@ -89,9 +87,7 @@ fun SignInScreen(
             navigateToAuthScreen = navigateToAuthScreen,
             navigateToSignUpScreen = navigateToSignUpScreen,
             navigateToHomeScreen = navigateToHomeScreen,
-            onEmailPasswordSignInClick = onEmailPasswordSignInClick,
-            onEvent = onEvent,
-            authViewModel = viewModel
+            viewModel = viewModel
         )
     }
 }
@@ -102,10 +98,7 @@ fun SignInScreenLightMode(
     navigateToAuthScreen: () -> Unit,
     navigateToSignUpScreen: () -> Unit,
     navigateToHomeScreen: () -> Unit,
-    onEmailPasswordSignInClick: (String, String) -> Unit,
-    onEvent: (AuthEvent) -> Unit,
     viewModel: SignInViewModel = hiltViewModel(),
-    authViewModel: AuthViewModel = hiltViewModel()
 ) {
 
     val context = LocalContext.current
@@ -291,7 +284,7 @@ fun SignInScreenLightMode(
                                     .fillMaxWidth()
                                     .weight(1f),
                                 onClick = {
-                                    authViewModel.oneTapSignIn()
+                                    viewModel.oneTapSignIn()
                                     Log.d("SignInScreen", "Sign In with Google")
                                 }
                             ) {
@@ -339,10 +332,10 @@ fun SignInScreenLightMode(
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             try {
-                val credentials = authViewModel.oneTapClient.getSignInCredentialFromIntent(result.data)
+                val credentials = viewModel.oneTapClient.getSignInCredentialFromIntent(result.data)
                 val googleIdToken = credentials.googleIdToken
                 val googleCredentials = GoogleAuthProvider.getCredential(googleIdToken, null)
-                authViewModel.signInWithGoogle(googleCredentials)
+                viewModel.signInWithGoogle(googleCredentials)
             } catch (it: ApiException) {
                 print(it)
             }
@@ -383,8 +376,6 @@ fun SignInPreview() {
             navigateToAuthScreen = {},
             navigateToSignUpScreen = {},
             navigateToHomeScreen = {},
-            onEmailPasswordSignInClick = { _, _ -> },
-            onEvent = { _ -> },
         )
     }
 }

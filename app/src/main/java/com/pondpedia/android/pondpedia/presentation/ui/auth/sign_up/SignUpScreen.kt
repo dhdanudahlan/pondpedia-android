@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Lightbulb
@@ -37,6 +38,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
@@ -270,7 +273,11 @@ fun SignUpScreenLightMode(
                             },
                             isErrorMessage = state.phoneNumberError,
                             label = stringResource(R.string.number_label),
-                            imageVector = Icons.Outlined.PhoneAndroid
+                            imageVector = Icons.Outlined.PhoneAndroid,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Done
+                            )
                         )
 
                         LargeSpacer()
@@ -450,13 +457,13 @@ fun SignUpScreenLightMode(
         }
     }
 
-    val verifyEmailMessage = stringResource(R.string.verify_email_message)
+    val signUpSuccessMessage = "${stringResource(R.string.signup_success)} ${stringResource(R.string.verify_email_message)}"
     SignUp(
         sendEmailVerification = {
             viewModel.sendEmailVerification()
         },
         showVerifyEmailMessage = {
-            showMessage(context, verifyEmailMessage)
+            showMessage(context, signUpSuccessMessage)
         }
     )
 

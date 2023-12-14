@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -26,6 +27,10 @@ fun MyOutlineTextField(
     isErrorMessage: String? = null,
     label: String? = null,
     imageVector: ImageVector? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(
+        keyboardType = KeyboardType.Text,
+        imeAction = ImeAction.Done
+    ),
 ) {
     Box(
         modifier = Modifier
@@ -65,10 +70,7 @@ fun MyOutlineTextField(
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(8.dp),
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Done
-                    ),
+                    keyboardOptions = keyboardOptions,
                     leadingIcon = {
                         if (imageVector != null) {
                             Icon(

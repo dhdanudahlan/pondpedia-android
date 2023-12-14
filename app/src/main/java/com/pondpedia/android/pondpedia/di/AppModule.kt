@@ -50,10 +50,9 @@ class AppModule {
         .setGoogleIdTokenRequestOptions(
             BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                 .setSupported(true)
-                .setServerClientId(app.getString(R.string.web_client_id))
+                .setServerClientId(app.getString(R.string.web_client_id_google))
                 .setFilterByAuthorizedAccounts(true)
                 .build())
-        .setAutoSelectEnabled(true)
         .build()
 
     @Provides
@@ -64,7 +63,7 @@ class AppModule {
         .setGoogleIdTokenRequestOptions(
             BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                 .setSupported(true)
-                .setServerClientId(app.getString(R.string.web_client_id))
+                .setServerClientId(app.getString(R.string.web_client_id_google))
                 .setFilterByAuthorizedAccounts(false)
                 .build())
         .build()
@@ -73,7 +72,7 @@ class AppModule {
     fun provideGoogleSignInOptions(
         app: Application
     ) = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestIdToken(app.getString(R.string.web_client_id))
+        .requestIdToken(app.getString(R.string.web_client_id_google))
         .requestEmail()
         .build()
 
@@ -91,13 +90,13 @@ class AppModule {
         signInRequest: BeginSignInRequest,
         @Named(SIGN_UP_REQUEST)
         signUpRequest: BeginSignInRequest,
-        db: FirebaseFirestore
+//        db: FirebaseFirestore
     ): AuthRepository = AuthRepositoryImpl(
         auth = auth,
         oneTapClient = oneTapClient,
         signInRequest = signInRequest,
         signUpRequest = signUpRequest,
-        db = db
+//        db = db
     )
 
     @Provides
@@ -105,11 +104,11 @@ class AppModule {
         auth: FirebaseAuth,
         oneTapClient: SignInClient,
         signInClient: GoogleSignInClient,
-        db: FirebaseFirestore
+//        db: FirebaseFirestore
     ): ProfileRepository = ProfileRepositoryImpl(
         auth = auth,
         oneTapClient = oneTapClient,
         signInClient = signInClient,
-        db = db
+//        db = db
     )
 }

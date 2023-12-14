@@ -6,10 +6,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.pondpedia.android.pondpedia.components.ProgressBar
 import com.pondpedia.android.pondpedia.domain.model.auth.Response.*
 import com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel.AuthViewModel
+import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_in.viewmodel.SignInViewModel
 
 @Composable
 fun SignInWithGoogle(
-    viewModel: AuthViewModel = hiltViewModel(),
+    viewModel: SignInViewModel = hiltViewModel(),
     navigateToHomeScreen: (signedIn: Boolean) -> Unit
 ) {
     when(val signInWithGoogleResponse = viewModel.signInWithGoogleResponse) {

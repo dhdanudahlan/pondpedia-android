@@ -41,7 +41,7 @@ class AuthRepositoryImpl @Inject constructor(
     private var signInRequest: BeginSignInRequest,
     @Named(SIGN_UP_REQUEST)
     private var signUpRequest: BeginSignInRequest,
-    private val db: FirebaseFirestore
+//    private val db: FirebaseFirestore
 ) : AuthRepository {
     override val isUserAuthenticatedInFirebase = auth.currentUser != null
 
@@ -65,21 +65,21 @@ class AuthRepositoryImpl @Inject constructor(
         return try {
             val authResult = auth.signInWithCredential(googleCredential).await()
             val isNewUser = authResult.additionalUserInfo?.isNewUser ?: false
-            if (isNewUser) {
-                addUserToFirestore()
-            }
+//            if (isNewUser) {
+//                addUserToFirestore()
+//            }
             Success(true)
         } catch (e: Exception) {
             Failure(e)
         }
     }
 
-    private suspend fun addUserToFirestore() {
-        auth.currentUser?.apply {
-            val user = toUser()
-            db.collection(USERS).document(uid).set(user).await()
-        }
-    }
+//    private suspend fun addUserToFirestore() {
+//        auth.currentUser?.apply {
+//            val user = toUser()
+//            db.collection(USERS).document(uid).set(user).await()
+//        }
+//    }
     override val currentUser get() = auth.currentUser
 
 

@@ -7,10 +7,11 @@ import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.pondpedia.android.pondpedia.components.ProgressBar
 import com.pondpedia.android.pondpedia.domain.model.auth.Response.*
 import com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel.AuthViewModel
+import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_in.viewmodel.SignInViewModel
 
 @Composable
 fun OneTapSignIn(
-    viewModel: AuthViewModel = hiltViewModel(),
+    viewModel: SignInViewModel = hiltViewModel(),
     launch: (result: BeginSignInResult) -> Unit
 ) {
     when(val oneTapSignInResponse = viewModel.oneTapSignInResponse) {

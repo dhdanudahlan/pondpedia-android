@@ -5,7 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pondpedia.android.pondpedia.components.ProgressBar
 import com.pondpedia.android.pondpedia.domain.model.auth.Response.*
-import com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.ProfileViewModel
+import com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.components.ProfileViewModel
 
 @Composable
 fun ReloadUser(

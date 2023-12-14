@@ -10,7 +10,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.pondpedia.android.pondpedia.MainViewModel
 import com.pondpedia.android.pondpedia.presentation.components.navigation.graphs.authNavGraph
 import com.pondpedia.android.pondpedia.presentation.navigation.Screen
 import com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel.AuthViewModel
@@ -19,8 +18,7 @@ import com.pondpedia.android.pondpedia.presentation.ui.home.HomeScreen
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun PondPediaApp(
-    viewModel: MainViewModel = hiltViewModel(),
-    authViewModel: AuthViewModel = hiltViewModel(),
+    viewModel: AuthViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
 
@@ -32,7 +30,7 @@ fun PondPediaApp(
     ) {
         authNavGraph(
             navController = navController,
-            viewModel = authViewModel,
+            viewModel = viewModel,
         )
         composable(
             route = Graph.HOME
@@ -53,7 +51,7 @@ fun PondPediaApp(
 }
 @Composable
 private fun AuthState(
-    viewModel: MainViewModel,
+    viewModel: AuthViewModel,
     navController: NavHostController
 ) {
     val isUserSignedOut = viewModel.getAuthState().collectAsState().value

@@ -1,4 +1,4 @@
-package com.pondpedia.android.pondpedia.presentation.ui.home.more.profile
+package com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.components
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,6 +11,8 @@ import com.pondpedia.android.pondpedia.domain.model.auth.Response.Success
 import com.pondpedia.android.pondpedia.domain.repository.AuthRepository
 import com.pondpedia.android.pondpedia.domain.repository.ReloadUserResponse
 import com.pondpedia.android.pondpedia.domain.repository.RevokeAccessResponse
+import com.pondpedia.android.pondpedia.domain.repository.SendEmailVerificationResponse
+import com.pondpedia.android.pondpedia.domain.repository.SignOutResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,6 +21,9 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val repo: AuthRepository
 ): ViewModel() {
+
+    var signOutResponse by mutableStateOf<SignOutResponse>(Success(false))
+        private set
     var revokeAccessResponse by mutableStateOf<RevokeAccessResponse>(Success(false))
         private set
     var reloadUserResponse by mutableStateOf<ReloadUserResponse>(Success(false))
@@ -30,6 +35,15 @@ class ProfileViewModel @Inject constructor(
     }
 
     val isEmailVerified get() = repo.currentUser?.isEmailVerified ?: false
+
+    var sendEmailVerificationResponse by mutableStateOf<SendEmailVerificationResponse>(Success(false))
+        private set
+
+    fun sendEmailVerification() = viewModelScope.launch {
+        sendEmailVerificationResponse = Loading
+        sendEmailVerificationResponse = repo.sendEmailVerification()
+    }
+
 
     val currentUser get() = repo.currentUser
 

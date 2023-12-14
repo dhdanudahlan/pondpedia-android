@@ -28,7 +28,7 @@ android {
 
     buildTypes {
         release {
-            BuildConfigField("String", "BASE_URL", "\"https://main.devapi-pondpedia.com/\"")
+            BuildConfigField("String", "BASE_URL", "\"https://main.devapi-pondpedia.com\"")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

@@ -25,45 +25,5 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AuthModule {
 
-    @Provides
-    @Singleton
-    fun provideValidateEmailUseCase(): ValidateEmailUseCase {
-        return ValidateEmailUseCase()
-    }
-    @Provides
-    @Singleton
-    fun provideValidateInformationSourceUseCase(): ValidateInformationSourceUseCase {
-        return ValidateInformationSourceUseCase()
-    }
-    @Provides
-    @Singleton
-    fun provideValidateNameUseCase(): ValidateNameUseCase {
-        return ValidateNameUseCase()
-    }
-    @Provides
-    @Singleton
-    fun provideValidateOccupationUseCase(): ValidateOccupationUseCase {
-        return ValidateOccupationUseCase()
-    }
-    @Provides
-    @Singleton
-    fun provideValidatePasswordUseCase(): ValidatePasswordUseCase {
-        return ValidatePasswordUseCase()
-    }
-    @Provides
-    @Singleton
-    fun provideValidateRepeatedPasswordUseCase(): ValidateRepeatedPasswordUseCase {
-        return ValidateRepeatedPasswordUseCase()
-    }
-    @Provides
-    @Singleton
-    fun provideValidatePhoneNumberUseCase(): ValidatePhoneNumberUseCase {
-        return ValidatePhoneNumberUseCase()
-    }
-    @Provides
-    @Singleton
-    fun provideValidateTermsUseCase(): ValidateTermsUseCase {
-        return ValidateTermsUseCase()
-    }
 
 }

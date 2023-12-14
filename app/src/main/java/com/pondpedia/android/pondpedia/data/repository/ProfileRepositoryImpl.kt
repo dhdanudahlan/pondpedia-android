@@ -19,7 +19,7 @@ class ProfileRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
     private var oneTapClient: SignInClient,
     private var signInClient: GoogleSignInClient,
-    private val db: FirebaseFirestore
+//    private val db: FirebaseFirestore
 ) : ProfileRepository {
     override val displayName = auth.currentUser?.displayName.toString()
     override val photoUrl = auth.currentUser?.photoUrl.toString()
@@ -37,7 +37,7 @@ class ProfileRepositoryImpl @Inject constructor(
     override suspend fun revokeAccess(): RevokeAccessResponseGoogle {
         return try {
             auth.currentUser?.apply {
-                db.collection(USERS).document(uid).delete().await()
+//                db.collection(USERS).document(uid).delete().await()
                 signInClient.revokeAccess().await()
                 oneTapClient.signOut().await()
                 delete().await()

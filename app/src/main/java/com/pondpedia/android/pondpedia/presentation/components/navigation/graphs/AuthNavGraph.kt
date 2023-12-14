@@ -3,6 +3,7 @@ package com.pondpedia.android.pondpedia.presentation.components.navigation.graph
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.navigation
@@ -13,6 +14,7 @@ import com.pondpedia.android.pondpedia.presentation.theme.PondPediaCustomTheme
 import com.pondpedia.android.pondpedia.presentation.ui.auth.AuthScreen
 import com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel.AuthViewModel
 import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_in.SignInScreen
+import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_in.viewmodel.SignInViewModel
 import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_up.SignUpScreen
 import com.pondpedia.android.pondpedia.presentation.ui.auth.verify_email.VerifyEmailScreen
 import com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.ProfileScreen
@@ -49,6 +51,8 @@ fun NavGraphBuilder.authNavGraph(
         ) {
             val authState by viewModel.state.collectAsState()
 
+            val signInViewModel: SignInViewModel = hiltViewModel()
+
             PondPediaCustomTheme ( darkTheme = false ) {
                 SignInScreen(
                     state = authState,
@@ -62,9 +66,7 @@ fun NavGraphBuilder.authNavGraph(
                     navigateToHomeScreen = {
                         navController.navigate(Graph.HOME)
                     },
-                    onEmailPasswordSignInClick = { _, _ -> },
-                    onEvent = viewModel::onEvent,
-                    viewModel = viewModel
+                    viewModel = signInViewModel
                 )
             }
         }

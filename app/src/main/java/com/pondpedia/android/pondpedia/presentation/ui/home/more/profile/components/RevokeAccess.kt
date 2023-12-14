@@ -15,7 +15,6 @@ import com.pondpedia.android.pondpedia.core.util.Utils.Companion.showMessage
 import com.pondpedia.android.pondpedia.domain.model.auth.Response.Failure
 import com.pondpedia.android.pondpedia.domain.model.auth.Response.Loading
 import com.pondpedia.android.pondpedia.domain.model.auth.Response.Success
-import com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.ProfileViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -44,7 +43,7 @@ fun RevokeAccess(
     viewModel: ProfileViewModel = hiltViewModel(),
     snackbarHostState: SnackbarHostState,
     coroutineScope: CoroutineScope,
-    signOut: () -> Unit,
+    signOut: (Boolean) -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -53,9 +52,9 @@ fun RevokeAccess(
             message = REVOKE_ACCESS_MESSAGE,
             actionLabel = SIGN_OUT_ITEM
         )
-        if (result == SnackbarResult.ActionPerformed) {
-            signOut()
-        }
+//        if (result == SnackbarResult.ActionPerformed) {
+//            signOut()
+//        }
     }
 
     when(val revokeAccessResponse = viewModel.revokeAccessResponse) {
@@ -65,6 +64,7 @@ fun RevokeAccess(
             LaunchedEffect(isAccessRevoked) {
                 if (isAccessRevoked == true) {
                     showMessage(context, ACCESS_REVOKED_MESSAGE)
+                    signOut(isAccessRevoked)
                 }
             }
         }

@@ -2,7 +2,6 @@ package com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.compon
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.ProfileViewModel
 
 @Composable
 fun SignOut(

@@ -11,11 +11,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -73,7 +77,7 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             val systemUiController = rememberSystemUiController()
-            val darkTheme = true
+            val darkTheme = false
             val isDynamicColor = true
 //            val darkTheme = shouldUseDarkTheme(uiState)
 //            val isDynamicColor = shouldUseDynamicColor(uiState)
@@ -83,13 +87,17 @@ class MainActivity : ComponentActivity() {
                 onDispose {}
             }
             PondPediaCustomTheme(
-//                darkTheme = darkTheme,
+                darkTheme = darkTheme,
                 dynamicColor = isDynamicColor
             ) {
-                navController = rememberAnimatedNavController()
-                PondPediaApp(
-                    navController = navController,
-                )
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    navController = rememberAnimatedNavController()
+                    PondPediaApp(
+                        navController = navController,
+                    )
 
 //                Button(
 //                    onClick = {
@@ -101,7 +109,8 @@ class MainActivity : ComponentActivity() {
 //                    }
 //                ) {
 //                    Text(text = "Check Internet Access")
-//                }
+//                }}
+                }
             }
         }
     }

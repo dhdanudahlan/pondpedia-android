@@ -29,6 +29,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Verified
+import androidx.compose.material.icons.outlined.Verified
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -54,6 +55,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
@@ -73,42 +75,10 @@ import com.pondpedia.android.pondpedia.core.util.Constants.WELCOME_MESSAGE
 @Composable
 fun ProfileContent(
     padding: PaddingValues,
-    photoUrl: String,
-    displayName: String
+    user: FirebaseUser?,
+    sendEmailVerification: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(padding),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(
-            modifier = Modifier.height(48.dp)
-        )
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(photoUrl)
-                .crossfade(true)
-                .build(),
-            contentDescription = null,
-            contentScale = Crop,
-            modifier = Modifier
-                .clip(CircleShape)
-                .width(96.dp)
-                .height(96.dp)
-        )
-        Text(
-            text = displayName,
-            fontSize = 24.sp
-        )
-    }
-}
 
-@Composable
-fun ProfileContent(
-    padding: PaddingValues,
-    user: FirebaseUser?
-) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -140,10 +110,6 @@ fun ProfileContent(
             emailVerified = it.isEmailVerified
             uid = it.uid
         }
-        val imageModifier = Modifier
-            .size(150.dp)
-            .border(BorderStroke(1.dp, Color.Black))
-            .background(Color.Yellow)
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -155,8 +121,8 @@ fun ProfileContent(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
-                    .background(color = colorResource(id = R.color.blue_500))
+                    .height(150.dp)
+                    .background(color = MaterialTheme.colorScheme.primary)
             )
             Row(
                 modifier = Modifier
@@ -166,35 +132,54 @@ fun ProfileContent(
                     .padding(horizontal = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .border(BorderStroke(1.dp, Color.DarkGray), CircleShape)
-                        .size(100.dp)
-                        .background(color = Color.White),
-                    painter = painterResource(id = R.drawable.pondpedia_logo), // Replace with your image resource
-                    contentDescription = "Circle image"
-                )
+                if (photoUrl != null ) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(photoUrl)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = null,
+                        contentScale = Crop,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .border(BorderStroke(1.dp, Color.DarkGray), CircleShape)
+                            .width(96.dp)
+                            .height(96.dp)
+                            .background(color = Color.White),
+                    )
+                } else {
+                    Image(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .border(BorderStroke(1.dp, Color.DarkGray), CircleShape)
+                            .size(100.dp)
+                            .background(color = Color.White),
+                        painter = painterResource(id = R.drawable.pondpedia_logo), // Replace with your image resource
+                        contentDescription = "Circle image"
+                    )
+                }
                 Spacer(modifier = Modifier.weight(1f))
                 Box(
                     modifier = Modifier.height(100.dp),
                     contentAlignment = Alignment.BottomEnd
                 ) {
                     Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer
-                        )
+//                        colors = CardDefaults.cardColors(
+//                            containerColor = MaterialTheme.colorScheme.primaryContainer
+//                        )
                     ) {
                         Row(
                             modifier = Modifier.padding(4.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Verified,
-                                contentDescription = null
+                                imageVector = if (emailVerified) Icons.Default.Verified else Icons.Outlined.Verified,
+                                contentDescription = null,
+                                tint = colorResource(id = R.color.navi)
                             )
+                            Spacer(modifier = Modifier.width(2.dp))
                             Text(
-                                text = stringResource(id = R.string.verified),
+                                text = if (emailVerified) stringResource(id = R.string.verified) else stringResource(id = R.string.unverified),
                                 fontWeight = FontWeight.Bold
                             )
                         }
@@ -217,7 +202,10 @@ fun ProfileContent(
                 ) {
                     ProfileMainCard(
                         displayName = name,
-                        email = email
+                        email = email,
+                        emailVerified = emailVerified,
+                        uid = uid,
+                        sendEmailVerification = sendEmailVerification
                     )
                 }
             }
@@ -228,6 +216,9 @@ fun ProfileContent(
 fun ProfileMainCard(
     displayName: String? = null,
     email: String? = null,
+    emailVerified: Boolean = false,
+    uid: String? = null,
+    sendEmailVerification: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -252,6 +243,13 @@ fun ProfileMainCard(
                 fontWeight = FontWeight.Normal
             )
             SmallSpacer()
+            Text(
+                text = uid ?: "Placeholder.uid",
+                fontSize = 6.sp,
+                fontWeight = FontWeight.Thin,
+                fontStyle = FontStyle.Italic
+            )
+            SmallSpacer()
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -259,12 +257,14 @@ fun ProfileMainCard(
             ) {
                 Button(
                     modifier = Modifier,
-                    onClick = { /*TODO*/ }
+                    onClick = { sendEmailVerification() },
+                    enabled = !emailVerified
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(imageVector = Icons.Default.Email, contentDescription = null)
+                        Spacer(modifier = Modifier.width(4.dp))
                         Text(text = stringResource(id = R.string.verify_profile_label))
                     }
                 }
@@ -276,6 +276,7 @@ fun ProfileMainCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(imageVector = Icons.Default.Edit, contentDescription = null)
+                        Spacer(modifier = Modifier.width(4.dp))
                         Text(text = stringResource(id = R.string.edit_profile_label))
                     }
                 }
@@ -290,6 +291,7 @@ fun ProfileMainCard(
 fun ProfileContentPreview() {
     ProfileContent(
         padding = PaddingValues(16.dp),
-        user = null
+        user = null,
+        sendEmailVerification = {}
     )
 }

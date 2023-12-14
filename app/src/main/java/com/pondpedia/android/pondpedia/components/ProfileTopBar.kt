@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.RotateRight
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
@@ -28,7 +29,8 @@ import com.pondpedia.android.pondpedia.R
 fun ProfileTopBar(
     title: String,
     signOut: () -> Unit,
-    revokeAccess: () -> Unit
+    revokeAccess: () -> Unit,
+    reloadUser: () -> Unit
 ) {
     var openMenu by remember { mutableStateOf(false) }
 
@@ -79,6 +81,16 @@ fun ProfileTopBar(
                     openMenu = !openMenu
                 }
             ) {
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = stringResource(R.string.reload_item)
+                        )
+                    },
+                    onClick = {
+                        reloadUser()
+                    }
+                )
                 DropdownMenuItem(
                     text = {
                         Text(

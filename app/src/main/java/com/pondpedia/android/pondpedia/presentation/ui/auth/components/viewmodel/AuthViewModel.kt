@@ -35,7 +35,6 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val repo: AuthRepository,
-    val oneTapClient: SignInClient,
     private val validateNameUseCase: ValidateNameUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePhoneNumberUseCase: ValidatePhoneNumberUseCase,
@@ -46,13 +45,9 @@ class AuthViewModel @Inject constructor(
     private val validateTermsUseCase: ValidateTermsUseCase
 ): ViewModel() {
 
-    private val _state = MutableStateFlow(AuthState())
-    val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AuthState())
+    ////////////////////////////| Firebase Google Authentication |////////////////////////////
 
-    private val validationEventChannel = Channel<ValidationEvent>()
-    val validationEvents = validationEventChannel.receiveAsFlow()
-
-    val isUserAuthenticated get() = repo.isUserAuthenticatedInFirebase
+    /*val isUserAuthenticated get() = repo.isUserAuthenticatedInFirebase
 
     var oneTapSignInResponse by mutableStateOf<OneTapSignInResponse>(Success(null))
         private set
@@ -68,7 +63,28 @@ class AuthViewModel @Inject constructor(
     fun signInWithGoogle(googleCredential: AuthCredential) = viewModelScope.launch {
         oneTapSignInResponse = Loading
         signInWithGoogleResponse = repo.firebaseSignInWithGoogle(googleCredential)
+    }*/
+
+    ////////////////////////////| Firebase Email and Password Authentication |////////////////////////////
+
+    init {
+        getAuthState()
     }
+
+    fun getAuthState() = repo.getAuthState(viewModelScope)
+
+    val isEmailVerified get() = repo.currentUser?.isEmailVerified ?: false
+
+    ////////////////////////////| Normal ViewModel Things |////////////////////////////
+
+    private val _state = MutableStateFlow(AuthState())
+    val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AuthState())
+
+    private val validationEventChannel = Channel<ValidationEvent>()
+    val validationEvents = validationEventChannel.receiveAsFlow()
+
+
+    ////////////////////////////| Normal ViewModel OnEvent |////////////////////////////
 
     fun onEvent(event: AuthEvent) {
         when(event) {

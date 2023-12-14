@@ -14,7 +14,7 @@ import com.pondpedia.android.pondpedia.core.util.Constants.VERIFY_EMAIL_SCREEN
 import com.pondpedia.android.pondpedia.core.util.Utils.Companion.showMessage
 import com.pondpedia.android.pondpedia.presentation.ui.auth.verify_email.components.ReloadUser
 import com.pondpedia.android.pondpedia.presentation.ui.auth.verify_email.components.VerifyEmailContent
-import com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.ProfileViewModel
+import com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.components.ProfileViewModel
 import com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.components.RevokeAccess
 
 @Composable
@@ -35,6 +35,9 @@ fun VerifyEmailScreen(
                 },
                 revokeAccess = {
                     viewModel.revokeAccess()
+                },
+                reloadUser = {
+                    viewModel.reloadUser()
                 }
             )
         },

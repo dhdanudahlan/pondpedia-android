@@ -119,7 +119,7 @@ fun NavGraphBuilder.moreNavGraph(
     }
     composable(route = Screens.Profile.route) {
         ProfileScreen(
-            navigateToAuthScreen = navigateToAuthScreen
+            navigateToAuthScreen = navigateToAuthScreen,
         )
     }
     composable(route = Screens.Settings.route) {

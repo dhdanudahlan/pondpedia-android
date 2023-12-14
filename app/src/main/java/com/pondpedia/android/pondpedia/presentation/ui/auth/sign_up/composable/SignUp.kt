@@ -21,9 +21,7 @@ fun SignUp(
             val isUserSignedUp = signUpResponse.data
             LaunchedEffect(isUserSignedUp) {
                 if (isUserSignedUp == true) {
-                    sendEmailVerification()
                     showVerifyEmailMessage()
-
                 }
             }
         }
