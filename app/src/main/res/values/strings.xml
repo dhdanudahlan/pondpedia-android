@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PondPedia</string>
+    <string name="app_name">PondPedia Lite</string>
     <string name="web_client_id_google">120180449168-ins88i5ljekol0gg4haelk52du62rk48.apps.googleusercontent.com</string>
     <string name="web_client_id_old">120180449168-org6h1is7pu9mlsg6k83fnuir9d80rq8.apps.googleusercontent.com</string>
 

@@ -194,7 +194,7 @@ fun AddPondManagementRecordsTabWaterScreen(
             value = ph,
             onValueChange = {
                 ph = it
-                onEvent(PondDetailsEvent.SetWaterRecordsPH(it))
+                onEvent(PondDetailsEvent.SetWaterRecordsPH(StringParser.toFloat(it).toString()))
             },
             label = {
                 Text(text = "pH Air")
@@ -219,7 +219,7 @@ fun AddPondManagementRecordsTabWaterScreen(
             value = temperature,
             onValueChange = {
                 temperature = it
-                onEvent(PondDetailsEvent.SetWaterRecordsTemperature(it))
+                onEvent(PondDetailsEvent.SetWaterRecordsTemperature(StringParser.toFloat(it).toString()))
             },
             label = {
                 Text(text = "Suhu Air")
@@ -266,7 +266,7 @@ fun AddPondManagementRecordsTabWaterScreen(
             value = dissolvedOxygen,
             onValueChange = {
                 dissolvedOxygen = it
-                onEvent(PondDetailsEvent.SetWaterRecordsDissolvedOxygen(it))
+                onEvent(PondDetailsEvent.SetWaterRecordsDissolvedOxygen(StringParser.toFloat(it).toString()))
             },
             label = {
                 Text(text = "Oksigen Terlarut Air")
@@ -287,7 +287,7 @@ fun AddPondManagementRecordsTabWaterScreen(
             value = salinity,
             onValueChange = {
                 salinity = it
-                onEvent(PondDetailsEvent.SetWaterRecordsSalinity(it))
+                onEvent(PondDetailsEvent.SetWaterRecordsSalinity(StringParser.toFloat(it).toString()))
             },
             label = {
                 Text(text = "Salinitas Air")
@@ -308,7 +308,7 @@ fun AddPondManagementRecordsTabWaterScreen(
             value = turbidity,
             onValueChange = {
                 turbidity = it
-                onEvent(PondDetailsEvent.SetWaterRecordsTurbidity(it))
+                onEvent(PondDetailsEvent.SetWaterRecordsTurbidity(StringParser.toFloat(it).toString()))
             },
             label = {
                 Text(text = "Kekeruhan Air")
@@ -329,7 +329,7 @@ fun AddPondManagementRecordsTabWaterScreen(
             value = clarity,
             onValueChange = {
                 clarity = it
-                onEvent(PondDetailsEvent.SetWaterRecordsClarity(it))
+                onEvent(PondDetailsEvent.SetWaterRecordsClarity(StringParser.toFloat(it).toString()))
             },
             label = {
                 Text(text = "Warna Air")

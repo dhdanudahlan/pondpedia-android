@@ -1,17 +1,9 @@
 package com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel
 
-import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.firebase.auth.AuthCredential
-import com.pondpedia.android.pondpedia.domain.model.auth.Response.*
+import com.pondpedia.android.pondpedia.data.remote.dto.auth.AuthResponse
 import com.pondpedia.android.pondpedia.domain.repository.AuthRepository
-import com.pondpedia.android.pondpedia.domain.repository.OneTapSignInResponse
-import com.pondpedia.android.pondpedia.domain.repository.SignInWithGoogleResponse
 import com.pondpedia.android.pondpedia.domain.use_case.auth.signup.ValidateEmailUseCase
 import com.pondpedia.android.pondpedia.domain.use_case.auth.signup.ValidateInformationSourceUseCase
 import com.pondpedia.android.pondpedia.domain.use_case.auth.signup.ValidateNameUseCase
@@ -45,25 +37,14 @@ class AuthViewModel @Inject constructor(
     private val validateTermsUseCase: ValidateTermsUseCase
 ): ViewModel() {
 
-    ////////////////////////////| Firebase Google Authentication |////////////////////////////
+    ////////////////////////////| Custom API Authentication |////////////////////////////
 
-    /*val isUserAuthenticated get() = repo.isUserAuthenticatedInFirebase
+    private val _response = MutableStateFlow(AuthResponse())
+    val response = _response.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AuthResponse())
 
-    var oneTapSignInResponse by mutableStateOf<OneTapSignInResponse>(Success(null))
-        private set
-    var signInWithGoogleResponse by mutableStateOf<SignInWithGoogleResponse>(Success(false))
-        private set
+    ////////////////////////////| Custom API Authentication Function |////////////////////////////
 
-    fun oneTapSignIn() = viewModelScope.launch {
-        oneTapSignInResponse = Loading
-        oneTapSignInResponse = repo.oneTapSignInWithGoogle()
-        Log.d("AuthViewModel", "Sign In with Google")
-    }
-
-    fun signInWithGoogle(googleCredential: AuthCredential) = viewModelScope.launch {
-        oneTapSignInResponse = Loading
-        signInWithGoogleResponse = repo.firebaseSignInWithGoogle(googleCredential)
-    }*/
+    fun googleAuthRegister(){}
 
     ////////////////////////////| Firebase Email and Password Authentication |////////////////////////////
 

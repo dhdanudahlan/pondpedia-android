@@ -56,7 +56,10 @@ object Constants {
 
     const val PREFS_KEY_HOMEPAGE = "prefs_key_homepage"
     const val PREFS_KEY_THEME = "prefs_key_theme"
+    const val DATASTORE_KEY = "datastore_key"
     const val USERDATA_KEY = "userdata_key"
+    const val USER_SETTINGS = "user_settings_key"
+    const val APP_ENTRY = "app_entry_key"
 
     const val MAXIMAL_SIZE = 1000000
 }

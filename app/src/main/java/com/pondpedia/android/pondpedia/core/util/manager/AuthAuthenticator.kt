@@ -1,13 +1,12 @@
-package com.mrntlu.tokenauthentication.utils
-
-import com.mrntlu.tokenauthentication.models.LoginResponse
-import com.mrntlu.tokenauthentication.service.auth.AuthApiService
+package com.pondpedia.android.pondpedia.core.util.manager
+import com.pondpedia.android.pondpedia.data.remote.api.PondPediaApiService
+import com.pondpedia.android.pondpedia.data.remote.dto.auth.AuthResponse
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Inject
 
 class AuthAuthenticator @Inject constructor(
@@ -26,25 +25,25 @@ class AuthAuthenticator @Inject constructor(
             }
 
             newToken.body()?.let {
-                tokenManager.saveToken(it.token)
+                tokenManager.saveToken(it.data)
                 response.request.newBuilder()
-                    .header("Authorization", "Bearer ${it.token}")
+                    .header("Authorization", "Bearer ${it.data}")
                     .build()
             }
         }
     }
 
-    private suspend fun getNewToken(refreshToken: String?): retrofit2.Response<LoginResponse> {
+    private suspend fun getNewToken(refreshToken: String?): retrofit2.Response<AuthResponse> {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
         val okHttpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://jwt-test-api.onrender.com/api/")
-            .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
+            .baseUrl(PondPediaApiService.BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create())
             .build()
-        val service = retrofit.create(AuthApiService::class.java)
-        return service.refreshToken("Bearer $refreshToken")
+        val service = retrofit.create(PondPediaApiService::class.java)
+        return service.googleAuthLogin(refreshToken!!)
     }
 }

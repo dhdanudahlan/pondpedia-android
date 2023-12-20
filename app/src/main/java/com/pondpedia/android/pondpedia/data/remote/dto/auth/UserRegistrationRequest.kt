@@ -1,16 +1,17 @@
 package com.pondpedia.android.pondpedia.data.remote.dto.auth
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+
 
 data class UserRegistrationRequest(
     val name: String,
     val username: String,
-    @SerializedName("phone_number")
+    @Json(name = "phone_number")
     val phoneNumber: String,
     val email: String,
     val occupation: String,
-    @SerializedName("information_source")
+    @Json(name = "information_source")
     val informationSource: String,
-    @SerializedName("preferences")
+    @Json(name = "preferences")
     val userPreferences: String
 )

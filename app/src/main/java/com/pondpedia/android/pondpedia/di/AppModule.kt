@@ -2,6 +2,7 @@ package com.pondpedia.android.pondpedia.di
 
 import android.app.Application
 import android.content.Context
+import androidx.room.Room
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -10,22 +11,33 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.pondpedia.android.pondpedia.R
+import com.pondpedia.android.pondpedia.core.app.PondPediaApplication
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_IN_REQUEST
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_UP_REQUEST
+import com.pondpedia.android.pondpedia.data.local.database.PondPediaDatabase
+import com.pondpedia.android.pondpedia.data.remote.api.PondPediaApiService
+import com.pondpedia.android.pondpedia.data.remote.api.PondPediaApiService.Companion.BASE_URL
 import com.pondpedia.android.pondpedia.data.repository.AuthRepositoryImpl
 import com.pondpedia.android.pondpedia.data.repository.ProfileRepositoryImpl
 import com.pondpedia.android.pondpedia.domain.repository.AuthRepository
 import com.pondpedia.android.pondpedia.domain.repository.ProfileRepository
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -90,13 +102,13 @@ class AppModule {
         signInRequest: BeginSignInRequest,
         @Named(SIGN_UP_REQUEST)
         signUpRequest: BeginSignInRequest,
-//        db: FirebaseFirestore
+        api: PondPediaApiService
     ): AuthRepository = AuthRepositoryImpl(
         auth = auth,
         oneTapClient = oneTapClient,
         signInRequest = signInRequest,
         signUpRequest = signUpRequest,
-//        db = db
+        api = api
     )
 
     @Provides
@@ -111,4 +123,5 @@ class AppModule {
         signInClient = signInClient,
 //        db = db
     )
+
 }

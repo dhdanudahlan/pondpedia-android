@@ -66,8 +66,7 @@ fun AddCommodityScreen(
         "Udang Vaname",
         "Udang Windu",
         "Ikan Nila",
-        "Ikan Lele",
-        "Lainnya"
+        "Ikan Lele"
     )
 
     val waterTypeList = listOf(
@@ -186,7 +185,7 @@ fun AddCommodityScreen(
             value = quantity,
             onValueChange = {
                 quantity = it
-                onEvent(PondDetailsEvent.SetCommodityQuantity(StringParser.toInt(it).toString()))
+                onEvent(PondDetailsEvent.SetCommodityQuantity(StringParser.toIntAbs(it).toString()))
             },
             label = {
                 Text(text = "Jumlah Tebar")
@@ -248,7 +247,6 @@ fun AddCommodityScreen(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             OutlinedButton(onClick = {
-                /*onEvent(PondDetailsEvent.HideDialog)*/
                 onNavigateToOverviewScreen()
             }) {
                 Text(text = "Batal")

@@ -8,12 +8,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
+import com.pondpedia.android.pondpedia.core.util.Resource
+import com.pondpedia.android.pondpedia.data.remote.dto.auth.AuthResponse
+import com.pondpedia.android.pondpedia.data.remote.dto.auth.UserRegistrationRequest
+import com.pondpedia.android.pondpedia.domain.model.auth.Response
 import com.pondpedia.android.pondpedia.domain.model.auth.Response.Loading
 import com.pondpedia.android.pondpedia.domain.model.auth.Response.Success
 import com.pondpedia.android.pondpedia.domain.repository.AuthRepository
 import com.pondpedia.android.pondpedia.domain.repository.OneTapSignInResponse
 import com.pondpedia.android.pondpedia.domain.repository.SignInResponse
 import com.pondpedia.android.pondpedia.domain.repository.SignInWithGoogleResponse
+import com.pondpedia.android.pondpedia.domain.repository.SignInWithPondPediaApiResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,11 +29,29 @@ class SignInViewModel @Inject constructor(
     val oneTapClient: SignInClient
 ): ViewModel() {
 
+    var signInApiWithGoogleResponse by mutableStateOf<SignInWithPondPediaApiResponse>(Success(null))
+    private set
+
+    ////////////////////////////| Firebase Google Authentication |////////////////////////////
+
+    fun registerGoogleAuth(
+        token: String,
+        userRegistrationRequest: UserRegistrationRequest
+    ): Response<AuthResponse> {
+        val authResponse: Response<AuthResponse> = Success(null)
+        viewModelScope.launch {
+            val autoResponse = repo.registerGoogleAuth(
+                token = token,
+                userRegistrationRequest = userRegistrationRequest
+            )
+        }
+        return authResponse
+    }
     ////////////////////////////| Firebase Google Authentication |////////////////////////////
 
     var oneTapSignInResponse by mutableStateOf<OneTapSignInResponse>(Success(null))
         private set
-    var signInWithGoogleResponse by mutableStateOf<SignInWithGoogleResponse>(Success(false))
+    var signInWithGoogleResponse by mutableStateOf<SignInWithGoogleResponse>(Success(null))
         private set
 
     fun oneTapSignIn() = viewModelScope.launch {

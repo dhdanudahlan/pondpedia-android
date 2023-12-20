@@ -11,15 +11,11 @@ data class Farmer(
 
     val email: String,
 
-    val password: String = "",
-
     val occupation: String,
 
     val informationSource: String,
 
     val photoUrl: String,
-
-    val firebaseId: String,
 
     val preferences: String
 ) {
@@ -29,11 +25,9 @@ data class Farmer(
             name = name,
             phoneNumber = phoneNumber,
             email = email,
-            password = password,
             occupation = occupation,
             informationSource = informationSource,
             photoUrl = photoUrl,
-            firebaseId = firebaseId,
             preferences = preferences
         )
     }

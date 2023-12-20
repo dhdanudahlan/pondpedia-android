@@ -1,11 +1,12 @@
 package com.pondpedia.android.pondpedia.domain.use_case
 
 import com.pondpedia.android.pondpedia.domain.manager.LocalUserManager
+import kotlinx.coroutines.flow.Flow
 
-class SaveAppEntryUseCase(
+class ReadAppEntryUseCase(
     private val localUserManager: LocalUserManager
 ) {
-    suspend operator fun invoke(){
-        localUserManager.saveAppEntry()
+    operator fun invoke(): Flow<Boolean> {
+        return localUserManager.readAppEntry()
     }
 }

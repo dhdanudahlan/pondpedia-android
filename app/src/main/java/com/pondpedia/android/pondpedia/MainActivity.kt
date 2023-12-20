@@ -3,33 +3,21 @@ package com.pondpedia.android.pondpedia
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.pondpedia.android.pondpedia.core.app.PondPediaApplication
-import com.pondpedia.android.pondpedia.presentation.Graph
-import com.pondpedia.android.pondpedia.presentation.navigation.Screen
 import com.pondpedia.android.pondpedia.presentation.PondPediaApp
 import com.pondpedia.android.pondpedia.presentation.theme.PondPediaCustomTheme
 import dagger.hilt.android.AndroidEntryPoint
-import com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel.AuthViewModel
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,7 +54,7 @@ import com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val dataStore by lazy { (application as PondPediaApplication).pondPediaDataStore }
+    //    private val dataStore by lazy { (application as PondPediaApplication).pondPediaDataStore }
 
     private lateinit var navController: NavHostController
 

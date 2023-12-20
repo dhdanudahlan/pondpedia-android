@@ -2,6 +2,9 @@ package com.pondpedia.android.pondpedia.di
 
 import android.app.Application
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
@@ -15,15 +18,24 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.pondpedia.android.pondpedia.R
 import com.pondpedia.android.pondpedia.core.app.PondPediaApplication
+import com.pondpedia.android.pondpedia.core.util.Constants
+import com.pondpedia.android.pondpedia.core.util.Constants.DATASTORE_KEY
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_IN_REQUEST
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_UP_REQUEST
+import com.pondpedia.android.pondpedia.core.util.manager.AuthAuthenticator
+import com.pondpedia.android.pondpedia.core.util.manager.AuthInterceptor
+import com.pondpedia.android.pondpedia.core.util.manager.TokenManager
 import com.pondpedia.android.pondpedia.data.local.database.PondPediaDatabase
 import com.pondpedia.android.pondpedia.data.remote.api.PondPediaApiService
 import com.pondpedia.android.pondpedia.data.remote.api.PondPediaApiService.Companion.BASE_URL
 import com.pondpedia.android.pondpedia.data.repository.AuthRepositoryImpl
 import com.pondpedia.android.pondpedia.data.repository.ProfileRepositoryImpl
+import com.pondpedia.android.pondpedia.domain.manager.LocalUserManager
+import com.pondpedia.android.pondpedia.domain.manager.LocalUserManagerImpl
 import com.pondpedia.android.pondpedia.domain.repository.AuthRepository
 import com.pondpedia.android.pondpedia.domain.repository.ProfileRepository
+import com.pondpedia.android.pondpedia.domain.use_case.ReadAppEntryUseCase
+import com.pondpedia.android.pondpedia.domain.use_case.SaveAppEntryUseCase
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -33,98 +45,17 @@ import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import javax.inject.Named
 import javax.inject.Singleton
 
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATASTORE_KEY)
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModule {
-    @Provides
-    fun provideFirebaseAuth() = Firebase.auth
-
-    @Provides
-    fun provideFirebaseFirestore() = Firebase.firestore
-
-    @Provides
-    fun provideOneTapClient(
-        @ApplicationContext
-        context: Context
-    ) = Identity.getSignInClient(context)
-
-    @Provides
-    @Named(SIGN_IN_REQUEST)
-    fun provideSignInRequest(
-        app: Application
-    ) = BeginSignInRequest.builder()
-        .setGoogleIdTokenRequestOptions(
-            BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                .setSupported(true)
-                .setServerClientId(app.getString(R.string.web_client_id_google))
-                .setFilterByAuthorizedAccounts(true)
-                .build())
-        .build()
-
-    @Provides
-    @Named(SIGN_UP_REQUEST)
-    fun provideSignUpRequest(
-        app: Application
-    ) = BeginSignInRequest.builder()
-        .setGoogleIdTokenRequestOptions(
-            BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-                .setSupported(true)
-                .setServerClientId(app.getString(R.string.web_client_id_google))
-                .setFilterByAuthorizedAccounts(false)
-                .build())
-        .build()
-
-    @Provides
-    fun provideGoogleSignInOptions(
-        app: Application
-    ) = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestIdToken(app.getString(R.string.web_client_id_google))
-        .requestEmail()
-        .build()
-
-    @Provides
-    fun provideGoogleSignInClient(
-        app: Application,
-        options: GoogleSignInOptions
-    ) = GoogleSignIn.getClient(app, options)
-
-    @Provides
-    fun provideAuthRepository(
-        auth: FirebaseAuth,
-        oneTapClient: SignInClient,
-        @Named(SIGN_IN_REQUEST)
-        signInRequest: BeginSignInRequest,
-        @Named(SIGN_UP_REQUEST)
-        signUpRequest: BeginSignInRequest,
-        api: PondPediaApiService
-    ): AuthRepository = AuthRepositoryImpl(
-        auth = auth,
-        oneTapClient = oneTapClient,
-        signInRequest = signInRequest,
-        signUpRequest = signUpRequest,
-        api = api
-    )
-
-    @Provides
-    fun provideProfileRepository(
-        auth: FirebaseAuth,
-        oneTapClient: SignInClient,
-        signInClient: GoogleSignInClient,
-//        db: FirebaseFirestore
-    ): ProfileRepository = ProfileRepositoryImpl(
-        auth = auth,
-        oneTapClient = oneTapClient,
-        signInClient = signInClient,
-//        db = db
-    )
-
-
+class AppSingletonModule {
 
     @Provides
     @Singleton
@@ -138,24 +69,32 @@ class AppModule {
         return database
     }
 
-    @Provides
     @Singleton
-    fun providePondPediaApiService(): PondPediaApiService {
-        return Retrofit.Builder()
-            .baseUrl(PondPediaApiService.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
+    @Provides
+    fun provideTokenManager(@ApplicationContext context: Context): TokenManager = TokenManager(context)
+
+    @Singleton
+    @Provides
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor,
+        authAuthenticator: AuthAuthenticator,
+    ): OkHttpClient {
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+
+        return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .authenticator(authAuthenticator)
             .build()
-            .create()
     }
-
-
     @Singleton
     @Provides
     fun providesMoshi() = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
     @Provides
     @Singleton
-    fun provideRetrofit(
+    fun provideRetrofitBuilder(
         okHttpClient: OkHttpClient,
         moshi: Moshi
     ) = Retrofit.Builder()
@@ -163,4 +102,15 @@ class AppModule {
         .baseUrl(BASE_URL)
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
+
+    @Provides
+    @Singleton
+    fun providePondPediaApiService(): PondPediaApiService {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create())
+            .build()
+            .create()
+    }
+
 }

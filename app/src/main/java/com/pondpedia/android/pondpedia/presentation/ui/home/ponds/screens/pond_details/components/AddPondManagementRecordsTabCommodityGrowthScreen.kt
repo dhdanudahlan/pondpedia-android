@@ -197,7 +197,7 @@ fun AddPondManagementRecordsTabCommodityGrowthScreen(
             value = age,
             onValueChange = {
                 age = it
-                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsAge(StringParser.toInt(it).toString()))
+                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsAge(StringParser.toIntAbs(it).toString()))
             },
             label = {
                 Text(text = "Umur Komoditas (Hari)")
@@ -220,7 +220,7 @@ fun AddPondManagementRecordsTabCommodityGrowthScreen(
             value = length,
             onValueChange = {
                 length = it
-                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsLength(StringParser.toInt(it).toString()))
+                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsLength(StringParser.toFloatAbs(it).toString()))
             },
             label = {
                 Text(text = "Panjang Komoditas")
@@ -243,7 +243,7 @@ fun AddPondManagementRecordsTabCommodityGrowthScreen(
             value = weight,
             onValueChange = {
                 weight = it
-                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsWeight(StringParser.toInt(it).toString()))
+                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsWeight(StringParser.toFloatAbs(it).toString()))
             },
             label = {
                 Text(text = "Berat Komoditas")

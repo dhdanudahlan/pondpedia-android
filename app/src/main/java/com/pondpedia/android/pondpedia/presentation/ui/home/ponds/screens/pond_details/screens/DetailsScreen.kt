@@ -88,9 +88,9 @@ fun DetailsScreen(
         mutableStateOf(0)
     }
 
-    if (pondDetailsState.isAddingCommodity) {
-        AddCommodityDialog(pondDetailsState, onEvent)
-    }
+//    if (pondDetailsState.isAddingCommodity) {
+//        AddCommodityDialog(pondDetailsState, onEvent)
+//    }
 
     ModalNavigationDrawer(
         drawerContent = {

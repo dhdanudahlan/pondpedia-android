@@ -117,26 +117,4 @@ object PondManagementModule {
         return PondDetailsRepositoryImpl(db.pondsDao, db.pondDetailsDao)
     }
 
-
-    @Provides
-    @Singleton
-    fun providePondDatabase(app: Application): PondPediaDatabase {
-        val database = Room.databaseBuilder(
-            app,
-            PondPediaDatabase::class.java,
-            "pond_database_1.2"
-        ).build()
-
-        return database
-    }
-
-    /*@Provides
-    @Singleton
-    fun providePondApi(): PondApi {
-        return Retrofit.Builder()
-            .baseUrl(PondApi.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(PondApi::class.java)
-    }*/
 }

@@ -202,7 +202,7 @@ fun AddPondManagementRecordsTabCommodityHealthScreen(
             value = death,
             onValueChange = {
                 death = it
-                onEvent(PondDetailsEvent.SetCommodityHealthRecordsDeath(StringParser.toInt(it).toString()))
+                onEvent(PondDetailsEvent.SetCommodityHealthRecordsDeath(StringParser.toIntAbs(it).toString()))
             },
             label = {
                 Text(text = "Jumlah Kematian")

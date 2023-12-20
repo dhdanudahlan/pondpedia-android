@@ -24,7 +24,7 @@ fun HomeBottomNavGraph(
     homeState: PondPediaAppState,
     pondsState: PondsState,
     onEvent: (PondsEvent) -> Unit,
-    startDestination: String = Screens.More.route,
+    startDestination: String = Screens.Ponds.route,
     navigateToAuthScreen: () -> Unit
 ) {
     val navController = homeState.navController

@@ -1,5 +1,6 @@
 package com.pondpedia.android.pondpedia.presentation.components.navigation.graphs
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -9,7 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.navigation
 import com.google.accompanist.navigation.animation.composable
 import com.pondpedia.android.pondpedia.presentation.Graph
-import com.pondpedia.android.pondpedia.presentation.navigation.Screen
+import com.pondpedia.android.pondpedia.presentation.components.navigation.Screen
 import com.pondpedia.android.pondpedia.presentation.theme.PondPediaCustomTheme
 import com.pondpedia.android.pondpedia.presentation.ui.auth.AuthScreen
 import com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel.AuthViewModel
@@ -64,7 +65,10 @@ fun NavGraphBuilder.authNavGraph(
                         navController.navigate(AuthScreens.SignUp.route)
                     },
                     navigateToHomeScreen = {
-                        navController.navigate(Graph.HOME)
+//                        navController.navigate(Graph.HOME)
+                        NavigateToHomeScreen(
+                            navController = navController
+                        )
                     },
                     viewModel = signInViewModel
                 )
@@ -108,6 +112,16 @@ fun NavGraphBuilder.authNavGraph(
         ) {
             ProfileScreen()
         }
+    }
+
+}
+
+fun NavigateToHomeScreen(
+    navController: NavHostController
+) = navController.navigate(Graph.HOME) {
+    Log.d("MainActivity", "Navigate to Home Screen")
+    popUpTo(navController.graph.id) {
+        inclusive = true
     }
 }
 

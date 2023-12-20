@@ -33,12 +33,10 @@ fun NavGraphBuilder.menuNavGraph(
         }
 
         composable(route = MenuScreens.AiChat.route) {
-//            AiChatScreen(
-//               //
-//            )
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "Under Construction...")
-            }
+            AiChatScreen()
+//            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+//                Text(text = "Under Construction...")
+//            }
         }
     }
 }

@@ -354,6 +354,7 @@ fun SignInScreenLightMode(
 
     SignInWithGoogle(
         navigateToHomeScreen = { signedIn ->
+            Log.d("SignInScreen", "SignInWithGoogle")
             if (signedIn) {
                 navigateToHomeScreen()
             }

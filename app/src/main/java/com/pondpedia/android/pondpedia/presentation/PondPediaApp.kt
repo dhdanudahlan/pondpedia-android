@@ -11,7 +11,7 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.pondpedia.android.pondpedia.presentation.components.navigation.graphs.authNavGraph
-import com.pondpedia.android.pondpedia.presentation.navigation.Screen
+import com.pondpedia.android.pondpedia.presentation.components.navigation.Screen
 import com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel.AuthViewModel
 import com.pondpedia.android.pondpedia.presentation.ui.home.HomeScreen
 
@@ -30,7 +30,7 @@ fun PondPediaApp(
     ) {
         authNavGraph(
             navController = navController,
-            viewModel = viewModel,
+            viewModel = viewModel
         )
         composable(
             route = Graph.HOME

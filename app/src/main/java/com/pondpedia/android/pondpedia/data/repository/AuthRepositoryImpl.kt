@@ -7,22 +7,22 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.firestore.FieldValue.serverTimestamp
-import com.google.firebase.firestore.FirebaseFirestore
 import com.pondpedia.android.pondpedia.core.util.Constants.CREATED_AT
 import com.pondpedia.android.pondpedia.core.util.Constants.DISPLAY_NAME
 import com.pondpedia.android.pondpedia.core.util.Constants.EMAIL
 import com.pondpedia.android.pondpedia.core.util.Constants.PHOTO_URL
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_IN_REQUEST
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_UP_REQUEST
-import com.pondpedia.android.pondpedia.core.util.Constants.USERS
+import com.pondpedia.android.pondpedia.core.util.Resource
+import com.pondpedia.android.pondpedia.data.remote.api.PondPediaApiService
+import com.pondpedia.android.pondpedia.data.remote.dto.auth.AuthResponse
+import com.pondpedia.android.pondpedia.data.remote.dto.auth.UserRegistrationRequest
 import com.pondpedia.android.pondpedia.domain.model.auth.Response.*
 import com.pondpedia.android.pondpedia.domain.repository.AuthRepository
 import com.pondpedia.android.pondpedia.domain.repository.OneTapSignInResponse
 import com.pondpedia.android.pondpedia.domain.repository.SignInWithGoogleResponse
-import com.pondpedia.android.pondpedia.domain.repository.SignUpResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted
@@ -36,6 +36,7 @@ import javax.inject.Singleton
 @Singleton
 class AuthRepositoryImpl @Inject constructor(
     private val auth: FirebaseAuth,
+    private val api: PondPediaApiService,
     private var oneTapClient: SignInClient,
     @Named(SIGN_IN_REQUEST)
     private var signInRequest: BeginSignInRequest,
@@ -66,9 +67,26 @@ class AuthRepositoryImpl @Inject constructor(
             val authResult = auth.signInWithCredential(googleCredential).await()
             val isNewUser = authResult.additionalUserInfo?.isNewUser ?: false
 //            if (isNewUser) {
-//                addUserToFirestore()
+//                registerGoogleAuth(
+//                    authorization = authResult.user!!.uid,
+//                    userRegistrationRequest = UserRegistrationRequest(
+//                        name = authResult.user!!.displayName ?: "NAME",
+//                        username = authResult.user!!.email ?: "USERNAME",
+//                        phoneNumber = authResult.user!!.phoneNumber ?: "6212345678910",
+//                        email = authResult.user!!.email ?: "EMAIL",
+//                        occupation = "Unknown",
+//                        informationSource = "Unknown",
+//                        userPreferences = "{}"
+//                    )
+//                )
+//            } else {
+//                authResult.user?.let {
+//                    loginGoogleAuth(
+//                        authorization = it.uid
+//                    )
+//                }
 //            }
-            Success(true)
+            Success(authResult)
         } catch (e: Exception) {
             Failure(e)
         }
@@ -80,9 +98,36 @@ class AuthRepositoryImpl @Inject constructor(
 //            db.collection(USERS).document(uid).set(user).await()
 //        }
 //    }
-    override val currentUser get() = auth.currentUser
+    override val currentUser: FirebaseUser?
+        get() = auth.currentUser
+    override val authResponse: AuthResponse
+        get() = TODO("Not yet implemented")
 
 
+    override suspend fun loginGoogleAuth(
+        token: String
+    ): Resource<AuthResponse> {
+        val response = try {
+            api.googleAuthLogin(token)
+        } catch (e: Exception) {
+            return Resource.Error("An unknown error occured. -> $e")
+        }.body() ?: return Resource.Error(message = "Response is null")
+        return Resource.Success(response)
+    }
+    override suspend fun registerGoogleAuth(
+        token: String,
+        userRegistrationRequest: UserRegistrationRequest
+    ): Resource<AuthResponse> {
+        val response = try {
+            api.googleAuthRegister(
+                token = token,
+                body = userRegistrationRequest
+            ).body()
+        } catch (e: Exception) {
+            return Resource.Error("An unknown error occured. -> $e")
+        }
+        return Resource.Success(response!!)
+    }
     override suspend fun firebaseSignUpWithEmailAndPassword(
         email: String, password: String, name: String
     ) = try {
