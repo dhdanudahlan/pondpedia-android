@@ -70,7 +70,8 @@ fun NavGraphBuilder.authNavGraph(
                             navController = navController
                         )
                     },
-                    viewModel = signInViewModel
+                    viewModel = signInViewModel,
+                    onEvent = viewModel::onEvent
                 )
             }
         }

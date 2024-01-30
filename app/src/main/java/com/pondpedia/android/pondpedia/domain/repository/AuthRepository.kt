@@ -7,6 +7,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.pondpedia.android.pondpedia.core.util.Resource
 import com.pondpedia.android.pondpedia.data.remote.dto.auth.AuthResponse
 import com.pondpedia.android.pondpedia.data.remote.dto.auth.UserRegistrationRequest
+import com.pondpedia.android.pondpedia.data.remote.dto.auth.login.LoginRequest
+import com.pondpedia.android.pondpedia.data.remote.dto.auth.register.RegisterRequest
 import com.pondpedia.android.pondpedia.domain.model.auth.Response
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
@@ -57,4 +59,10 @@ interface AuthRepository {
     suspend fun revokeAccess(): RevokeAccessResponse
 
     fun getAuthState(viewModelScope: CoroutineScope): AuthStateResponse
+
+    suspend fun register(request: RegisterRequest): Resource<String>
+
+    suspend fun login(request: LoginRequest): Resource<String>
+
+    suspend fun isUserLoggedIn(): Boolean
 }

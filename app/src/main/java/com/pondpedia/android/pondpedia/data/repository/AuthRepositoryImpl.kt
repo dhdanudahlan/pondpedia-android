@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.userProfileChangeRequest
 import com.google.firebase.firestore.FieldValue.serverTimestamp
+import com.haroldadmin.cnradapter.NetworkResponse
 import com.pondpedia.android.pondpedia.core.util.Constants.CREATED_AT
 import com.pondpedia.android.pondpedia.core.util.Constants.DISPLAY_NAME
 import com.pondpedia.android.pondpedia.core.util.Constants.EMAIL
@@ -16,9 +17,12 @@ import com.pondpedia.android.pondpedia.core.util.Constants.PHOTO_URL
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_IN_REQUEST
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_UP_REQUEST
 import com.pondpedia.android.pondpedia.core.util.Resource
+import com.pondpedia.android.pondpedia.core.util.manager.TokenManager
 import com.pondpedia.android.pondpedia.data.remote.api.PondPediaApiService
 import com.pondpedia.android.pondpedia.data.remote.dto.auth.AuthResponse
 import com.pondpedia.android.pondpedia.data.remote.dto.auth.UserRegistrationRequest
+import com.pondpedia.android.pondpedia.data.remote.dto.auth.login.LoginRequest
+import com.pondpedia.android.pondpedia.data.remote.dto.auth.register.RegisterRequest
 import com.pondpedia.android.pondpedia.domain.model.auth.Response.*
 import com.pondpedia.android.pondpedia.domain.repository.AuthRepository
 import com.pondpedia.android.pondpedia.domain.repository.OneTapSignInResponse
@@ -27,6 +31,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -42,6 +47,7 @@ class AuthRepositoryImpl @Inject constructor(
     private var signInRequest: BeginSignInRequest,
     @Named(SIGN_UP_REQUEST)
     private var signUpRequest: BeginSignInRequest,
+    private val tokenManager: TokenManager,
 //    private val db: FirebaseFirestore
 ) : AuthRepository {
     override val isUserAuthenticatedInFirebase = auth.currentUser != null
@@ -208,6 +214,47 @@ class AuthRepositoryImpl @Inject constructor(
             auth.removeAuthStateListener(authStateListener)
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), auth.currentUser == null)
+
+    override suspend fun register(request: RegisterRequest): Resource<String> {
+        return try {
+            when (val result = api.register(request)) {
+                is NetworkResponse.Success -> {
+                    val response = result.body
+                    Resource.Success(response.message)
+                }
+                is NetworkResponse.Error -> {
+                    val response = result.body
+                    Resource.Error(response?.message.orEmpty(), null)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(e.message.orEmpty(), null)
+        }
+    }
+
+    override suspend fun login(request: LoginRequest): Resource<String> {
+        return try {
+            when (val result = api.login(request)) {
+                is NetworkResponse.Success -> {
+                    val response = result.body
+                    tokenManager.saveToken(response.token)
+                    Resource.Success(response.message)
+                }
+                is NetworkResponse.Error -> {
+                    val response = result.body
+                    Resource.Error(response?.errors?.first()?.message.orEmpty(), null)
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Resource.Error(e.message.orEmpty(), null)
+        }
+    }
+
+    override suspend fun isUserLoggedIn(): Boolean {
+        return (tokenManager.getToken().first()?.isNotEmpty() ?: false)
+    }
 }
 
 fun FirebaseUser.toUser() = mapOf(

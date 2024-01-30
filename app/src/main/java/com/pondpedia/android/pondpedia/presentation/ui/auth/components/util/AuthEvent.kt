@@ -3,6 +3,8 @@ package com.pondpedia.android.pondpedia.presentation.ui.auth.components.util
 sealed interface AuthEvent {
     data object SignIn: AuthEvent
     data object SignUp: AuthEvent
+    data object DismissSignUpCommonDialog: AuthEvent
+    data object DismissSignInCommonDialog: AuthEvent
 
     data class SetName(val value: String): AuthEvent
     data class SetPhoneNumber(val value: String): AuthEvent

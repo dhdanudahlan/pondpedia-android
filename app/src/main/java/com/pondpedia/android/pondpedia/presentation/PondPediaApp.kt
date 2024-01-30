@@ -55,7 +55,8 @@ private fun AuthState(
     navController: NavHostController
 ) {
     val isUserSignedOut = viewModel.getAuthState().collectAsState().value
-    if (isUserSignedOut) {
+    val isUserLoggedIn = viewModel.isUserLoggedIn() || !isUserSignedOut
+    if (!isUserLoggedIn) {
         NavigateToAuthScreen(
             navController = navController
         )

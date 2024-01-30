@@ -1,9 +1,18 @@
 package com.pondpedia.android.pondpedia.presentation.ui.auth.components.data
 
 data class AuthState(
+    val isSignInLoading: Boolean = false,
     val isSignInSuccessful: Boolean = false,
+    val isSignInError: Boolean = false,
+
+    val signInSuccess: String? = null,
     val signInError: String? = null,
+
+    val isSignUpLoading: Boolean = false,
     val isSignUpSuccessful: Boolean = false,
+    val isSignUpError: Boolean = false,
+
+    val signUpSuccess: String? = null,
     val signUpError: String? = null,
 
 

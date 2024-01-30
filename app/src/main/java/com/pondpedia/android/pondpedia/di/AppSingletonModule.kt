@@ -16,6 +16,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
+import com.pondpedia.android.pondpedia.BuildConfig
 import com.pondpedia.android.pondpedia.R
 import com.pondpedia.android.pondpedia.core.app.PondPediaApplication
 import com.pondpedia.android.pondpedia.core.util.Constants
@@ -47,6 +49,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
 import javax.inject.Named
@@ -85,32 +88,30 @@ class AppSingletonModule {
         return OkHttpClient.Builder()
             .addInterceptor(authInterceptor)
             .addInterceptor(loggingInterceptor)
-            .authenticator(authAuthenticator)
             .build()
     }
     @Singleton
     @Provides
-    fun providesMoshi() = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+    fun providesMoshi() = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
 
     @Provides
     @Singleton
     fun provideRetrofitBuilder(
         okHttpClient: OkHttpClient,
         moshi: Moshi
-    ) = Retrofit.Builder()
+    ): Retrofit = Retrofit.Builder()
         .client(okHttpClient)
-        .baseUrl(BASE_URL)
+        .baseUrl(BuildConfig.BASE_URL)
+        .addCallAdapterFactory(NetworkResponseAdapterFactory())
+        .addConverterFactory(GsonConverterFactory.create())
         .addConverterFactory(MoshiConverterFactory.create(moshi))
         .build()
 
     @Provides
-    @Singleton
-    fun providePondPediaApiService(): PondPediaApiService {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-            .create()
+    fun providePondPediaApiService(
+        retrofit: Retrofit
+    ): PondPediaApiService {
+        return retrofit.create(PondPediaApiService::class.java)
     }
 
 }
