@@ -59,6 +59,8 @@ import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.pondpedia.android.pondpedia.R
+import com.pondpedia.android.pondpedia.components.CommonDialog
+import com.pondpedia.android.pondpedia.components.LoadingDialog
 import com.pondpedia.android.pondpedia.components.SmallSpacer
 import com.pondpedia.android.pondpedia.core.util.Utils.Companion.showMessage
 import com.pondpedia.android.pondpedia.presentation.theme.PondPediaCustomTheme
@@ -78,7 +80,8 @@ fun SignInScreen(
     navigateToAuthScreen: () -> Unit,
     navigateToSignUpScreen: () -> Unit,
     navigateToHomeScreen: () -> Unit,
-    viewModel: SignInViewModel = hiltViewModel()
+    viewModel: SignInViewModel = hiltViewModel(),
+    onEvent: (AuthEvent) -> Unit,
 ) {
 
     PondPediaCustomTheme (darkTheme = false) {
@@ -87,7 +90,8 @@ fun SignInScreen(
             navigateToAuthScreen = navigateToAuthScreen,
             navigateToSignUpScreen = navigateToSignUpScreen,
             navigateToHomeScreen = navigateToHomeScreen,
-            viewModel = viewModel
+            viewModel = viewModel,
+            onEvent = onEvent
         )
     }
 }
@@ -99,6 +103,7 @@ fun SignInScreenLightMode(
     navigateToSignUpScreen: () -> Unit,
     navigateToHomeScreen: () -> Unit,
     viewModel: SignInViewModel = hiltViewModel(),
+    onEvent: (AuthEvent) -> Unit,
 ) {
 
     val context = LocalContext.current
@@ -126,7 +131,30 @@ fun SignInScreenLightMode(
         }
     )
 
+    LoadingDialog(
+        isShowDialog = state.isSignInLoading
+    )
 
+    CommonDialog(
+        title = if (state.isSignInError) {
+            "Terjadi Kesalahan"
+        } else {
+            "Sukses"
+        },
+        message = if (state.isSignInError) {
+            state.signInError ?: "Terjadi Kesalahan"
+        } else {
+            state.signInError ?: "Berhasil masuk, selamat datang!"
+        },
+        isShowDialog = state.isSignInError || state.isSignInSuccessful,
+        onDismissRequest = {
+            if (!state.isSignInError) {
+                navigateToHomeScreen()
+            } else {
+                onEvent(AuthEvent.DismissSignInCommonDialog)
+            }
+        }
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -193,6 +221,7 @@ fun SignInScreenLightMode(
                     email = email,
                     onEmailValueChange = { newValue ->
                         email = newValue
+                        onEvent(AuthEvent.SetEmail(newValue.text))
                     }
                 )
                 SmallSpacer()
@@ -200,6 +229,7 @@ fun SignInScreenLightMode(
                     password = password,
                     onPasswordValueChange = { newValue ->
                         password = newValue
+                        onEvent(AuthEvent.SetPassword(newValue.text))
                     }
                 )
                 SmallSpacer()
@@ -216,7 +246,7 @@ fun SignInScreenLightMode(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
                                 keyboard?.hide()
-                                viewModel.signInWithEmailAndPassword(email.text, password.text)
+                                onEvent(AuthEvent.SignIn)
                             }
                         ) {
                             Text(
@@ -377,6 +407,7 @@ fun SignInPreview() {
             navigateToAuthScreen = {},
             navigateToSignUpScreen = {},
             navigateToHomeScreen = {},
+            onEvent = {}
         )
     }
 }

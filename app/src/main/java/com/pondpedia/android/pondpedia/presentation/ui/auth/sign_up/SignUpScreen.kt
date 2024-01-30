@@ -47,7 +47,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pondpedia.android.pondpedia.R
 import com.pondpedia.android.pondpedia.components.BackIcon
+import com.pondpedia.android.pondpedia.components.CommonDialog
 import com.pondpedia.android.pondpedia.components.LargeSpacer
+import com.pondpedia.android.pondpedia.components.LoadingDialog
 import com.pondpedia.android.pondpedia.core.util.Utils.Companion.showMessage
 import com.pondpedia.android.pondpedia.presentation.theme.PondPediaCustomTheme
 import com.pondpedia.android.pondpedia.presentation.ui.auth.components.composable.MyEmailTextField
@@ -105,6 +107,31 @@ fun SignUpScreenLightMode(
 //            ).show()
 //        }
 //    }
+
+    LoadingDialog(
+        isShowDialog = state.isSignUpLoading
+    )
+
+    CommonDialog(
+        title = if (state.isSignUpError) {
+            "Terjadi Kesalahan"
+        } else {
+            "Sukses"
+        },
+        message = if (state.isSignUpError) {
+            state.signUpError ?: "Terjadi Kesalahan"
+        } else {
+            state.signUpSuccess ?: "Berhasil daftar, silahkan cek email anda untuk verifikasi"
+        },
+        isShowDialog = state.isSignUpError || state.isSignUpSuccessful,
+        onDismissRequest = {
+            if (!state.isSignUpError) {
+                navigateToSignInScreen()
+            } else {
+                onEvent(AuthEvent.DismissSignUpCommonDialog)
+            }
+        }
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -390,7 +417,7 @@ fun SignUpScreenLightMode(
                             onClick = {
                                 keyboard?.hide()
                                 onEvent(AuthEvent.SignUp)
-                                viewModel.signUpWithEmailAndPassword(email.text, password.text, name.text)
+                                //viewModel.signUpWithEmailAndPassword(email.text, password.text, name.text)
                                 onEvent(AuthEvent.Reset)
                             }
                         ) {

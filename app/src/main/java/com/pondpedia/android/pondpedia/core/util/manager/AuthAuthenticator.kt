@@ -44,6 +44,6 @@ class AuthAuthenticator @Inject constructor(
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
         val service = retrofit.create(PondPediaApiService::class.java)
-        return service.googleAuthLogin(refreshToken!!)
+        return service.googleAuthLogin(refreshToken.orEmpty())
     }
 }
