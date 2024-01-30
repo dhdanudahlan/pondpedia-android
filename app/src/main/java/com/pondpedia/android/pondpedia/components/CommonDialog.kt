@@ -84,7 +84,7 @@ fun CommonDialog(
                 ) {
                     Text(
                         text = title,
-                        style = MaterialTheme.typography.headlineSmall.copy(
+                        style = MaterialTheme.typography.headlineMedium.copy(
                             fontWeight = FontWeight.Bold,
                             color = MaterialTheme.colorScheme.secondary
                         )
@@ -92,7 +92,7 @@ fun CommonDialog(
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = message,
-                        style = MaterialTheme.typography.bodySmall.copy(
+                        style = MaterialTheme.typography.bodyMedium.copy(
                             fontWeight = FontWeight.Normal,
                             color = if (isSystemInDarkTheme()) Color.White else Color.Black
                         )
