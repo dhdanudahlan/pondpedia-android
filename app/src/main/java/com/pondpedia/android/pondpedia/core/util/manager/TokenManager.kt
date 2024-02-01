@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.map
 class TokenManager(private val context: Context) {
     companion object {
         private val TOKEN_KEY = stringPreferencesKey("jwt_token")
+        private val USER_ID_KEY = stringPreferencesKey("user_id")
     }
 
     fun getToken(): Flow<String?> {
@@ -27,6 +28,24 @@ class TokenManager(private val context: Context) {
     suspend fun deleteToken() {
         context.dataStore.edit { preferences ->
             preferences.remove(TOKEN_KEY)
+        }
+    }
+
+    fun getUserId(): Flow<String?> {
+        return context.dataStore.data.map { preferences ->
+            preferences[USER_ID_KEY]
+        }
+    }
+
+    suspend fun saveUserId(userId: String) {
+        context.dataStore.edit { preferences ->
+            preferences[USER_ID_KEY] = userId
+        }
+    }
+
+    suspend fun deleteUserId() {
+        context.dataStore.edit { preferences ->
+            preferences.remove(USER_ID_KEY)
         }
     }
 }

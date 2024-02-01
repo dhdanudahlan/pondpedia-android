@@ -6,6 +6,13 @@ import com.pondpedia.android.pondpedia.domain.model.pond_management.Pond
 import java.time.LocalDateTime
 
 data class PondsState(
+
+    val isLoading: Boolean = false,
+    val isSuccess: Boolean = false,
+    val isError: Boolean = false,
+
+    val errorMessage: String = "",
+
     val categories: List<Category> = emptyList(),
 
     val ponds: List<Pond> = emptyList(),

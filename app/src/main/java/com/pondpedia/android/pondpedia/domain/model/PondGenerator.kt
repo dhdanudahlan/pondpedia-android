@@ -24,7 +24,7 @@ object PondGenerator {
             waterType = "Payau",
             location ="Malang",
             description = "Kolam Dummy",
-            farmerId = 0,
+            farmerId = (0).toString(),
         )
     }
     fun GenerateCommodity(pond: Pond): Commodity {

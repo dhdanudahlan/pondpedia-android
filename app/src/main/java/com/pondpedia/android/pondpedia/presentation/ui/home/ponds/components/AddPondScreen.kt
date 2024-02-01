@@ -40,8 +40,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.pondpedia.android.pondpedia.components.CommonDialog
+import com.pondpedia.android.pondpedia.components.LoadingDialog
 import com.pondpedia.android.pondpedia.core.util.StringParser
 import com.pondpedia.android.pondpedia.presentation.Graph
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.util.AuthEvent
 import com.pondpedia.android.pondpedia.presentation.ui.home.components.Screens
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsEvent
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsState
@@ -106,6 +109,24 @@ fun AddPondScreen(
     var description by rememberSaveable {
         mutableStateOf("")
     }
+
+    LoadingDialog(
+        isShowDialog = pondsState.isLoading
+    )
+
+    CommonDialog(
+        title = if (pondsState.isSuccess) "Berhasil" else "Gagal",
+        message = if (pondsState.isSuccess) "Kolam berhasil ditambahkan" else pondsState.errorMessage,
+        isShowDialog = pondsState.isSuccess || pondsState.isError,
+        onDismissRequest = {
+            if (pondsState.isSuccess) {
+                onEvent(PondsEvent.DismissCommonDialog)
+                onNavigateToDestination(Screens.Ponds)
+            } else {
+                onEvent(PondsEvent.DismissCommonDialog)
+            }
+        }
+    )
 
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -320,7 +341,6 @@ fun AddPondScreen(
             Button(
                 onClick = {
                     onEvent(PondsEvent.AddPond)
-                    onNavigateToDestination(Screens.Ponds)
                 },
                 enabled = validateForm(name, area, depth, pondType, waterType)
             ) {

@@ -3,6 +3,7 @@ package com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.vi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pondpedia.android.pondpedia.core.util.DateGenerator
+import com.pondpedia.android.pondpedia.core.util.Resource
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.CategoryEntity
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Pond
 import com.pondpedia.android.pondpedia.domain.use_case.ponds.AddPondUseCase
@@ -99,26 +100,47 @@ class PondsViewModel @Inject constructor(
                     description = description,
                     createdDate = createdDate,
                     updatedDate = updatedDate,
-                    farmerId = farmerId
+                    farmerId = farmerId.toString()
                 )
 
                 viewModelScope.launch(Dispatchers.IO) {
-                    addPondUseCase(pond = pond )
-                }
+                    _state.update {
+                        it.copy(isLoading = true)
+                    }
+                    val result = addPondUseCase(pond = pond)
+                    _state.update {
+                        it.copy(isLoading = false)
+                    }
 
-                _state.update {
-                    it.copy(
-                        isAddingPond = false,
-                        name = "",
-                        area = "",
-                        depth = "",
-                        pondType = "",
-                        waterType = "",
-                        description = "",
-                        createdDate = DateGenerator.getCurrentDateTime(),
-                        updatedDate = DateGenerator.getCurrentDateTime(),
-                        farmerId = 0,
-                    )
+                    when(result) {
+                        is Resource.Success -> {
+                            _state.update {
+                                it.copy(isSuccess = true)
+                            }
+
+                            _state.update {
+                                it.copy(
+                                    isAddingPond = false,
+                                    name = "",
+                                    area = "",
+                                    depth = "",
+                                    pondType = "",
+                                    waterType = "",
+                                    description = "",
+                                    createdDate = DateGenerator.getCurrentDateTime(),
+                                    updatedDate = DateGenerator.getCurrentDateTime(),
+                                    farmerId = 0,
+                                )
+                            }
+                        }
+
+                        is Resource.Error -> _state.update {
+                            it.copy(isError = true, errorMessage = result.message ?: "Terjadi kesalahan")
+                        }
+
+                        else -> {}
+                    }
+
                 }
             }
             is PondsEvent.DeletePond -> {
@@ -198,6 +220,13 @@ class PondsViewModel @Inject constructor(
                 ) }
             }
 
+            PondsEvent.DismissCommonDialog -> {
+                _state.update { it.copy(
+                    isError = false,
+                    isSuccess = false,
+                    errorMessage = ""
+                ) }
+            }
         }
     }
     suspend fun upsertCategory(categoryEntity: CategoryEntity){

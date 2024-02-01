@@ -8,11 +8,3 @@ data class LoginResponse(
     val token: String,
     val user: FarmerResponse
 )
-
-data class LoginErrorResponse(
-    val errors: List<Error>
-)
-
-data class Error(
-    val message: String
-)

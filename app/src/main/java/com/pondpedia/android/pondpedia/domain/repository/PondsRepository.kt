@@ -1,5 +1,6 @@
 package com.pondpedia.android.pondpedia.domain.repository
 
+import com.pondpedia.android.pondpedia.core.util.Resource
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.CategoryEntity
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.relations.PondCategoryCrossRefEntity
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Category
@@ -26,7 +27,7 @@ interface PondsRepository {
         pond: Pond,
         pondRecords: PondRecords,
         categoryList: List<String> = listOf()
-    )
+    ): Resource<Unit>
 
     suspend fun addCategory(
         category: Category

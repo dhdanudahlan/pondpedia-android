@@ -8,7 +8,7 @@ import com.pondpedia.android.pondpedia.domain.repository.PondsRepository
 class AddPondUseCase (
     private val repository: PondsRepository
 ) {
-    suspend operator fun invoke(pond: Pond, pondRecords: PondRecords = PondRecords(0, DateGenerator.getCurrentDateTime(), "0", "", pond.pondId), categoryList: List<String> = listOf("-")) {
+    suspend operator fun invoke(pond: Pond, pondRecords: PondRecords = PondRecords(0, DateGenerator.getCurrentDateTime(), "0", "", pond.pondId), categoryList: List<String> = listOf("-")) = run {
         repository.addPond(
             pond = pond,
             pondRecords = pondRecords,
