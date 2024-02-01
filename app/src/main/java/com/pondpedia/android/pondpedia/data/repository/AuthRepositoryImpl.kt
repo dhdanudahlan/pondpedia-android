@@ -239,6 +239,7 @@ class AuthRepositoryImpl @Inject constructor(
                 is NetworkResponse.Success -> {
                     val response = result.body
                     tokenManager.saveToken(response.token)
+                    tokenManager.saveUserId(response.user.id)
                     Resource.Success(response.message)
                 }
                 is NetworkResponse.Error -> {

@@ -2,7 +2,9 @@ package com.pondpedia.android.pondpedia.di
 
 import android.app.Application
 import androidx.room.Room
+import com.pondpedia.android.pondpedia.core.util.manager.TokenManager
 import com.pondpedia.android.pondpedia.data.local.database.PondPediaDatabase
+import com.pondpedia.android.pondpedia.data.remote.api.PondPediaApiService
 import com.pondpedia.android.pondpedia.data.repository.PondDetailsRepositoryImpl
 import com.pondpedia.android.pondpedia.data.repository.PondsRepositoryImpl
 import com.pondpedia.android.pondpedia.domain.repository.PondDetailsRepository
@@ -104,9 +106,11 @@ object PondManagementModule {
     @Provides
     @Singleton
     fun providePondsRepository(
+        api: PondPediaApiService,
         db: PondPediaDatabase,
+        tokenManager: TokenManager
     ): PondsRepository {
-        return PondsRepositoryImpl(db.pondsDao, db.pondDetailsDao)
+        return PondsRepositoryImpl(api, db.pondsDao, db.pondDetailsDao, tokenManager)
     }
 
     @Provides
