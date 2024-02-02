@@ -198,7 +198,20 @@ class AuthRepositoryImpl @Inject constructor(
         Failure(e)
     }
 
-    override fun signOut() = auth.signOut()
+    override suspend fun signOut(): Resource<Unit> {
+        return when (val result = api.logout()) {
+            is NetworkResponse.Success -> {
+                auth.signOut()
+                tokenManager.deleteToken()
+                tokenManager.deleteUserId()
+                Resource.Success(Unit)
+            }
+            is NetworkResponse.Error -> {
+                val response = result.body
+                Resource.Error(response?.errors?.first()?.message.orEmpty(), null)
+            }
+        }
+    }
 
     override suspend fun revokeAccess() = try {
         auth.currentUser?.delete()?.await()

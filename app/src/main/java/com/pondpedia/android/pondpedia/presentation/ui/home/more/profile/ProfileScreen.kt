@@ -1,5 +1,6 @@
 package com.pondpedia.android.pondpedia.presentation.ui.home.more.profile
 
+import android.widget.Toast
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -8,6 +9,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pondpedia.android.pondpedia.components.ProfileTopBar
 import com.pondpedia.android.pondpedia.core.util.Constants.PROFILE_SCREEN
@@ -23,19 +25,21 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
     navigateToAuthScreen: () -> Unit = {},
 ) {
+
+    val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val currentUser = viewModel.currentUser
-
-
 
     Scaffold(
         topBar = {
             ProfileTopBar(
                 title = PROFILE_SCREEN,
                 signOut = {
-                    viewModel.signOut()
-                    navigateToAuthScreen()
+                    viewModel.signOut(
+                        onSuccess = { navigateToAuthScreen() },
+                        onError = { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
+                    )
                 },
                 revokeAccess = {
                     viewModel.revokeAccess()
@@ -72,10 +76,12 @@ fun ProfileScreen(
         snackbarHostState = snackbarHostState,
         coroutineScope = coroutineScope,
         signOut = { accessRevoked ->
-            viewModel.signOut()
-            if (accessRevoked) {
-                navigateToAuthScreen()
-            }
+            viewModel.signOut(
+                onSuccess = { if (accessRevoked) {
+                    navigateToAuthScreen()
+                }},
+                onError = { Toast.makeText(context, it, Toast.LENGTH_SHORT).show() }
+            )
         }
     )
 }

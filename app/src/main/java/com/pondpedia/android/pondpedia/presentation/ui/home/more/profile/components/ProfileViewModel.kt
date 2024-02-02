@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pondpedia.android.pondpedia.core.util.Resource
 import com.pondpedia.android.pondpedia.data.repository.toUser
 import com.pondpedia.android.pondpedia.domain.model.auth.Response.Loading
 import com.pondpedia.android.pondpedia.domain.model.auth.Response.Success
@@ -47,7 +48,18 @@ class ProfileViewModel @Inject constructor(
 
     val currentUser get() = repo.currentUser
 
-    fun signOut() = repo.signOut()
+    fun signOut(
+        onSuccess: () -> Unit = {},
+        onError: (String) -> Unit = {}
+    ) {
+        viewModelScope.launch {
+            when (val result = repo.signOut()) {
+                is Resource.Success -> onSuccess.invoke()
+                is Resource.Error -> onError.invoke(result.message ?: "Gagal keluar")
+                else -> {}
+            }
+        }
+    }
 
     fun revokeAccess() = viewModelScope.launch {
         revokeAccessResponse = Loading
