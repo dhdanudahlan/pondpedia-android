@@ -10,6 +10,7 @@ import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.pondpedia.android.pondpedia.BuildConfig
 import com.pondpedia.android.pondpedia.core.util.Constants.DATASTORE_KEY
 import com.pondpedia.android.pondpedia.core.util.manager.AuthInterceptor
+import com.pondpedia.android.pondpedia.core.util.manager.ThreadManager
 import com.pondpedia.android.pondpedia.core.util.manager.TokenManager
 import com.pondpedia.android.pondpedia.data.local.database.PondPediaDatabase
 import com.pondpedia.android.pondpedia.data.remote.api.PondPediaApiService
@@ -25,6 +26,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = DATASTORE_KEY)
@@ -38,7 +40,7 @@ class AppSingletonModule {
         val database = Room.databaseBuilder(
             app,
             PondPediaDatabase::class.java,
-            "pond_database_1.4"
+            "pond_database_1.5"
         ).build()
 
         return database
@@ -50,6 +52,10 @@ class AppSingletonModule {
 
     @Singleton
     @Provides
+    fun provideThreadManager(@ApplicationContext context: Context): ThreadManager = ThreadManager(context)
+
+    @Singleton
+    @Provides
     fun provideOkHttpClient(
         authInterceptor: AuthInterceptor,
     ): OkHttpClient {
@@ -57,6 +63,8 @@ class AppSingletonModule {
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
         return OkHttpClient.Builder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(authInterceptor)
             .addInterceptor(loggingInterceptor)
             .build()

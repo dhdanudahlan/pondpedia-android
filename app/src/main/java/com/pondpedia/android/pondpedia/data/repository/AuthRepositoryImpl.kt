@@ -17,6 +17,7 @@ import com.pondpedia.android.pondpedia.core.util.Constants.PHOTO_URL
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_IN_REQUEST
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_UP_REQUEST
 import com.pondpedia.android.pondpedia.core.util.Resource
+import com.pondpedia.android.pondpedia.core.util.manager.ThreadManager
 import com.pondpedia.android.pondpedia.core.util.manager.TokenManager
 import com.pondpedia.android.pondpedia.data.remote.api.PondPediaApiService
 import com.pondpedia.android.pondpedia.data.remote.dto.auth.AuthResponse
@@ -48,6 +49,7 @@ class AuthRepositoryImpl @Inject constructor(
     @Named(SIGN_UP_REQUEST)
     private var signUpRequest: BeginSignInRequest,
     private val tokenManager: TokenManager,
+    private val threadManager: ThreadManager
 //    private val db: FirebaseFirestore
 ) : AuthRepository {
     override val isUserAuthenticatedInFirebase = auth.currentUser != null
@@ -240,7 +242,13 @@ class AuthRepositoryImpl @Inject constructor(
                     val response = result.body
                     tokenManager.saveToken(response.token)
                     tokenManager.saveUserId(response.user.id)
-                    Resource.Success(response.message)
+
+                    val isThreadCreated = createThread()
+                    if (isThreadCreated) {
+                        Resource.Success(response.message)
+                    } else {
+                        Resource.Error("Terjadi kesalahan membuat thread", null)
+                    }
                 }
                 is NetworkResponse.Error -> {
                     val response = result.body
@@ -255,6 +263,24 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun isUserLoggedIn(): Boolean {
         return (tokenManager.getToken().first()?.isNotEmpty() ?: false)
+    }
+
+    private suspend fun createThread(): Boolean {
+        val isThreadExist = threadManager.getThreadId().first() != null
+        if (isThreadExist) return true
+        return try {
+            when (val response = api.createThread()) {
+                is NetworkResponse.Success -> {
+                    val thread = response.body
+                    threadManager.saveThreadId(thread.threadId)
+                    true
+                }
+                is NetworkResponse.Error -> false
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            false
+        }
     }
 }
 

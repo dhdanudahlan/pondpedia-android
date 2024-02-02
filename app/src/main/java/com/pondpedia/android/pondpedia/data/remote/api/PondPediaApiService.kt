@@ -1,6 +1,9 @@
 package com.pondpedia.android.pondpedia.data.remote.api
 
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.pondpedia.android.pondpedia.data.remote.dto.ai_chat.ChatRequest
+import com.pondpedia.android.pondpedia.data.remote.dto.ai_chat.ChatResponse
+import com.pondpedia.android.pondpedia.data.remote.dto.ai_chat.ThreadResponse
 import com.pondpedia.android.pondpedia.data.remote.dto.auth.AuthResponse
 import com.pondpedia.android.pondpedia.data.remote.dto.auth.UserRegistrationRequest
 import com.pondpedia.android.pondpedia.data.remote.dto.base.BaseError
@@ -8,6 +11,7 @@ import com.pondpedia.android.pondpedia.data.remote.dto.auth.login.LoginRequest
 import com.pondpedia.android.pondpedia.data.remote.dto.auth.login.LoginResponse
 import com.pondpedia.android.pondpedia.data.remote.dto.auth.register.RegisterRequest
 import com.pondpedia.android.pondpedia.data.remote.dto.auth.register.RegisterResponse
+import com.pondpedia.android.pondpedia.data.remote.dto.base.BaseSuccess
 import com.pondpedia.android.pondpedia.data.remote.dto.base.Docs
 import com.pondpedia.android.pondpedia.data.remote.dto.pond.PondRequest
 import com.pondpedia.android.pondpedia.data.remote.dto.pond.PondResponse
@@ -60,6 +64,15 @@ interface PondPediaApiService {
     suspend fun deletePond(
         @Path("id") id: String
     ): NetworkResponse<Nothing, BaseError>
+
+    @POST("users/assistant/thread")
+    suspend fun createThread(): NetworkResponse<ThreadResponse, BaseError>
+
+    @POST("users/assistant/{id}")
+    suspend fun sendMessage(
+        @Path("id") id: String,
+        @Body request: ChatRequest
+    ): NetworkResponse<BaseSuccess<ChatResponse>, BaseError>
 
     companion object {
         @Deprecated(
