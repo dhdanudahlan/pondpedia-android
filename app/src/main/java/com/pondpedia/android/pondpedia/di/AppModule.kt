@@ -17,6 +17,7 @@ import com.pondpedia.android.pondpedia.R
 import com.pondpedia.android.pondpedia.core.app.PondPediaApplication
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_IN_REQUEST
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_UP_REQUEST
+import com.pondpedia.android.pondpedia.core.util.manager.ThreadManager
 import com.pondpedia.android.pondpedia.core.util.manager.TokenManager
 import com.pondpedia.android.pondpedia.data.local.database.PondPediaDatabase
 import com.pondpedia.android.pondpedia.data.remote.api.PondPediaApiService
@@ -105,13 +106,15 @@ class AppModule {
         signUpRequest: BeginSignInRequest,
         api: PondPediaApiService,
         tokenManager: TokenManager,
+        threadManager: ThreadManager
     ): AuthRepository = AuthRepositoryImpl(
         auth = auth,
         oneTapClient = oneTapClient,
         signInRequest = signInRequest,
         signUpRequest = signUpRequest,
         api = api,
-        tokenManager = tokenManager
+        tokenManager = tokenManager,
+        threadManager = threadManager
     )
 
     @Provides

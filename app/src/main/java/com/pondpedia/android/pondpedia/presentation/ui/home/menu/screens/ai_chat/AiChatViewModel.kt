@@ -4,7 +4,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pondpedia.android.pondpedia.domain.model.ai_chat.Message
+import com.pondpedia.android.pondpedia.core.util.Resource
+import com.pondpedia.android.pondpedia.data.remote.dto.ai_chat.ChatRequest
+import com.pondpedia.android.pondpedia.domain.model.ai_chat.Chat
+import com.pondpedia.android.pondpedia.domain.use_case.ai_chat.AddChatUseCase
+import com.pondpedia.android.pondpedia.domain.use_case.ai_chat.GetChatUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -13,6 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AiChatViewModel @Inject constructor(
+    private val addChatUseCase: AddChatUseCase,
+    private val getChatUseCase: GetChatUseCase
 //    pager: Pager<Int, ChatResponseEntity>
 ): ViewModel() {
 
@@ -28,6 +34,13 @@ class AiChatViewModel @Inject constructor(
 
     fun onMessageChange(message: String) {
         _messageText.value = message
+    }
+
+    fun onErrorDialogDismissed() {
+        _state.value = state.value.copy(
+            isError = false,
+            errorMessage = ""
+        )
     }
 
     fun connectToChat() {
@@ -59,30 +72,14 @@ class AiChatViewModel @Inject constructor(
 //            chatSocketService.closeSession()
 //        }
     }
-    fun getAllMessages() {
-//        viewModelScope.launch {
-//            _state.value = state.value.copy(isLoading = true)
-//            val result = messageService.getAllMessages()
-//            _state.value = state.value.copy(
-//                messages = result,
-//                isLoading = false
-//            )
-//        }
-        val newList = listOf(
-            Message(
-                text = "Berapa range pH yang baik untuk budidaya ikan nila?",
-                formattedTime = "15/12/2023 11:44",
-                username = "User"
-            ),
-            Message(
-                text = "Budidaya ikan nila umumnya dilakukan pada lingkungan air dengan pH yang berkisar antara 6 hingga 8,5. Rentang pH ini dianggap optimal untuk pertumbuhan dan perkembangan ikan nila. Namun perlu diperhatikan bahwa Nilai pH sekitar 7 hingga 7,5 dianggap ideal untuk budidaya ikan nila. Ini menciptakan kondisi lingkungan yang netral hingga sedikit basa.",
-                formattedTime = "15/12/2023 11:44",
-                username = "ChatGPT"
-            )
-        ).reversed()
-        _state.value = state.value.copy(
-            messages = newList
-        )
+    private fun getAllMessages() {
+        viewModelScope.launch {
+           getChatUseCase().collect {
+                _state.value = state.value.copy(
+                    chats = it.reversed()
+                )
+           }
+        }
     }
 
     fun sendMessage() {
@@ -90,6 +87,19 @@ class AiChatViewModel @Inject constructor(
 //            if(messageText.value.isNotBlank()) {
 //                chatSocketService.sendMessage(messageText.value)
 //            }
+
+            val message = _messageText.value
+            _messageText.value = ""
+            if(message.isNotBlank()) {
+                val request = ChatRequest(message)
+                when(val result = addChatUseCase(request)) {
+                    is Resource.Error -> _state.value = state.value.copy(
+                        isError = true,
+                        errorMessage = result.message ?: "Terjadi kesalahan, silahkan coba lagi."
+                    )
+                    else -> {}
+                }
+            }
         }
     }
 

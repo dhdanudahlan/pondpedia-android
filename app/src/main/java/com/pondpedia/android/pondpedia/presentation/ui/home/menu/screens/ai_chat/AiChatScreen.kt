@@ -1,14 +1,10 @@
 package com.pondpedia.android.pondpedia.presentation.ui.home.menu.screens.ai_chat
 
-import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,49 +14,42 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.PersonPin
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import com.pondpedia.android.pondpedia.core.util.DateGenerator
-import com.pondpedia.android.pondpedia.domain.model.ai_chat.ChatResponse
+import com.pondpedia.android.pondpedia.components.CommonDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AiChatScreen(
-    username: String = "User",
     viewModel: AiChatViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
 //    LaunchedEffect(key1 = true) {
 //        viewModel.toastEvent.collectLatest { message ->
 //            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
@@ -80,7 +69,16 @@ fun AiChatScreen(
             lifecycleOwner.lifecycle.removeObserver(observer)
         }
     }
+
     val state = viewModel.state.value
+
+    CommonDialog(
+        isShowDialog = state.isError,
+        title = "Error",
+        message = state.errorMessage,
+        onDismissRequest = viewModel::onErrorDialogDismissed
+    )
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -95,8 +93,8 @@ fun AiChatScreen(
             item {
                 Spacer(modifier = Modifier.height(32.dp))
             }
-            items(state.messages) { message ->
-                val isOwnMessage = message.username == username
+            items(state.chats) { message ->
+                val isOwnMessage = message.username != "asst"
                 Box(
                     contentAlignment = if (isOwnMessage) {
                         Alignment.CenterEnd
@@ -114,7 +112,10 @@ fun AiChatScreen(
                                     if (isOwnMessage) {
                                         moveTo(size.width, size.height - cornerRadius)
                                         lineTo(size.width, size.height + triangleHeight)
-                                        lineTo(size.width - triangleWidth, size.height - cornerRadius)
+                                        lineTo(
+                                            size.width - triangleWidth,
+                                            size.height - cornerRadius
+                                        )
                                         close()
                                     } else {
                                         moveTo(0f, size.height - cornerRadius)
@@ -135,7 +136,7 @@ fun AiChatScreen(
                             .padding(8.dp)
                     ) {
                         Text(
-                            text = message.username,
+                            text = if (isOwnMessage) "Anda" else "Asisten",
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
@@ -162,9 +163,15 @@ fun AiChatScreen(
                 placeholder = {
                     Text(text = "Enter a message")
                 },
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .focusRequester(focusRequester)
             )
-            IconButton(onClick = viewModel::sendMessage) {
+            IconButton(onClick = {
+                viewModel.sendMessage()
+                focusManager.clearFocus()
+                keyboardController?.hide()
+            }) {
                 Icon(
                     imageVector = Icons.Default.Send,
                     contentDescription = "Send"
