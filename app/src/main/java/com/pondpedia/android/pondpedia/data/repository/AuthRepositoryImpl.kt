@@ -254,7 +254,7 @@ class AuthRepositoryImpl @Inject constructor(
                 is NetworkResponse.Success -> {
                     val response = result.body
                     tokenManager.saveToken(response.token)
-                    tokenManager.saveUserId(response.user.id)
+                    tokenManager.saveUserId(response.user?.id.orEmpty())
 
                     val isThreadCreated = createThread()
                     if (isThreadCreated) {
@@ -276,6 +276,29 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun isUserLoggedIn(): Boolean {
         return (tokenManager.getToken().first()?.isNotEmpty() ?: false)
+    }
+
+    override suspend fun checkTokenValidity() {
+        try {
+            when(val result = api.getUser()) {
+                is NetworkResponse.Success -> {
+                    val response = result.body.user
+                    if (response == null) {
+                        tokenManager.deleteToken()
+                        tokenManager.deleteUserId()
+                    }
+                }
+                is NetworkResponse.Error -> {
+                    tokenManager.deleteToken()
+                    tokenManager.deleteUserId()
+                }
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            tokenManager.deleteToken()
+            tokenManager.deleteUserId()
+        }
     }
 
     private suspend fun createThread(): Boolean {

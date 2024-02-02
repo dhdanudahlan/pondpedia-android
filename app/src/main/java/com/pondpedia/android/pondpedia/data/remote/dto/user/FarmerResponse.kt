@@ -1,6 +1,7 @@
 package com.pondpedia.android.pondpedia.data.remote.dto.user
 
 import com.google.gson.annotations.SerializedName
+import com.pondpedia.android.pondpedia.domain.model.auth.Farmer
 
 
 data class FarmerResponse(
@@ -26,4 +27,25 @@ data class FarmerResponse(
     @field:SerializedName("_verified")
     val verified: Boolean,
     val loginAttempts: Long,
-)
+) {
+    fun toFarmer() = Farmer(
+        id = id,
+        assistantId = assistantId,
+        name = name,
+        username = username,
+        phoneNumber = phoneNumber,
+        profilePicture = profilePicture,
+        occupation = occupation,
+        usesSocialLogin = usesSocialLogin,
+        education = education,
+        gender = gender,
+        birthdate = birthdate,
+        birthplace = birthplace,
+        domicile = domicile,
+        bio = bio,
+        roles = roles,
+        email = email,
+        verified = verified,
+        loginAttempts = loginAttempts
+    )
+}

@@ -6,5 +6,5 @@ data class LoginResponse(
     val exp: Int,
     val message: String,
     val token: String,
-    val user: FarmerResponse
+    val user: FarmerResponse?
 )

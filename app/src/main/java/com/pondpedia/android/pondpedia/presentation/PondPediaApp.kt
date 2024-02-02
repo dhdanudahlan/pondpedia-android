@@ -54,6 +54,7 @@ private fun AuthState(
     viewModel: AuthViewModel,
     navController: NavHostController
 ) {
+    viewModel.checkTokenValidity()
     val isUserSignedOut = viewModel.getAuthState().collectAsState().value
     val isUserLoggedIn = viewModel.isUserLoggedIn() || !isUserSignedOut
     if (!isUserLoggedIn) {
