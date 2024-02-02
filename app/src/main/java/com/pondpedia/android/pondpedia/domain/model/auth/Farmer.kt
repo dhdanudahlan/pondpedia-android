@@ -1,34 +1,48 @@
 package com.pondpedia.android.pondpedia.domain.model.auth
 
+import com.google.gson.annotations.SerializedName
 import com.pondpedia.android.pondpedia.data.local.entity.auth.FarmerEntity
 
 data class Farmer(
-    val farmerId: Long,
-
+    val id: String,
+    val assistantId: String,
     val name: String,
-
+    val username: String,
     val phoneNumber: String,
-
-    val email: String,
-
+    val profilePicture: Any?,
     val occupation: String,
-
-    val informationSource: String,
-
-    val photoUrl: String,
-
-    val preferences: String
+    val usesSocialLogin: Boolean,
+    val education: Any?,
+    val gender: Any?,
+    val birthdate: String,
+    val birthplace: Any?,
+    val domicile: Any?,
+    val bio: Any?,
+    val roles: List<String>,
+    val email: String,
+    val verified: Boolean,
+    val loginAttempts: Long,
 ) {
     fun toFarmerEntity(): FarmerEntity {
         return FarmerEntity(
-            farmerId = farmerId,
+            id = id,
+            assistantId = assistantId,
             name = name,
+            username = username,
             phoneNumber = phoneNumber,
-            email = email,
+            profilePicture = profilePicture,
             occupation = occupation,
-            informationSource = informationSource,
-            photoUrl = photoUrl,
-            preferences = preferences
+            usesSocialLogin = usesSocialLogin,
+            education = education,
+            gender = gender,
+            birthdate = birthdate,
+            birthplace = birthplace,
+            domicile = domicile,
+            bio = bio,
+            roles = roles,
+            email = email,
+            verified = verified,
+            loginAttempts = loginAttempts
         )
     }
 }

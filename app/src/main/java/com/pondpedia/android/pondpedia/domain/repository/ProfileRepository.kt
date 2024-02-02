@@ -1,5 +1,7 @@
 package com.pondpedia.android.pondpedia.domain.repository
 
+import com.pondpedia.android.pondpedia.core.util.Resource
+import com.pondpedia.android.pondpedia.domain.model.auth.Farmer
 import com.pondpedia.android.pondpedia.domain.model.auth.Response
 
 
@@ -13,4 +15,6 @@ interface ProfileRepository {
     suspend fun signOut(): SignOutResponse
 
     suspend fun revokeAccess(): RevokeAccessResponseGoogle
+
+    suspend fun getUser(): Resource<Farmer>
 }

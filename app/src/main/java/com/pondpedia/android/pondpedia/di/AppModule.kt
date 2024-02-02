@@ -122,11 +122,13 @@ class AppModule {
         auth: FirebaseAuth,
         oneTapClient: SignInClient,
         signInClient: GoogleSignInClient,
+        api: PondPediaApiService
 //        db: FirebaseFirestore
     ): ProfileRepository = ProfileRepositoryImpl(
         auth = auth,
         oneTapClient = oneTapClient,
         signInClient = signInClient,
+        api = api
 //        db = db
     )
 

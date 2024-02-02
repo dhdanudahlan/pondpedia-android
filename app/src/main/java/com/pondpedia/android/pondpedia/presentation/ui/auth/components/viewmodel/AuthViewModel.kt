@@ -335,6 +335,8 @@ class AuthViewModel @Inject constructor(
 
     fun isUserLoggedIn() = runBlocking { repo.isUserLoggedIn() }
 
+    fun checkTokenValidity() = runBlocking { repo.checkTokenValidity() }
+
     sealed interface ValidationEvent {
         data object Success: ValidationEvent
     }

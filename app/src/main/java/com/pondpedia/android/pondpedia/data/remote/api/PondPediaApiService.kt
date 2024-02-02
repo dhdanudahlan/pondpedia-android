@@ -49,6 +49,9 @@ interface PondPediaApiService {
     @POST("users/logout")
     suspend fun logout(): NetworkResponse<Unit, BaseError>
 
+    @GET("users/me")
+    suspend fun getUser(): NetworkResponse<LoginResponse, BaseError>
+
     @POST("ponds")
     suspend fun createPond(
         @Body request: PondRequest

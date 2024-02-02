@@ -65,4 +65,6 @@ interface AuthRepository {
     suspend fun login(request: LoginRequest): Resource<String>
 
     suspend fun isUserLoggedIn(): Boolean
+
+    suspend fun checkTokenValidity()
 }

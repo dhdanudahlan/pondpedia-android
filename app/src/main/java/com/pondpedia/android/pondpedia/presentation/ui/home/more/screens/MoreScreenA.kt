@@ -43,7 +43,7 @@ fun MoreScreenA(
     ) {
         if (userData != null) {
             AsyncImage(
-                model = if(userData.photoUrl != "GUEST") userData.photoUrl else R.drawable.pondpedia_1,
+                model = if(userData.profilePicture != "GUEST") userData.profilePicture else R.drawable.pondpedia_1,
                 contentDescription = "Profile picture",
                 modifier = Modifier
                     .size(150.dp)
