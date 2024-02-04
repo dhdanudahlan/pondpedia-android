@@ -4,14 +4,15 @@ package com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.vi
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pondpedia.android.pondpedia.core.util.Resource
 import com.pondpedia.android.pondpedia.core.util.StringParser
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Commodity
 import com.pondpedia.android.pondpedia.domain.model.pond_management.CommodityGrowthRecords
 import com.pondpedia.android.pondpedia.domain.model.pond_management.CommodityHealthRecords
-import com.pondpedia.android.pondpedia.domain.model.pond_management.new_model.FeedingRecords
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Pond
 import com.pondpedia.android.pondpedia.domain.model.pond_management.PondRecords
 import com.pondpedia.android.pondpedia.domain.model.pond_management.WaterRecords
+import com.pondpedia.android.pondpedia.domain.model.pond_management.new_model.FeedingRecords
 import com.pondpedia.android.pondpedia.domain.use_case.ponds.DeletePondByIdUseCase
 import com.pondpedia.android.pondpedia.domain.use_case.ponds.GetPondByIdUseCase
 import com.pondpedia.android.pondpedia.domain.use_case.ponds.UpsertCategoryUseCase
@@ -333,7 +334,7 @@ class PondDetailsViewModel @Inject constructor(
 
                 val turbidity = state.value.waterRecordsTurbidity
 
-                val clarity = state.value.waterRecordsClarity
+                val alkalinity = state.value.waterRecordsAlkalinity
 
                 val note = state.value.waterRecordsNote
 
@@ -341,42 +342,37 @@ class PondDetailsViewModel @Inject constructor(
 
                 val waterRecords = WaterRecords(
                     0,
-                    date = date,
-                    level = StringParser.toInt(level)!!,
-                    pH = StringParser.toFloat(pH),
-                    temperature = StringParser.toFloat(temperature),
-                    weather = if (weather.isNotBlank()) weather else "Cerah",
-                    dissolvedOxygen = StringParser.toFloat(dissolvedOxygen),
-                    salinity = StringParser.toFloat(salinity),
-                    turbidity = StringParser.toFloat(turbidity),
-                    clarity = StringParser.toFloat(clarity),
-                    color = color,
-                    note = note,
+                    date = "$date 00:00:00+00",
+                    waterHeight = if (level.isBlank()) null else level.toInt(),
+                    pH = if (pH.isBlank()) null else pH.toDouble(),
+                    temperature = if (temperature.isBlank()) null else temperature.toDouble(),
+                    weather = if (weather.isBlank()) null else weather,
+                    dissolvedOxygen = if (dissolvedOxygen.isBlank()) null else dissolvedOxygen.toDouble(),
+                    salinity = if (salinity.isBlank()) null else salinity.toDouble(),
+                    turbidity = if (turbidity.isBlank()) null else turbidity.toDouble(),
+                    alkalinity = if (alkalinity.isBlank()) null else alkalinity.toDouble(),
+                    color = if (color.isBlank()) null else color,
+                    note = if (note.isBlank()) null else note,
                     pondId = pondId
                 )
 
-                if (date.isBlank() || level.isBlank() || color.isBlank()) {
+                if (date.isBlank()) {
                     return
                 }
 
                 viewModelScope.launch(Dispatchers.IO) {
-                    addWaterRecordsUseCase(waterRecords)
-                }
-
-                _state.update {
-                    it.copy(
-                        waterRecordsDate = "",
-                        waterRecordsLevel = "",
-                        waterRecordsPH = "",
-                        waterRecordsTemperature = "",
-                        waterRecordsWeather = "",
-                        waterRecordsDissolvedOxygen = "",
-                        waterRecordsSalinity = "",
-                        waterRecordsTurbidity = "",
-                        waterRecordsClarity = "",
-                        waterRecordsColor = "",
-                        waterRecordsNote = "",
-                    )
+                    _state.update { it.copy(isLoading = true) }
+                    val result = addWaterRecordsUseCase(waterRecords)
+                    _state.update { it.copy(isLoading = false) }
+                    when(result) {
+                        is Resource.Success -> {
+                            _state.update { it.copy(isSuccess = true) }
+                        }
+                        is Resource.Error -> {
+                            _state.update { it.copy(isError = true, error = result.message ?: "Tidak dapat menambahkan data kualitas air") }
+                        }
+                        else -> {}
+                    }
                 }
             }
 
@@ -685,7 +681,7 @@ class PondDetailsViewModel @Inject constructor(
             is PondDetailsEvent.SetWaterRecordsClarity -> {
                 _state.update {
                     it.copy(
-                        waterRecordsClarity = event.value
+                        waterRecordsAlkalinity = event.value
                     )
                 }
             }
@@ -711,6 +707,31 @@ class PondDetailsViewModel @Inject constructor(
                 _state.update {
                     it.copy(
                         isAddingCommodity = false
+                    )
+                }
+            }
+
+            PondDetailsEvent.DismissCommonDialog -> {
+                _state.update { it.copy(isError = false, error = "") }
+            }
+
+            PondDetailsEvent.DismissCommonDialogWithClearState -> {
+                _state.update {
+                    it.copy(
+                        isSuccess = false,
+                        isError = false,
+                        error = "",
+                        waterRecordsDate = "",
+                        waterRecordsLevel = "",
+                        waterRecordsPH = "",
+                        waterRecordsTemperature = "",
+                        waterRecordsWeather = "",
+                        waterRecordsDissolvedOxygen = "",
+                        waterRecordsSalinity = "",
+                        waterRecordsTurbidity = "",
+                        waterRecordsAlkalinity = "",
+                        waterRecordsColor = "",
+                        waterRecordsNote = "",
                     )
                 }
             }

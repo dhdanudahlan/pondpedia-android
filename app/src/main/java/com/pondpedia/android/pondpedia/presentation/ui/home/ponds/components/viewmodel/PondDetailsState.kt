@@ -10,6 +10,12 @@ import com.pondpedia.android.pondpedia.domain.model.pond_management.WaterRecords
 
 
 data class PondDetailsState(
+
+    val isLoading: Boolean = false,
+    val isError: Boolean = false,
+    val isSuccess: Boolean = false,
+    val error: String = "",
+
     val pond: Pond = Pond(),
 
     val pondRecords: List<PondRecords> = emptyList(),
@@ -103,7 +109,7 @@ data class PondDetailsState(
 
     val waterRecordsTurbidity: String = "",
 
-    val waterRecordsClarity: String = "",
+    val waterRecordsAlkalinity: String = "",
 
     val waterRecordsNote: String = "",
 

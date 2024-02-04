@@ -53,8 +53,8 @@ data class Pond(
             user = farmerId,
             area = area.toInt(),
             depth = depth.toInt(),
-            pondType = pondType.toLowerCase(Locale.current),
-            waterType = waterType.toLowerCase(Locale.current).replace(" ", "_"),
+            pondType = pondType,
+            waterType = waterType,
             location = location,
             description = description,
         )

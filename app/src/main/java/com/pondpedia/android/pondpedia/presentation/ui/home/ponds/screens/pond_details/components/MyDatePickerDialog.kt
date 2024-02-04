@@ -20,7 +20,7 @@ fun MyDatePickerDialog(
 
     val selectedDate = datePickerState.selectedDateMillis?.let {
         convertMillisToDate(it)
-    } ?: ""
+    }.orEmpty()
 
     DatePickerDialog(
         onDismissRequest = { onDismiss() },
@@ -48,6 +48,6 @@ fun MyDatePickerDialog(
     }
 }
 private fun convertMillisToDate(millis: Long): String {
-    val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm")
+    val formatter = SimpleDateFormat("yyyy-MM-dd")
     return formatter.format(Date(millis))
 }

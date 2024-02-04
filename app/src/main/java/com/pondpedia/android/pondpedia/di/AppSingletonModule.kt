@@ -40,8 +40,9 @@ class AppSingletonModule {
         val database = Room.databaseBuilder(
             app,
             PondPediaDatabase::class.java,
-            "pond_database_1.5"
-        ).build()
+            "pond_database_1.6"
+        ).fallbackToDestructiveMigration()
+            .build()
 
         return database
     }

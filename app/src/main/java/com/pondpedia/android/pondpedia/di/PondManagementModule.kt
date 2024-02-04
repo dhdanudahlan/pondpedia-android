@@ -116,9 +116,10 @@ object PondManagementModule {
     @Provides
     @Singleton
     fun providePondManagementRepository(
+        api: PondPediaApiService,
         db: PondPediaDatabase,
     ): PondDetailsRepository {
-        return PondDetailsRepositoryImpl(db.pondsDao, db.pondDetailsDao)
+        return PondDetailsRepositoryImpl(api, db.pondsDao, db.pondDetailsDao)
     }
 
 }

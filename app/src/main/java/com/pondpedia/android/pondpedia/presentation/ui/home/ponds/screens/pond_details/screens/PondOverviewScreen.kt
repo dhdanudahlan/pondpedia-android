@@ -1,5 +1,6 @@
 package com.pondpedia.android.pondpedia.presentation.ui.home.ponds.screens.pond_details.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -23,15 +24,18 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -40,6 +44,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleObserver
 import com.pondpedia.android.pondpedia.R
 import com.pondpedia.android.pondpedia.presentation.PondPediaAppState
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondDetailsEvent
@@ -367,8 +374,8 @@ fun DetailsScreenFeeding(
 fun DetailsScreenWater(
     pondDetailsState: PondDetailsState,
 ) {
-    val listOfRecords = pondDetailsState.waterRecords
-    val records = listOfRecords.last()
+    val listOfRecords = pondDetailsState.waterRecords.sortedBy { it.recordId }.reversed()
+    val records = listOfRecords.first()
 
     Column(
         modifier = Modifier
@@ -389,7 +396,7 @@ fun DetailsScreenWater(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = records.date,
+                    text = records.date.convertToDateOnly(),
                     fontWeight = FontWeight.SemiBold
                 )
                 if (records.pH != null) {
@@ -420,15 +427,20 @@ fun DetailsScreenWater(
                     Text(text = "Kekeruhan : ${records.turbidity}")
                 }
 
-                if (records.clarity != null) {
-                    Text(text = "Kecerahan : ${records.clarity}")
+                if (records.alkalinity != null) {
+                    Text(text = "Alkalinitas : ${records.alkalinity}")
                 }
 
-                if (records.note.isNotBlank()) {
+                if (records.note != null) {
                     Text(text = "Catatan : ${records.note}")
                 }
             }
 
         }
     }
+}
+
+private fun String.convertToDateOnly(): String {
+    val date = this.split("T")
+    return date.first()
 }
