@@ -1,5 +1,6 @@
 package com.pondpedia.android.pondpedia.domain.repository
 
+import com.pondpedia.android.pondpedia.core.util.Resource
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Commodity
 import com.pondpedia.android.pondpedia.domain.model.pond_management.CommodityGrowthRecords
 import com.pondpedia.android.pondpedia.domain.model.pond_management.CommodityHealthRecords
@@ -27,7 +28,7 @@ interface PondDetailsRepository {
 
      suspend fun insertPondRecords(pondRecords: PondRecords): Long
 
-     suspend fun insertWaterRecords(waterRecords: WaterRecords): Long
+     suspend fun insertWaterRecords(waterRecords: WaterRecords): Resource<Unit>
 
      suspend fun insertFeedingRecords(feedingRecords: FeedingRecords): Long
 

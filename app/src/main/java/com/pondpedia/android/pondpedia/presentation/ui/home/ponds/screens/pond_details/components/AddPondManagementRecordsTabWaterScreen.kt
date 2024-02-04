@@ -1,6 +1,7 @@
 package com.pondpedia.android.pondpedia.presentation.ui.home.ponds.screens.pond_details.components
 
 import android.health.connect.datatypes.units.Temperature
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.outlined.Cloud
 import androidx.compose.material.icons.outlined.InvertColors
 import androidx.compose.material.icons.outlined.StickyNote2
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -35,9 +37,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.pondpedia.android.pondpedia.R
+import com.pondpedia.android.pondpedia.components.CommonDialog
+import com.pondpedia.android.pondpedia.components.LoadingDialog
 import com.pondpedia.android.pondpedia.core.util.StringParser
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.util.AuthEvent
+import com.pondpedia.android.pondpedia.presentation.ui.home.components.Screens
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondDetailsEvent
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondDetailsState
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsEvent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,6 +57,9 @@ fun AddPondManagementRecordsTabWaterScreen(
     var showDatePicker by remember {
         mutableStateOf(false)
     }
+
+    var expandedWaterColor by remember { mutableStateOf(false) }
+    var expandedWeather by remember { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
 
@@ -101,6 +111,24 @@ fun AddPondManagementRecordsTabWaterScreen(
         color = ""
         note = ""
     }
+
+    LoadingDialog(
+        isShowDialog = pondDetailsState.isLoading
+    )
+
+    CommonDialog(
+        title = if (pondDetailsState.isSuccess) "Berhasil" else "Gagal",
+        message = if (pondDetailsState.isSuccess) "Data air berhasil ditambahkan" else pondDetailsState.error,
+        isShowDialog = pondDetailsState.isSuccess || pondDetailsState.isError,
+        onDismissRequest = {
+            if (pondDetailsState.isSuccess) {
+                onEvent(PondDetailsEvent.DismissCommonDialog)
+                onNavigateToOverviewScreen()
+            } else {
+                onEvent(PondDetailsEvent.DismissCommonDialog)
+            }
+        }
+    )
 
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -156,7 +184,7 @@ fun AddPondManagementRecordsTabWaterScreen(
                 Text(text = "CM")
             },
             supportingText = {
-                Text(text = "* Wajib diisi", color = androidx.compose.ui.graphics.Color.Gray)
+                Text(text = "* Opsional", color = androidx.compose.ui.graphics.Color.Gray)
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Decimal,
@@ -165,29 +193,23 @@ fun AddPondManagementRecordsTabWaterScreen(
         )
         Spacer(modifier = Modifier.height(4.dp))
 
-        TextField(
-            value = color,
-            onValueChange = {
-                color = it
+        CommonExposedDropdown(
+            label = "Warna Air",
+            supportingText = "* Opsional",
+            items = listOf(
+                "Hijau", "Hijau Pekat", "Hijau Tua", "Hijau Semu", "Hijau Kebiruan", "Hijau Pupus",
+                "Hijau Kecoklatan", "Hijau Kemerahan", "Jernih", "Kuning Kehijauan", "Kecoklatan",
+                "Coklat Tua", "Coklat Kemerahan"
+            ),
+            expanded = expandedWaterColor,
+            selectedItem = color,
+            onValueChanged = { color = it
                 onEvent(PondDetailsEvent.SetWaterRecordsColor(it))
-            },
-            label = {
-                Text(text = "Warna Air")
-            },
-            trailingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.InvertColors,
-                    contentDescription = "Color"
-                )
-            },
-            supportingText = {
-                Text(text = "* Wajib diisi", color = androidx.compose.ui.graphics.Color.Gray)
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            )
+                expandedWaterColor = false
+                Log.d("AddPondManagementRecordsTabWaterScreen", "color: $color") },
+            onExpandChanged = { expandedWaterColor = it }
         )
+
         Spacer(modifier = Modifier.height(4.dp))
 
         TextField(
@@ -206,7 +228,7 @@ fun AddPondManagementRecordsTabWaterScreen(
                 )
             },
             supportingText = {
-                Text(text = "* Wajib diisi", color = androidx.compose.ui.graphics.Color.Gray)
+                Text(text = "* Opsional", color = androidx.compose.ui.graphics.Color.Gray)
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Decimal,
@@ -228,7 +250,7 @@ fun AddPondManagementRecordsTabWaterScreen(
                 Text(text = "°C")
             },
             supportingText = {
-                Text(text = "* Wajib diisi", color = androidx.compose.ui.graphics.Color.Gray)
+                Text(text = "* Opsional", color = androidx.compose.ui.graphics.Color.Gray)
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Decimal,
@@ -237,29 +259,21 @@ fun AddPondManagementRecordsTabWaterScreen(
         )
         Spacer(modifier = Modifier.height(4.dp))
 
-        TextField(
-            value = weather,
-            onValueChange = {
-                weather = it
+        CommonExposedDropdown(
+            label = "Cuaca",
+            supportingText = "* Opsional",
+            items = listOf(
+                "Cerah", "Berawan", "Hujan", "Mendung", "Hujan"
+            ),
+            expanded = expandedWeather,
+            selectedItem = weather,
+            onValueChanged = { weather = it
                 onEvent(PondDetailsEvent.SetWaterRecordsWeather(it))
-            },
-            label = {
-                Text(text = "Cuaca")
-            },
-            trailingIcon = {
-                Icon(
-                    imageVector = Icons.Outlined.Cloud,
-                    contentDescription = "Color"
-                )
-            },
-            supportingText = {
-                Text(text = "* Wajib diisi", color = androidx.compose.ui.graphics.Color.Gray)
-            },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next
-            )
+                expandedWeather = false
+                Log.d("AddPondManagementRecordsTabWaterScreen", "weather: $weather") },
+            onExpandChanged = { expandedWeather = it }
         )
+
         Spacer(modifier = Modifier.height(4.dp))
 
         TextField(
@@ -376,11 +390,9 @@ fun AddPondManagementRecordsTabWaterScreen(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
-                enabled = validateForm(date, level, ph, temperature, weather, color),
+                enabled = validateForm(date),
                 onClick = {
                     onEvent(PondDetailsEvent.AddWaterRecords)
-                    reset()
-                    onNavigateToOverviewScreen()
                 }
             ) {
                 Text(text = stringResource(R.string.button_save))
@@ -388,7 +400,7 @@ fun AddPondManagementRecordsTabWaterScreen(
         }
     }
 }
-private fun validateForm(date: String, level: String, ph: String, temperature: String, weather: String, color: String): Boolean {
-    return !(date.isBlank() || level.isBlank() || ph.isBlank() || temperature.isBlank() || weather.isBlank() || color.isBlank())
+private fun validateForm(date: String): Boolean {
+    return !(date.isBlank())
 }
 

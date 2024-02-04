@@ -13,13 +13,18 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.AddPondDialog
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.PondItemSquareCard
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsEvent
@@ -62,6 +67,20 @@ fun PondsScreen(
     onPondListDisplayed : () -> Unit,
     onEvent: (PondsEvent) -> Unit,
 ) {
+
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME)
+                onEvent(PondsEvent.ReFetchPonds)
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            onEvent(PondsEvent.HideDialog)
+        }
+    }
+
     onTabIndexSelected(0)
     if (pondsState.isAddingPond) {
         AddPondDialog(pondsState, onEvent)

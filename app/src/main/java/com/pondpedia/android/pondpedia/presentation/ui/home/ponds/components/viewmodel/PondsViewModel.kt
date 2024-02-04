@@ -18,6 +18,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -45,10 +46,6 @@ class PondsViewModel @Inject constructor(
     private val _categories = getCategoryListUseCase().map { it }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private val _ponds = combine(_sortType, _selectedCategoryIndex) { sortType, selectedCategoryIndex ->
-        getPondListUseCase(sortType, "-")
-    }.flatMapLatest { it }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private val _pond= _selectedPondId.flatMapLatest { selectedPondId ->
         getPondByIdUseCase(selectedPondId)
@@ -57,17 +54,19 @@ class PondsViewModel @Inject constructor(
 
 
     private val _state = MutableStateFlow(PondsState())
-    private val _stateTwo = combine(_state, _sortType, _selectedCategoryIndex, _categories, _ponds) { state, sortType, selectedCategoryIndex, categories, ponds ->
+    private val _ponds = MutableStateFlow(emptyList<Pond>())
+
+    private val _stateTwo = combine(_state, _sortType, _selectedCategoryIndex, _categories) { state, sortType, selectedCategoryIndex, categories ->
         state.copy(
             sortType = sortType,
             selectedCategoryIndex = selectedCategoryIndex,
             categories = categories,
-            ponds = ponds
         )
     }.stateIn(this.viewModelScope, SharingStarted.WhileSubscribed(5000), PondsState())
-    val state = combine(_stateTwo, _pond) { state, pond ->
+    val state = combine(_stateTwo, _pond, _ponds) { state, pond, ponds ->
         state.copy(
-            pond = pond
+            pond = pond,
+            ponds = ponds
         )
     }.stateIn(this.viewModelScope, SharingStarted.WhileSubscribed(5000), PondsState())
 
@@ -226,6 +225,14 @@ class PondsViewModel @Inject constructor(
                     isSuccess = false,
                     errorMessage = ""
                 ) }
+            }
+
+            PondsEvent.ReFetchPonds -> {
+                viewModelScope.launch {
+                    _ponds.value = combine(_sortType, _selectedCategoryIndex) { sortType, selectedCategoryIndex ->
+                        getPondListUseCase(sortType, "-")
+                    }.flatMapLatest { it }.first()
+                }
             }
         }
     }

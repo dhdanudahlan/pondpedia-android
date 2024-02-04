@@ -15,6 +15,8 @@ import com.pondpedia.android.pondpedia.data.remote.dto.base.BaseSuccess
 import com.pondpedia.android.pondpedia.data.remote.dto.base.Docs
 import com.pondpedia.android.pondpedia.data.remote.dto.pond.PondRequest
 import com.pondpedia.android.pondpedia.data.remote.dto.pond.PondResponse
+import com.pondpedia.android.pondpedia.data.remote.dto.pond.water.WaterRequest
+import com.pondpedia.android.pondpedia.data.remote.dto.pond.water.WaterResponse
 import kotlinx.coroutines.Deferred
 import retrofit2.Response
 import retrofit2.http.Body
@@ -70,6 +72,17 @@ interface PondPediaApiService {
     suspend fun deletePond(
         @Path("id") id: String
     ): NetworkResponse<Nothing, BaseError>
+
+    @POST("ponds/{id}/water")
+    suspend fun addWaterRecord(
+        @Path("id") pondId: Long,
+        @Body request: WaterRequest
+    ): NetworkResponse<BaseSuccess<WaterResponse>, BaseError>
+
+    @GET("ponds/{id}/water")
+    suspend fun getWaterRecords(
+        @Path("id") pondId: Long
+    ): NetworkResponse<BaseSuccess<List<WaterResponse>>, BaseError>
 
     @POST("users/assistant/thread")
     suspend fun createThread(): NetworkResponse<ThreadResponse, BaseError>

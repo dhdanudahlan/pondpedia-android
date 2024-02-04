@@ -33,7 +33,7 @@ fun PondWaterScreen(
     innerPadding: PaddingValues
 ) {
     
-    val listOfRecords = pondDetailsState.waterRecords.sortedBy { it.date }
+    val listOfRecords = pondDetailsState.waterRecords.sortedBy { it.recordId }
     val scrollState = rememberScrollState()
     val listOfRecordsReversed = listOfRecords.reversed()
     Row(
@@ -67,11 +67,11 @@ fun PondWaterScreen(
                             )
 
                             Text(
-                                text = waterRecords.date,
+                                text = waterRecords.date.convertToDateOnly(),
                                 fontWeight = FontWeight.SemiBold
                             )
 
-                            Text(text = "Ketinggian Air : ${waterRecords.level}")
+                            Text(text = "Ketinggian Air : ${waterRecords.waterHeight}")
 
                             if (waterRecords.pH != null) {
                                 Text(text = "PH Air : ${waterRecords.pH}")
@@ -101,11 +101,11 @@ fun PondWaterScreen(
                                 Text(text = "Kekeruhan : ${waterRecords.turbidity}")
                             }
 
-                            if (waterRecords.clarity != null) {
-                                Text(text = "Kecerahan : ${waterRecords.clarity}")
+                            if (waterRecords.alkalinity != null) {
+                                Text(text = "Alkalinitas : ${waterRecords.alkalinity}")
                             }
 
-                            if (waterRecords.note.isNotBlank()) {
+                            if (waterRecords.note != null) {
                                 Text(text = "Catatan : ${waterRecords.note}")
                             }
                         }
@@ -114,4 +114,9 @@ fun PondWaterScreen(
             }
         }
     }
+}
+
+private fun String.convertToDateOnly(): String {
+    val date = this.split("T")
+    return date.first()
 }

@@ -26,4 +26,5 @@ sealed interface PondsEvent{
     data class SortPonds(val sortType: SortType): PondsEvent
 
     data object DismissCommonDialog: PondsEvent
+    data object ReFetchPonds: PondsEvent
 }

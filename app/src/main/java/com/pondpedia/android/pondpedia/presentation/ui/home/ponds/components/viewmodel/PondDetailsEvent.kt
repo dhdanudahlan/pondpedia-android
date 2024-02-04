@@ -74,4 +74,7 @@ sealed interface PondDetailsEvent{
 
     data object ShowDialog: PondDetailsEvent
     data object HideDialog: PondDetailsEvent
+
+    data object DismissCommonDialog: PondDetailsEvent
+    data object DismissCommonDialogWithClearState: PondDetailsEvent
 }
