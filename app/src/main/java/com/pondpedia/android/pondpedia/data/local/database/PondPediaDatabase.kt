@@ -4,8 +4,10 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.pondpedia.android.pondpedia.core.util.Converters
+import com.pondpedia.android.pondpedia.data.local.dao.AiChatDao
 import com.pondpedia.android.pondpedia.data.local.dao.PondDetailsDao
 import com.pondpedia.android.pondpedia.data.local.dao.PondsDao
+import com.pondpedia.android.pondpedia.data.local.entity.ai_chat.ChatEntity
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.CategoryEntity
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.CommodityEntity
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.CommodityGrowthRecordsEntity
@@ -29,14 +31,14 @@ import com.pondpedia.android.pondpedia.data.local.entity.pond_management.relatio
         PondRecordsEntity::class,
         WaterRecordsEntity::class,
         PondCategoryCrossRefEntity::class,
-//        ChatResponseEntity::class
+        ChatEntity::class
     ],
-    version = 1,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class PondPediaDatabase : RoomDatabase() {
     abstract val pondsDao: PondsDao
     abstract val pondDetailsDao: PondDetailsDao
-//    abstract val chatDao: AiChatDao
+    abstract val chatDao: AiChatDao
 }

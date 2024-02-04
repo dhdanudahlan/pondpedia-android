@@ -1,7 +1,10 @@
 package com.pondpedia.android.pondpedia.data.repository
 
+import com.haroldadmin.cnradapter.NetworkResponse
+import com.pondpedia.android.pondpedia.core.util.Resource
 import com.pondpedia.android.pondpedia.data.local.dao.PondDetailsDao
 import com.pondpedia.android.pondpedia.data.local.dao.PondsDao
+import com.pondpedia.android.pondpedia.data.remote.api.PondPediaApiService
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Commodity
 import com.pondpedia.android.pondpedia.domain.model.pond_management.CommodityGrowthRecords
 import com.pondpedia.android.pondpedia.domain.model.pond_management.CommodityHealthRecords
@@ -11,9 +14,13 @@ import com.pondpedia.android.pondpedia.domain.model.pond_management.PondRecords
 import com.pondpedia.android.pondpedia.domain.model.pond_management.WaterRecords
 import com.pondpedia.android.pondpedia.domain.repository.PondDetailsRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
 class PondDetailsRepositoryImpl(
+    private val api: PondPediaApiService,
     private val pondsDao: PondsDao,
     private val pondDetailsDao: PondDetailsDao
 ): PondDetailsRepository {
@@ -24,15 +31,25 @@ class PondDetailsRepositoryImpl(
         }
     }
 
-    override fun getPondRecordsByPondId(pondId: Long): Flow<List<PondRecords>> {
+    override fun getPondRecordsByPondId(pondId: Long): Flow<List<PondRecords>>{
         return pondDetailsDao.getPondWithPondRecords(pondId).map { pondWithRecords ->
             pondWithRecords?.pondRecords?.map { it.toPondRecords() } ?: emptyList()
         }
     }
 
-    override fun getWaterRecordsByPondId(pondId: Long): Flow<List<WaterRecords>> {
-        return pondDetailsDao.getPondWithWaterRecords(pondId).map { pondWithWaterRecords ->
-            pondWithWaterRecords?.waterRecords?.map { it.toWaterRecords() } ?: emptyList()
+    override fun getWaterRecordsByPondId(pondId: Long): Flow<List<WaterRecords>> = flow {
+        when(val result = api.getWaterRecords(pondId)) {
+            is NetworkResponse.Success -> {
+                val waterRecords = result.body.data.map { it.toWaterRecords() }
+                emit(waterRecords)
+            }
+            is NetworkResponse.Error -> {
+                val waterRecords = pondDetailsDao.getPondWithWaterRecords(pondId)
+                    .map { pondWithWaterRecords ->
+                        pondWithWaterRecords?.waterRecords?.map { it.toWaterRecords() } ?: emptyList()
+                    }.firstOrNull()
+                emit(waterRecords.orEmpty())
+            }
         }
     }
 
@@ -64,8 +81,19 @@ class PondDetailsRepositoryImpl(
         return pondsDao.insertPondRecords(pondRecords.toPondRecordsEntity())
     }
 
-    override suspend fun insertWaterRecords(waterRecords: WaterRecords): Long {
-        return pondDetailsDao.insertWaterRecords(waterRecords.toWaterRecordsEntity())
+    override suspend fun insertWaterRecords(waterRecords: WaterRecords): Resource<Unit> {
+        return when(val result = api.addWaterRecord(waterRecords.pondId, waterRecords.toWaterRequest())) {
+            is NetworkResponse.Success -> {
+                val response = result.body.data
+                val waterRecordsUpdated = waterRecords.copy(recordId = response.id)
+                pondDetailsDao.insertWaterRecords(waterRecordsUpdated.toWaterRecordsEntity())
+                Resource.Success(Unit)
+            }
+
+            is NetworkResponse.Error -> {
+                Resource.Error(result.body?.errors?.first()?.message ?: "Gagal menambahkan data air")
+            }
+        }
     }
 
     override suspend fun insertFeedingRecords(feedingRecords: FeedingRecords): Long {

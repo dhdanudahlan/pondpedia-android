@@ -1,3 +1,5 @@
+import com.android.build.api.variant.BuildConfigField
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -15,8 +17,8 @@ android {
         applicationId = "com.pondpedia.android.pondpedia"
         minSdk = 28
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.2"
+        versionCode = 4
+        versionName = "1.2.2-alpha"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -25,12 +27,23 @@ android {
     }
 
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
+            buildConfigField("String", "BASE_URL", "\"https://api.pondpedia.com/api/\"")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            buildConfigField("String", "BASE_URL", "\"https://api.pondpedia.com/api/\"")
         }
     }
     compileOptions {
@@ -43,6 +56,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.0"
@@ -59,7 +73,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.1")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -72,12 +86,15 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    // Preferences
     implementation("androidx.preference:preference-ktx:1.2.1")
+
+    // Preferences Datastore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.datastore:datastore-preferences-core:1.0.0")
 
 
-    //Dagger - Hilt
+    // Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.48")
     ksp("com.google.dagger:hilt-compiler:2.48.1")
 
@@ -88,27 +105,37 @@ dependencies {
 //    implementation("androidx.room:room-paging:2.5.2")
 
     // Paging
-//    implementation("androidx.paging:paging-runtime-ktx:3.1.1")
-//    implementation("androidx.paging:paging-compose:1.0.0-alpha18")
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation("androidx.paging:paging-compose:3.3.0-alpha02")
+
+    // Moshi
+    implementation("com.squareup.moshi:moshi-kotlin:1.12.0")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.12.0")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.retrofit2:adapter-rxjava3:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
+    implementation("com.slack.eithernet:eithernet:1.8.0")
+    implementation("com.github.haroldadmin:NetworkResponseAdapter:5.0.0")
+
+    // OkHttp
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.3")
+    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3")
 
     // Compose
     implementation(platform("androidx.compose:compose-bom:2023.06.01"))
     implementation("androidx.compose.ui:ui:1.5.4")
     implementation("androidx.compose.ui:ui-graphics:1.5.4")
     implementation("androidx.compose.ui:ui-tooling-preview:1.6.0-beta02")
-    implementation("androidx.compose.material3:material3:1.1.2")
+    implementation("androidx.compose.material3:material3:1.2.0-beta02")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
     implementation("androidx.navigation:navigation-compose:2.7.5")
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
-    implementation("androidx.compose.foundation:foundation:1.5.4")
+    implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.runtime:runtime:1.5.4")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     implementation(platform("androidx.compose:compose-bom:2022.10.00"))
@@ -138,7 +165,9 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:20.7.0")
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
+    implementation(platform("com.google.firebase:firebase-bom:32.7.0"))
+        // Dependency for the Firebase SDK for Google Analytics
+    implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
 

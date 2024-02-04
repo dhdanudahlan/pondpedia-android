@@ -1,7 +1,5 @@
 package com.pondpedia.android.pondpedia.presentation.ui.auth.sign_up
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,67 +12,70 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.Lightbulb
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.PhoneAndroid
-import androidx.compose.material.icons.filled.Work
+import androidx.compose.material.icons.outlined.Lightbulb
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.PhoneAndroid
+import androidx.compose.material.icons.outlined.Work
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.pondpedia.android.pondpedia.R
-import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_up.composable.InformationSourceTabScreen
-import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_up.composable.OccupationTabScreen
+import com.pondpedia.android.pondpedia.components.BackIcon
+import com.pondpedia.android.pondpedia.components.CommonDialog
+import com.pondpedia.android.pondpedia.components.LargeSpacer
+import com.pondpedia.android.pondpedia.components.LoadingDialog
+import com.pondpedia.android.pondpedia.core.util.Utils.Companion.showMessage
+import com.pondpedia.android.pondpedia.presentation.theme.PondPediaCustomTheme
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.composable.MyEmailTextField
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.composable.MyOutlineDropdownTextField
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.composable.MyOutlineTextField
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.composable.MyPasswordTextField
 import com.pondpedia.android.pondpedia.presentation.ui.auth.components.data.AuthState
 import com.pondpedia.android.pondpedia.presentation.ui.auth.components.util.AuthEvent
-import com.pondpedia.android.pondpedia.presentation.ui.auth.components.util.AuthEvent.*
-import com.pondpedia.android.pondpedia.presentation.theme.PondPediaCustomTheme
-import com.pondpedia.android.pondpedia.presentation.theme.White
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.util.AuthEvent.SetEmail
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.util.AuthEvent.SetInformationSource
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.util.AuthEvent.SetName
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.util.AuthEvent.SetOccupation
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.util.AuthEvent.SetPassword
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.util.AuthEvent.SetPhoneNumber
+import com.pondpedia.android.pondpedia.presentation.ui.auth.components.util.AuthEvent.SetRepeatedPassword
+import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_up.composable.InformationSourceTabScreen
+import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_up.composable.OccupationTabScreen
+import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_up.composable.SendEmailVerification
+import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_up.composable.SignUp
+import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_up.viewmodel.SignUpViewModel
 
 @Composable
 fun SignUpScreen(
     state: AuthState,
     navigateToAuthScreen: () -> Unit,
     navigateToSignInScreen: () -> Unit,
-    onEmailPasswordSignUpClick: (String, String) -> Unit,
     onEvent: (AuthEvent) -> Unit,
 ) {
     PondPediaCustomTheme (darkTheme = false) {
@@ -82,7 +83,6 @@ fun SignUpScreen(
             state = state,
             navigateToAuthScreen = navigateToAuthScreen,
             navigateToSignInScreen = navigateToSignInScreen,
-            onEmailPasswordSignUpClick = onEmailPasswordSignUpClick,
             onEvent = onEvent
         )
     }
@@ -90,30 +90,131 @@ fun SignUpScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreenLightMode(
+    viewModel: SignUpViewModel = hiltViewModel(),
     state: AuthState,
     navigateToAuthScreen: () -> Unit,
     navigateToSignInScreen: () -> Unit,
-    onEmailPasswordSignUpClick: (String, String) -> Unit,
     onEvent: (AuthEvent) -> Unit,
 ) {
     val context = LocalContext.current
 
-    var name by rememberSaveable { mutableStateOf(state.name) }
+//    LaunchedEffect(key1 = state.signInError) {
+//        state.signInError?.let { error ->
+//            Toast.makeText(
+//                context,
+//                error,
+//                Toast.LENGTH_LONG
+//            ).show()
+//        }
+//    }
 
-    var email by rememberSaveable { mutableStateOf(state.email) }
+    LoadingDialog(
+        isShowDialog = state.isSignUpLoading
+    )
 
-    var phoneNumber by rememberSaveable { mutableStateOf(state.phoneNumber) }
+    CommonDialog(
+        title = if (state.isSignUpError) {
+            "Terjadi Kesalahan"
+        } else {
+            "Sukses"
+        },
+        message = if (state.isSignUpError) {
+            state.signUpError ?: "Terjadi Kesalahan"
+        } else {
+            state.signUpSuccess ?: "Berhasil daftar, silahkan cek email anda untuk verifikasi"
+        },
+        isShowDialog = state.isSignUpError || state.isSignUpSuccessful,
+        onDismissRequest = {
+            if (!state.isSignUpError) {
+                navigateToSignInScreen()
+            } else {
+                onEvent(AuthEvent.DismissSignUpCommonDialog)
+            }
+        }
+    )
 
-    var password by rememberSaveable { mutableStateOf(state.password) }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
-    var repeatedPassword by rememberSaveable { mutableStateOf(state.repeatedPassword) }
+    var name by rememberSaveable(
+        stateSaver = TextFieldValue.Saver,
+        init = {
+            mutableStateOf(
+                value = TextFieldValue(
+                    text = state.name
+                )
+            )
+        }
+    )
 
-    var occupation by rememberSaveable { mutableStateOf(state.occupation) }
+    var email by rememberSaveable(
+        stateSaver = TextFieldValue.Saver,
+        init = {
+            mutableStateOf(
+                value = TextFieldValue(
+                    text = state.email
+                )
+            )
+        }
+    )
 
-    var informationSource by rememberSaveable { mutableStateOf(state.informationSource) }
+    var phoneNumber by rememberSaveable(
+        stateSaver = TextFieldValue.Saver,
+        init = {
+            mutableStateOf(
+                value = TextFieldValue(
+                    text = state.phoneNumber
+                )
+            )
+        }
+    )
+
+    var password by rememberSaveable(
+        stateSaver = TextFieldValue.Saver,
+        init = {
+            mutableStateOf(
+                value = TextFieldValue(
+                    text = state.password
+                )
+            )
+        }
+    )
+
+    var repeatedPassword by rememberSaveable(
+        stateSaver = TextFieldValue.Saver,
+        init = {
+            mutableStateOf(
+                value = TextFieldValue(
+                    text = state.repeatedPassword
+                )
+            )
+        }
+    )
+
+    var occupation by rememberSaveable(
+        stateSaver = TextFieldValue.Saver,
+        init = {
+            mutableStateOf(
+                value = TextFieldValue(
+                    text = state.occupation
+                )
+            )
+        }
+    )
+
+    var informationSource by rememberSaveable(
+        stateSaver = TextFieldValue.Saver,
+        init = {
+            mutableStateOf(
+                value = TextFieldValue(
+                    text = state.informationSource
+                )
+            )
+        }
+    )
 
     var acceptedTerms by rememberSaveable { mutableStateOf(state.acceptedTerms) }
 
+    val keyboard = LocalSoftwareKeyboardController.current
 
     val sheetState = rememberModalBottomSheetState()
 
@@ -125,32 +226,19 @@ fun SignUpScreenLightMode(
         mutableStateOf(false)
     }
 
-    LaunchedEffect(key1 = state.signInError) {
-        state.signInError?.let { error ->
-            Toast.makeText(
-                context,
-                error,
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
-
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text(text = stringResource(R.string.title_signup_page))
+                    Text(
+                        text = stringResource(R.string.title_signup_page)
+                    )
                 },
                 navigationIcon = {
-                    IconButton(onClick = navigateToAuthScreen) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
+                    BackIcon(
+                        navigateBack = navigateToAuthScreen
+                    )
                 },
                 scrollBehavior = scrollBehavior
             )
@@ -180,369 +268,108 @@ fun SignUpScreenLightMode(
 
                         Spacer(modifier = Modifier.height(32.dp))
 
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.CenterStart
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                horizontalAlignment = Alignment.Start
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.name_label),
-                                    maxLines = 1,
+                        MyOutlineTextField(
+                            textFieldValue = name,
+                            onTextFieldValueChange = { newValue ->
+                                name = newValue
+                                onEvent(SetName(newValue.text))
+                            },
+                            isErrorMessage = state.nameError,
+                            label = stringResource(R.string.name_label),
+                            imageVector = Icons.Outlined.Person
+                        )
 
-                                )
-                                TextField(
-                                    value = name,
-                                    onValueChange = { 
-                                        name = it
-                                        onEvent(SetName(it))
-                                    },
-                                    placeholder = { Text(stringResource(R.string.name_label)) },
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .alpha(.6f),
-                                    shape = RoundedCornerShape(8.dp),
-                                    colors = TextFieldDefaults.colors(
-                                        focusedContainerColor = White,
-                                        unfocusedContainerColor = White,
-                                        disabledContainerColor = White,
-                                    ),
-                                    leadingIcon = {
-                                        Icon(
-                                            imageVector = Icons.Default.Person,
-                                            contentDescription = null
-                                        )
-                                    },
-                                    isError = state.nameError != null,
-                                    supportingText = {
-                                        if (state.nameError != null) {
-                                            Text(text = state.nameError)
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
+                        LargeSpacer()
 
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.CenterStart
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                horizontalAlignment = Alignment.Start
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.email_label),
-                                    maxLines = 1,
-                                )
-                                TextField(
-                                    value = email,
-                                    onValueChange = {
-                                        email = it
-                                        onEvent(SetEmail(it))
-                                    },
-                                    placeholder = { Text(stringResource(R.string.email_label)) },
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .alpha(.6f),
-                                    shape = RoundedCornerShape(8.dp),
-                                    colors = TextFieldDefaults.colors(
-                                        focusedContainerColor = White,
-                                        unfocusedContainerColor = White,
-                                        disabledContainerColor = White,
-                                    ),
-                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                                    leadingIcon = {
-                                        Icon(
-                                            imageVector = Icons.Default.Email,
-                                            contentDescription = null
-                                        )
-                                    },
-                                    isError = state.emailError != null,
-                                    supportingText = {
-                                        if (state.emailError != null) {
-                                            Text(text = state.emailError)
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
+                        MyEmailTextField(
+                            email = email,
+                            onEmailValueChange = { newValue ->
+                                email = newValue
+                                onEvent(SetEmail(newValue.text))
+                            },
+                            isErrorMessage = state.emailError
+                        )
 
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.CenterStart
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                horizontalAlignment = Alignment.Start
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.number_label),
-                                    maxLines = 1,
-                                )
-                                TextField(
-                                    value = phoneNumber,
-                                    onValueChange = {
-                                        phoneNumber = it
-                                        onEvent(SetPhoneNumber(it))
-                                    },
-                                    placeholder = { Text(stringResource(R.string.number_label)) },
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .alpha(.6f),
-                                    shape = RoundedCornerShape(8.dp),
-                                    colors = TextFieldDefaults.colors(
-                                        focusedContainerColor = White,
-                                        unfocusedContainerColor = White,
-                                        disabledContainerColor = White,
-                                    ),
-                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                    leadingIcon = {
-                                        Icon(
-                                            imageVector = Icons.Default.PhoneAndroid,
-                                            contentDescription = null
-                                        )
-                                    },
-                                    isError = state.phoneNumberError != null,
-                                    supportingText = {
-                                        if (state.phoneNumberError != null) {
-                                            Text(text = state.phoneNumberError)
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
+                        LargeSpacer()
+
+                        MyOutlineTextField(
+                            textFieldValue = phoneNumber,
+                            onTextFieldValueChange = { newValue ->
+                                phoneNumber = newValue
+                                onEvent(SetPhoneNumber(newValue.text))
+                            },
+                            isErrorMessage = state.phoneNumberError,
+                            label = stringResource(R.string.number_label),
+                            imageVector = Icons.Outlined.PhoneAndroid,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Done
+                            )
+                        )
+
+                        LargeSpacer()
+
+                        MyPasswordTextField(
+                            password = password,
+                            onPasswordValueChange = { newValue ->
+                                password = newValue
+                                onEvent(SetPassword(newValue.text))
+                            },
+                            isErrorMessage = state.passwordError
+                        )
+
+                        LargeSpacer()
+
+                        MyPasswordTextField(
+                            password = repeatedPassword,
+                            onPasswordValueChange = { newValue ->
+                                repeatedPassword = newValue
+                                onEvent(SetRepeatedPassword(newValue.text))
+                            },
+                            isErrorMessage = state.repeatedPasswordError
+                        )
+
+                        LargeSpacer()
+
+                        MyOutlineDropdownTextField(
+                            textFieldValue = occupation,
+                            onTextFieldValueChange = { newValue ->
+                                occupation = newValue
+                                onEvent(SetOccupation(newValue.text))
+                            },
+                            onExpandedChange = { newValue ->
+                                isOccupationSheetOpen = newValue
+                            },
+                            isExpanded = isOccupationSheetOpen,
+                            isErrorMessage = state.occupationError,
+                            label = stringResource(id = R.string.occupation_label),
+                            imageVector = Icons.Outlined.Work
+                        )
+
+                        LargeSpacer()
+
+                        MyOutlineDropdownTextField(
+                            textFieldValue = informationSource,
+                            onTextFieldValueChange = { newValue ->
+                                informationSource = newValue
+                                onEvent(SetInformationSource(newValue.text))
+                            },
+                            onExpandedChange = { newValue ->
+                                isInformationSourceOpen = newValue
+                            },
+                            isExpanded = isInformationSourceOpen,
+                            isErrorMessage = state.informationSourceError,
+                            label = stringResource(id = R.string.information_source_label),
+                            imageVector = Icons.Outlined.Lightbulb
+                        )
+
+                        LargeSpacer()
 
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth(),
                             contentAlignment = Alignment.CenterStart
                         ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                horizontalAlignment = Alignment.Start
-                            ) {
-                                Text(
-                                    text = stringResource(id = R.string.password_label),
-                                    maxLines = 1,
-                                )
-                                TextField(
-                                    value = password,
-                                    onValueChange = {
-                                        password = it
-                                        onEvent(SetPassword(it))
-                                    },
-                                    placeholder = { Text(stringResource(R.string.password_label)) },
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .alpha(.6f),
-                                    shape = RoundedCornerShape(8.dp),
-                                    colors = TextFieldDefaults.colors(
-                                        focusedContainerColor = White,
-                                        unfocusedContainerColor = White,
-                                        disabledContainerColor = White,
-                                    ),
-                                    visualTransformation = PasswordVisualTransformation(),
-                                    leadingIcon = {
-                                        Icon(
-                                            imageVector = Icons.Default.Lock,
-                                            contentDescription = null
-                                        )
-                                    },
-                                    isError = state.passwordError != null,
-                                    supportingText = {
-                                        if (state.passwordError != null) {
-                                            Text(text = state.passwordError)
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.CenterStart
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                horizontalAlignment = Alignment.Start
-                            ) {
-                                Text(
-                                    text = stringResource(id = R.string.password_confirmation_label),
-                                    maxLines = 1,
-                                )
-                                TextField(
-                                    value = repeatedPassword,
-                                    onValueChange = {
-                                        repeatedPassword = it
-                                        onEvent(SetRepeatedPassword(it))
-                                    },
-                                    placeholder = { Text(stringResource(R.string.password_confirmation_label)) },
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .alpha(.6f),
-                                    shape = RoundedCornerShape(8.dp),
-                                    colors = TextFieldDefaults.colors(
-                                        focusedContainerColor = White,
-                                        unfocusedContainerColor = White,
-                                        disabledContainerColor = White,
-                                    ),
-                                    visualTransformation = PasswordVisualTransformation(),
-                                    leadingIcon = {
-                                        Icon(
-                                            imageVector = Icons.Default.Lock,
-                                            contentDescription = null
-                                        )
-                                    },
-                                    isError = state.repeatedPasswordError != null,
-                                    supportingText = {
-                                        if (state.repeatedPasswordError != null) {
-                                            Text(text = state.repeatedPasswordError)
-                                        }
-                                    }
-                                )
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.CenterStart
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                horizontalAlignment = Alignment.Start
-                            ) {
-                                Text(
-                                    text = stringResource(id = R.string.occupation_label),
-                                    maxLines = 1,
-                                )
-                                ExposedDropdownMenuBox(
-                                    expanded = isOccupationSheetOpen,
-                                    onExpandedChange = { newValue ->
-                                        isOccupationSheetOpen = newValue
-                                    }
-                                ) {
-                                    TextField(
-                                        value = occupation,
-                                        onValueChange = {
-                                            occupation = it
-                                            onEvent(SetOccupation(it))
-                                        },
-                                        placeholder = { Text(stringResource(R.string.choose_label)) },
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .alpha(.6f)
-                                            .menuAnchor(),
-                                        shape = RoundedCornerShape(8.dp),
-                                        colors = TextFieldDefaults.colors(
-                                            focusedContainerColor = White,
-                                            unfocusedContainerColor = White,
-                                            disabledContainerColor = White,
-                                        ),
-                                        readOnly = true,
-                                        leadingIcon = {
-                                            Icon(
-                                                imageVector = Icons.Default.Work,
-                                                contentDescription = null
-                                            )
-                                        },
-                                        trailingIcon = {
-                                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isOccupationSheetOpen)
-                                        },
-                                        isError = state.occupationError != null,
-                                        supportingText = {
-                                            if (state.occupationError != null) {
-                                                Text(text = state.occupationError)
-                                            }
-                                        }
-                                    )
-                                }
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.CenterStart
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                horizontalAlignment = Alignment.Start
-                            ) {
-                                Text(
-                                    text = stringResource(id = R.string.information_source_label),
-                                    maxLines = 2,
-                                )
-                                ExposedDropdownMenuBox(
-                                    expanded = isInformationSourceOpen,
-                                    onExpandedChange = { newValue ->
-                                        isInformationSourceOpen = newValue
-                                    }
-                                ) {
-                                    TextField(
-                                        value = informationSource,
-                                        onValueChange = {
-                                            informationSource = it
-                                            onEvent(SetInformationSource(it))
-                                        },
-                                        placeholder = { Text(stringResource(R.string.choose_label)) },
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .alpha(.6f)
-                                            .menuAnchor(),
-                                        shape = RoundedCornerShape(8.dp),
-                                        colors = TextFieldDefaults.colors(
-                                            focusedContainerColor = White,
-                                            unfocusedContainerColor = White,
-                                            disabledContainerColor = White,
-                                        ),
-                                        readOnly = true,
-                                        leadingIcon = {
-                                            Icon(
-                                                imageVector = Icons.Default.Lightbulb,
-                                                contentDescription = null
-                                            )
-                                        },
-                                        trailingIcon = {
-                                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isInformationSourceOpen)
-                                        },
-                                        isError = state.informationSourceError != null,
-                                        supportingText = {
-                                            if (state.informationSourceError != null) {
-                                                Text(text = state.informationSourceError)
-                                            }
-                                        }
-                                    )
-                                }
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-
-//                        Box(
-//                            modifier = Modifier
-//                                .fillMaxWidth(),
-//                            contentAlignment = Alignment.CenterStart
-//                        ) {
 //                            Column(
 //                                modifier = Modifier
 //                                    .fillMaxSize(),
@@ -573,10 +400,10 @@ fun SignUpScreenLightMode(
 //                                    )
 //                                }
 //                            }
-//                        }
+                        }
                     }
                 }
-                Spacer(modifier = Modifier.height(16.dp))
+                LargeSpacer()
 
                 Spacer(modifier = Modifier.weight(1f))
                 Box(
@@ -588,13 +415,10 @@ fun SignUpScreenLightMode(
                         Button(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
-                                /*onEmailPasswordSignUpClick(
-                                    email,
-                                    password
-                                )*/
-
-                                Log.d("SignUpScreen", "Button is Clicked")
-                                onEvent(SignUp)
+                                keyboard?.hide()
+                                onEvent(AuthEvent.SignUp)
+                                //viewModel.signUpWithEmailAndPassword(email.text, password.text, name.text)
+                                onEvent(AuthEvent.Reset)
                             }
                         ) {
                             Text(text = stringResource(id = R.string.signup))
@@ -634,7 +458,7 @@ fun SignUpScreenLightMode(
             ) {
                 OccupationTabScreen(
                     onClick = { selectedItem ->
-                        occupation = selectedItem
+                        occupation = TextFieldValue(selectedItem)
                         onEvent(SetOccupation(selectedItem))
                         isOccupationSheetOpen = false
                     }
@@ -651,7 +475,7 @@ fun SignUpScreenLightMode(
             ) {
                 InformationSourceTabScreen(
                     onClick = { selectedItem ->
-                        informationSource = selectedItem
+                        informationSource = TextFieldValue(selectedItem)
                         onEvent(SetInformationSource(selectedItem))
                         isInformationSourceOpen = false
                     }
@@ -659,6 +483,18 @@ fun SignUpScreenLightMode(
             }
         }
     }
+
+    val signUpSuccessMessage = "${stringResource(R.string.signup_success)} ${stringResource(R.string.verify_email_message)}"
+    SignUp(
+        sendEmailVerification = {
+            viewModel.sendEmailVerification()
+        },
+        showVerifyEmailMessage = {
+            showMessage(context, signUpSuccessMessage)
+        }
+    )
+
+    SendEmailVerification()
 }
 
 @PreviewLightDark
@@ -669,8 +505,7 @@ fun SignUpPreview() {
             state = AuthState(),
             navigateToAuthScreen = {},
             navigateToSignInScreen = {},
-            onEmailPasswordSignUpClick = { _, _ -> },
-            onEvent = { event ->
+            onEvent = { _ ->
 
             }
         )

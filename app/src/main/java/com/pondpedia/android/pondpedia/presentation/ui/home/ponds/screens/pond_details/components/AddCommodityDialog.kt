@@ -110,10 +110,6 @@ fun AddCommodityDialog(
                 .fillMaxWidth()
         ) {
 
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Tambahkan Komoditas", fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colorScheme.onBackground, fontSize = 20.sp)
-            Spacer(modifier = Modifier.height(8.dp))
-
             ExposedDropdownMenuBox(
                 expanded = showDatePicker,
                 onExpandedChange = { newValue ->

@@ -5,6 +5,7 @@ import androidx.room.PrimaryKey
 import com.pondpedia.android.pondpedia.core.util.DateGenerator
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Pond
 import java.time.LocalDateTime
+import java.util.Locale
 
 @Entity(tableName = "pond_table")
 data class PondEntity(
@@ -30,7 +31,7 @@ data class PondEntity(
 
     val updatedDate: String = DateGenerator.getCurrentDateTime(),
 
-    val farmerId: Long,
+    val farmerId: String,
 ) {
     fun toPond(): Pond {
         return Pond(
@@ -38,8 +39,9 @@ data class PondEntity(
             name = name,
             area = area.toString(),
             depth = depth.toString(),
-            pondType = pondType,
-            waterType = waterType,
+            pondType = pondType.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() },
+            waterType = waterType.split("_").joinToString(" ") { it.replaceFirstChar { if (it.isLowerCase()) it.titlecase(
+                Locale.ROOT) else it.toString() } },
             location = location,
             description = description,
             createdDate = createdDate,

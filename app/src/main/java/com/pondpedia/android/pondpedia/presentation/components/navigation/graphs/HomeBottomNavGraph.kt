@@ -12,7 +12,9 @@ import androidx.navigation.compose.composable
 import com.pondpedia.android.pondpedia.presentation.Graph
 import com.pondpedia.android.pondpedia.presentation.PondPediaAppState
 import com.pondpedia.android.pondpedia.presentation.ui.home.components.Screens
-import com.pondpedia.android.pondpedia.presentation.ui.home.menu.screens.MenuScreen
+import com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.ProfileScreen
+import com.pondpedia.android.pondpedia.presentation.ui.home.more.screens.MoreScreen
+import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.AddPondScreen
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsEvent
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsState
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.screens.PondsScreen
@@ -23,6 +25,7 @@ fun HomeBottomNavGraph(
     pondsState: PondsState,
     onEvent: (PondsEvent) -> Unit,
     startDestination: String = Screens.Ponds.route,
+    navigateToAuthScreen: () -> Unit
 ) {
     val navController = homeState.navController
 
@@ -41,7 +44,10 @@ fun HomeBottomNavGraph(
         updatesNavGraph(homeState = homeState)
         menuNavGraph(homeState = homeState)
         exploreNavGraph(homeState = homeState)
-        moreNavGraph(homeState = homeState)
+        moreNavGraph(
+            homeState = homeState,
+            navigateToAuthScreen = navigateToAuthScreen
+        )
 
         pondNavGraph(
             homeState = homeState,
@@ -51,6 +57,12 @@ fun HomeBottomNavGraph(
             setDisplayActionScreen = {},
             setDisplayActionMenu = {}
         )
+        addPondNavGraph(
+            homeState = homeState,
+            pondsState = pondsState,
+            onEvent = onEvent,
+        )
+
     }
 }
 
@@ -95,11 +107,39 @@ fun NavGraphBuilder.exploreNavGraph(
 }
 fun NavGraphBuilder.moreNavGraph(
     homeState: PondPediaAppState,
+    navigateToAuthScreen: () -> Unit
 ) {
+    val navController = homeState.navController
     composable(route = Screens.More.route) {
+        MoreScreen(
+            onRouteChanged = { route ->
+                navController.navigate(route)
+            },
+        )
+    }
+    composable(route = Screens.Profile.route) {
+        ProfileScreen(
+            navigateToAuthScreen = navigateToAuthScreen,
+        )
+    }
+    composable(route = Screens.Settings.route) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(text = "Under Construction...")
+            Text(text = "Settings under Construction...")
         }
+    }
+}
+fun NavGraphBuilder.addPondNavGraph(
+    homeState: PondPediaAppState,
+    pondsState: PondsState,
+    onEvent: (PondsEvent) -> Unit,
+) {
+    val navController = homeState.navController
+    composable(route = Screens.Add.route) {
+        AddPondScreen(
+            pondsState = pondsState,
+            onEvent = onEvent,
+            onNavigateToDestination = homeState::navigateToHomeScreenDestination,
+        )
     }
 }
 

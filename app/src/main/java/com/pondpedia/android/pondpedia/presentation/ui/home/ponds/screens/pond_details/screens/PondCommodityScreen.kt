@@ -1,5 +1,6 @@
 package com.pondpedia.android.pondpedia.presentation.ui.home.ponds.screens.pond_details.screens
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,14 +42,15 @@ fun PondCommodityScreen(
     pondsState: PondsState,
     pondDetailsState: PondDetailsState,
     onEvent: (PondDetailsEvent) -> Unit,
-    innerPadding: PaddingValues
+    innerPadding: PaddingValues,
+    onNavigateToAddCommodityScreen: () -> Unit
 ) {
     val listOfCommodity = pondDetailsState.commodity
     val listOfRecords = listOf(
         "Growth Records",
         "Health Records",
     )
-    var selectedCommodityId by rememberSaveable { mutableStateOf(0.toLong())  }
+    var selectedCommodityId by rememberSaveable { mutableStateOf(listOfCommodity[0].commodityId)  }
     var commodityTabIndex by rememberSaveable { mutableStateOf(0) }
     var selectedRecordsTab by rememberSaveable { mutableStateOf(listOfRecords.first()) }
     var recordsTabIndex by rememberSaveable { mutableStateOf(0) }
@@ -70,6 +72,7 @@ fun PondCommodityScreen(
                         text = { Text(text = tab.name, fontSize = 12.sp, maxLines = 1) },
                         selected = selectedCommodityId == (tab.commodityId),
                         onClick = {
+                            Log.d("PondCommodityScreen", "${tab.commodityId}")
                             selectedCommodityId = tab.commodityId
                             commodityTabIndex = index
                         },
@@ -78,7 +81,10 @@ fun PondCommodityScreen(
             } else {
                 Tab(
                     selected = true,
-                    onClick = { onEvent(PondDetailsEvent.ShowDialog) }
+                    onClick = {
+                        /*onEvent(PondDetailsEvent.ShowDialog)*/
+                        onNavigateToAddCommodityScreen()
+                    }
                 ) {
                     Icon(imageVector = Icons.Outlined.Add, contentDescription = "Add Commodity")
                 }
@@ -103,6 +109,7 @@ fun PondCommodityScreen(
                 onEvent(PondDetailsEvent.SetCommodityId(selectedCommodityId))
                 CommodityGrowthScreen(pondDetailsState, innerPadding)
             }
+
             1 -> {
                 onEvent(PondDetailsEvent.SetCommodityId(selectedCommodityId))
                 CommodityHealthScreen(pondDetailsState, innerPadding)
@@ -119,11 +126,11 @@ fun CommodityGrowthScreen(
 ) {
     val listOfRecords = pondDetailsState.commodityGrowthRecords.sortedBy { it.date }
     val scrollState = rememberScrollState()
-    var listOfRecordsReversed = listOfRecords.reversed()
-    Row(
+    val listOfRecordsReversed = listOfRecords.reversed()
+    Box(
         Modifier
             .fillMaxSize()
-            .padding(innerPadding)
+//            .padding(innerPadding)
     ) {
         Column(
             Modifier
@@ -173,7 +180,7 @@ fun CommodityHealthScreen(
     val listOfRecords = pondDetailsState.commodityHealthRecords.sortedBy { it.date }
     val scrollState = rememberScrollState()
     var listOfRecordsReversed = listOfRecords.reversed()
-    Row(
+    Box(
         Modifier
             .fillMaxSize()
             .padding(innerPadding)

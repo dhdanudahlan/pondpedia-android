@@ -19,13 +19,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.pondpedia.android.pondpedia.domain.model.ai_chat.ChatResponse
+import com.pondpedia.android.pondpedia.domain.model.ai_chat.Chat
 import com.pondpedia.android.pondpedia.presentation.theme.PondPediaCustomTheme
 
 
 @Composable
 fun ChatInputItem(
-    chatResponse: ChatResponse,
+    chat: Chat,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -44,14 +44,14 @@ fun ChatInputItem(
                 .height(IntrinsicSize.Max)
                 .padding(16.dp)
         ) {
-            Text(text = chatResponse.input)
+            Text(text = chat.text)
         }
     }
 }
 
 @Composable
 fun ChatResponseItem(
-    chatResponse: ChatResponse,
+    chatResponse: Chat,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -72,7 +72,8 @@ fun ChatResponseItem(
         ) {
             Icon(imageVector = Icons.Default.PersonPin, contentDescription = "AI Avatar")
             Spacer(modifier = Modifier.width(16.dp))
-            Text(text = chatResponse.response)
+            Text(text = chatResponse.text
+            )
         }
     }
 }
@@ -80,29 +81,29 @@ fun ChatResponseItem(
 @Preview
 @Composable
 fun ChatResponseItemPreview() {
-    PondPediaCustomTheme {
-        ChatResponseItem(chatResponse = ChatResponse(
+    /*PondPediaCustomTheme {
+        ChatResponseItem(chatResponse = C(
             chatId =  1,
             username = "User",
             input = "Hello!",
             response = "Hello to you too! I hope you have a great day!"
         )
         )
-    }
+    }*/
 }
 @Preview
 @Composable
 fun ChatInputItemPreview() {
-    PondPediaCustomTheme {
+    /*PondPediaCustomTheme {
         ChatInputItem(
-            chatResponse = ChatResponse(
+            chat = Chat(
                 chatId =  1,
                 username = "User",
                 input = "Hello!",
                 response = "Hello to you too! I hope you have a great day!"
             )
         )
-    }
+    }*/
 }
 
 @Preview

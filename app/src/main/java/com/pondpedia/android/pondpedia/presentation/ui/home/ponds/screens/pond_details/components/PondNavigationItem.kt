@@ -68,6 +68,15 @@ sealed class PondNavigationItem (
         hasUnread = false,
         badgeCount = null,
     )
+    data object AddCommodity: PondNavigationItem(
+        route = "POND_ADD_COMMODITY",
+        labelTextId = R.string.pond_details_add_commodity,
+        titleTextId = R.string.pond_details_add_commodity,
+        selectedIcon = Icons.Filled.NoteAdd,
+        unselectedIcon = Icons.Outlined.NoteAdd,
+        hasUnread = false,
+        badgeCount = null,
+    )
 
 }
 

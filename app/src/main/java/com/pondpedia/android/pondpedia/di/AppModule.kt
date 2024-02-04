@@ -2,6 +2,7 @@ package com.pondpedia.android.pondpedia.di
 
 import android.app.Application
 import android.content.Context
+import androidx.room.Room
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -10,22 +11,35 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.pondpedia.android.pondpedia.R
+import com.pondpedia.android.pondpedia.core.app.PondPediaApplication
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_IN_REQUEST
 import com.pondpedia.android.pondpedia.core.util.Constants.SIGN_UP_REQUEST
+import com.pondpedia.android.pondpedia.core.util.manager.ThreadManager
+import com.pondpedia.android.pondpedia.core.util.manager.TokenManager
+import com.pondpedia.android.pondpedia.data.local.database.PondPediaDatabase
+import com.pondpedia.android.pondpedia.data.remote.api.PondPediaApiService
+import com.pondpedia.android.pondpedia.data.remote.api.PondPediaApiService.Companion.BASE_URL
 import com.pondpedia.android.pondpedia.data.repository.AuthRepositoryImpl
 import com.pondpedia.android.pondpedia.data.repository.ProfileRepositoryImpl
 import com.pondpedia.android.pondpedia.domain.repository.AuthRepository
 import com.pondpedia.android.pondpedia.domain.repository.ProfileRepository
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -50,10 +64,9 @@ class AppModule {
         .setGoogleIdTokenRequestOptions(
             BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                 .setSupported(true)
-                .setServerClientId(app.getString(R.string.web_client_id))
+                .setServerClientId(app.getString(R.string.web_client_id_google))
                 .setFilterByAuthorizedAccounts(true)
                 .build())
-        .setAutoSelectEnabled(true)
         .build()
 
     @Provides
@@ -64,7 +77,7 @@ class AppModule {
         .setGoogleIdTokenRequestOptions(
             BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                 .setSupported(true)
-                .setServerClientId(app.getString(R.string.web_client_id))
+                .setServerClientId(app.getString(R.string.web_client_id_google))
                 .setFilterByAuthorizedAccounts(false)
                 .build())
         .build()
@@ -73,7 +86,7 @@ class AppModule {
     fun provideGoogleSignInOptions(
         app: Application
     ) = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestIdToken(app.getString(R.string.web_client_id))
+        .requestIdToken(app.getString(R.string.web_client_id_google))
         .requestEmail()
         .build()
 
@@ -91,13 +104,17 @@ class AppModule {
         signInRequest: BeginSignInRequest,
         @Named(SIGN_UP_REQUEST)
         signUpRequest: BeginSignInRequest,
-        db: FirebaseFirestore
+        api: PondPediaApiService,
+        tokenManager: TokenManager,
+        threadManager: ThreadManager
     ): AuthRepository = AuthRepositoryImpl(
         auth = auth,
         oneTapClient = oneTapClient,
         signInRequest = signInRequest,
         signUpRequest = signUpRequest,
-        db = db
+        api = api,
+        tokenManager = tokenManager,
+        threadManager = threadManager
     )
 
     @Provides
@@ -105,11 +122,14 @@ class AppModule {
         auth: FirebaseAuth,
         oneTapClient: SignInClient,
         signInClient: GoogleSignInClient,
-        db: FirebaseFirestore
+        api: PondPediaApiService
+//        db: FirebaseFirestore
     ): ProfileRepository = ProfileRepositoryImpl(
         auth = auth,
         oneTapClient = oneTapClient,
         signInClient = signInClient,
-        db = db
+        api = api
+//        db = db
     )
+
 }

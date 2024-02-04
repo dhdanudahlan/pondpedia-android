@@ -29,9 +29,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.pondpedia.android.pondpedia.R
 import com.pondpedia.android.pondpedia.core.util.StringParser
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondDetailsEvent
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondDetailsState
@@ -40,7 +42,8 @@ import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.vie
 @Composable
 fun AddPondManagementRecordsTabCommodityGrowthScreen(
     pondDetailsState: PondDetailsState,
-    onEvent: (PondDetailsEvent) -> Unit
+    onEvent: (PondDetailsEvent) -> Unit,
+    onNavigateToOverviewScreen: () -> Unit
 ) {
 
     var showDatePicker by remember {
@@ -194,7 +197,7 @@ fun AddPondManagementRecordsTabCommodityGrowthScreen(
             value = age,
             onValueChange = {
                 age = it
-                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsAge(StringParser.toInt(it).toString()))
+                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsAge(StringParser.toIntAbs(it).toString()))
             },
             label = {
                 Text(text = "Umur Komoditas (Hari)")
@@ -217,7 +220,7 @@ fun AddPondManagementRecordsTabCommodityGrowthScreen(
             value = length,
             onValueChange = {
                 length = it
-                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsLength(StringParser.toInt(it).toString()))
+                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsLength(StringParser.toFloatAbs(it).toString()))
             },
             label = {
                 Text(text = "Panjang Komoditas")
@@ -240,7 +243,7 @@ fun AddPondManagementRecordsTabCommodityGrowthScreen(
             value = weight,
             onValueChange = {
                 weight = it
-                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsWeight(StringParser.toInt(it).toString()))
+                onEvent(PondDetailsEvent.SetCommodityGrowthRecordsWeight(StringParser.toFloatAbs(it).toString()))
             },
             label = {
                 Text(text = "Berat Komoditas")
@@ -288,15 +291,20 @@ fun AddPondManagementRecordsTabCommodityGrowthScreen(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
-                enabled = isCommodityExist,
+                enabled = isCommodityExist || validateForm(date, age, length, weight),
                 onClick = {
                     onEvent(PondDetailsEvent.AddCommodityGrowthRecords)
                     reset()
+                    onNavigateToOverviewScreen()
                 }
             ) {
-                Text(text = "Simpan")
+                Text(text = stringResource(R.string.button_save))
             }
         }
 
     }
+}
+
+private fun validateForm(date: String, age: String, length: String, weight: String): Boolean {
+    return !(date.isBlank() || age.isBlank() || length.isBlank() || weight.isBlank())
 }

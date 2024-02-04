@@ -52,7 +52,7 @@ class PondPediaAppState(
             Screens.Details.route -> Screens.Details
             Screens.Update.route -> Screens.Update
             Screens.Analytics.route -> Screens.Analytics
-            Screens.Create.route -> Screens.Create
+            Screens.Add.route -> Screens.Add
             else -> null
         }
 

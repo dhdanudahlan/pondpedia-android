@@ -7,13 +7,17 @@ import androidx.compose.material.icons.filled.Analytics
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Update
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Analytics
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.RotateRight
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -96,10 +100,10 @@ sealed class Screens(
         badgeCount = null,
     )
 
-    data object Create : Screens(
-        route = "POND_CREATE",
-        labelTextId = R.string.pond_create_title,
-        titleTextId = R.string.pond_create_title,
+    data object Add : Screens(
+        route = "POND_ADD",
+        labelTextId = R.string.pond_add_title,
+        titleTextId = R.string.pond_add_title,
         selectedIcon = Icons.Filled.Add,
         unselectedIcon = Icons.Outlined.Add,
         hasUnread = false,
@@ -134,74 +138,24 @@ sealed class Screens(
         hasUnread = false,
         badgeCount = null,
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HomeBottomNavBar(
-    navController: NavHostController,
-) {
-    val screens = listOf(
-        Screens.Ponds,
-        Screens.Updates,
-        Screens.Menu,
-        Screens.Explore,
-        Screens.More,
+    data object Profile: Screens(
+        route = "MORE_PROFILE",
+        labelTextId = R.string.more_profile_label,
+        titleTextId = R.string.more_profile_title,
+        selectedIcon = Icons.Filled.Person,
+        unselectedIcon = Icons.Outlined.Person,
+        hasUnread = false,
+        badgeCount = null,
     )
-
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-
-    var selectedScreenIndex by rememberSaveable {
-        mutableStateOf(0)
-    }
-
-    val bottomBarDestination = screens.any { it.route == currentDestination?. route }
-    if (bottomBarDestination) {
-        NavigationBar {
-            screens.forEachIndexed { index, screen ->
-                if (
-                    currentDestination?.hierarchy?.any {
-                        it.route == screen.route
-                    } == true
-                ) {
-                    selectedScreenIndex = index
-                }
-                NavigationBarItem(
-                    icon = {
-                        BadgedBox(
-                            badge = {
-                                if (screen.badgeCount != null) {
-                                    Text(text = screen.badgeCount.toString())
-                                } else if (screen.hasUnread) {
-                                    Badge()
-                                }
-                            }
-                        ) {
-                            Icon(
-                                imageVector = if (
-                                    selectedScreenIndex == index
-                                ) {
-                                    screen.selectedIcon
-                                } else screen.unselectedIcon,
-                                contentDescription = stringResource(screen.titleTextId)
-                            )
-                        }
-                    },
-                    label = {
-                        Text(text = stringResource(screen.labelTextId))
-                    },
-                    selected = selectedScreenIndex == index,
-                    onClick = {
-                        navController.navigate(screen.route) {
-                            popUpTo(navController.graph.findStartDestination().id)
-                            launchSingleTop = true
-                        }
-                    }
-                )
-            }
-        }
-    }
+    data object Settings: Screens(
+        route = "MORE_SETTINGS",
+        labelTextId = R.string.more_settings_label,
+        titleTextId = R.string.more_settings_title,
+        selectedIcon = Icons.Filled.Settings,
+        unselectedIcon = Icons.Outlined.Settings,
+        hasUnread = false,
+        badgeCount = null,
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

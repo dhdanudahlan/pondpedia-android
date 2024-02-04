@@ -1,259 +1,107 @@
 package com.pondpedia.android.pondpedia.presentation.ui.home.more.screens
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
-import com.pondpedia.android.pondpedia.R
-import com.pondpedia.android.pondpedia.domain.model.auth.Farmer
-import com.pondpedia.android.pondpedia.presentation.theme.Navi
-import com.pondpedia.android.pondpedia.presentation.theme.White
-
-//private val selectedNavItem = BottomNavItem.MORE
+import com.pondpedia.android.pondpedia.presentation.ui.home.more.components.MoreScreens
 
 @Composable
-fun MoreScreenA(
-    userData: Farmer?,
-    onSignOut: () -> Unit
+fun MoreScreen(
+    onRouteChanged: (String) -> Unit,
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        if (userData != null) {
-            AsyncImage(
-                model = if(userData.photoUrl != "GUEST") userData.photoUrl else R.drawable.pondpedia_1,
-                contentDescription = "Profile picture",
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop
-            )
-        } else {
-            AsyncImage(
-                model = R.drawable.pondpedia_1,
-                contentDescription = "Profile picture",
-                modifier = Modifier
-                    .size(150.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Crop
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        if (userData != null) {
-            Text(
-                text = userData.name,
-                textAlign = TextAlign.Center,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.SemiBold,
-            )
-        } else {
-            Text(
-                text = "Guest",
-                textAlign = TextAlign.Center,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.SemiBold,
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        if (userData != null) {
-            Text(
-                text = userData.email,
-                textAlign = TextAlign.Center,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold,
-            )
-        } else {
+    val items = listOf(
+        MoreScreens.Profile,
+        MoreScreens.Settings
+    )
+    val itemCategories = items.map { it.categoryId }.distinct()
+    Spacer(modifier = Modifier.height(8.dp))
+    CategorizedLazyColumn(
+        categories = itemCategories,
+        items = items,
+        onRouteChanged = onRouteChanged
+    )
+    
+}
 
-            Text(
-                text =  "Guest",
-                textAlign = TextAlign.Center,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold,
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            modifier = Modifier,
-            colors = ButtonDefaults.buttonColors(containerColor = Navi, contentColor = White),
-            shape = RoundedCornerShape(8.dp),
-            onClick = onSignOut) {
-            Text(text = "Sign out")
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun CategorizedLazyColumn(
+    categories: List<Int>,
+    items: List<MoreScreens>,
+    modifier: Modifier = Modifier,
+    onRouteChanged: (String) -> Unit,
+) {
+    LazyColumn(
+        modifier = modifier
+    ) {
+        categories.forEach { category ->
+            stickyHeader {
+                Divider()
+            }
+
+            val itemsCategorized = items.filter { it.categoryId == category }
+            items( itemsCategorized ) {item ->
+                CategoryItem(
+                    text = stringResource(item.labelTextId),
+                    route = item.route,
+                    onClickItem = onRouteChanged,
+                    modifier = modifier
+                )
+            }
+
         }
     }
 }
+
 @Composable
-fun MoreScreenB() {
-    Column(
+fun CategoryHeader(
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    /*Text(
+        text = text,
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Bold,
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(16.dp)
+    )*/
+    Divider(
         modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top,
-    ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable{}
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = "General", fontWeight = FontWeight.SemiBold, maxLines = 1)
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "App Language, Notifications",
-                    fontWeight = FontWeight.Normal,
-                    maxLines = 1
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable{}
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = "Appearance", fontWeight = FontWeight.SemiBold, maxLines = 1)
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "Theme, Data & Time Format",
-                    fontWeight = FontWeight.Normal,
-                    maxLines = 1
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable{}
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = "Ponds", fontWeight = FontWeight.SemiBold, maxLines = 1)
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "Category, Prediction",
-                    fontWeight = FontWeight.Normal,
-                    maxLines = 1
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable{}
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = "Explore", fontWeight = FontWeight.SemiBold, maxLines = 1)
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "Information, Images",
-                    fontWeight = FontWeight.Normal,
-                    maxLines = 1
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable{}
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = "Backup and Restore", fontWeight = FontWeight.SemiBold, maxLines = 1)
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "Manual & Automatic Backups",
-                    fontWeight = FontWeight.Normal,
-                    maxLines = 1
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable{}
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = "Security", fontWeight = FontWeight.SemiBold, maxLines = 1)
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "App Lock, Secure Screen, Password",
-                    fontWeight = FontWeight.Normal,
-                    maxLines = 1
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-    }
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(16.dp)
+    )
 }
-
 @Composable
-fun MoreScreenC() {
-}
-
-@Composable
-fun MoreScreenD() {
+fun CategoryItem(
+    text: String,
+    route: String,
+    onClickItem: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = text,
+        fontSize = 14.sp,
+        modifier = modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(16.dp)
+            .clickable { onClickItem(route) }
+    )
 }

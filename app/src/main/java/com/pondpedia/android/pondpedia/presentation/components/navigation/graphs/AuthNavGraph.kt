@@ -1,5 +1,6 @@
 package com.pondpedia.android.pondpedia.presentation.components.navigation.graphs
 
+import android.util.Log
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -9,16 +10,21 @@ import androidx.navigation.NavHostController
 import androidx.navigation.navigation
 import com.google.accompanist.navigation.animation.composable
 import com.pondpedia.android.pondpedia.presentation.Graph
-import com.pondpedia.android.pondpedia.presentation.ui.auth.AuthScreen
-import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_up.SignUpScreen
-import com.pondpedia.android.pondpedia.presentation.ui.auth.components.data.AuthState
+import com.pondpedia.android.pondpedia.presentation.components.navigation.Screen
 import com.pondpedia.android.pondpedia.presentation.theme.PondPediaCustomTheme
+import com.pondpedia.android.pondpedia.presentation.ui.auth.AuthScreen
 import com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel.AuthViewModel
 import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_in.SignInScreen
-import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsViewModel
+import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_in.viewmodel.SignInViewModel
+import com.pondpedia.android.pondpedia.presentation.ui.auth.sign_up.SignUpScreen
+import com.pondpedia.android.pondpedia.presentation.ui.auth.verify_email.VerifyEmailScreen
+import com.pondpedia.android.pondpedia.presentation.ui.home.more.profile.ProfileScreen
 
 @OptIn(ExperimentalAnimationApi::class)
-fun NavGraphBuilder.authNavGraph(navController: NavHostController, viewModel: AuthViewModel, state: AuthState) {
+fun NavGraphBuilder.authNavGraph(
+    navController: NavHostController,
+    viewModel: AuthViewModel,
+) {
 
     navigation(
         route = Graph.AUTHENTICATION,
@@ -46,6 +52,8 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController, viewModel: Au
         ) {
             val authState by viewModel.state.collectAsState()
 
+            val signInViewModel: SignInViewModel = hiltViewModel()
+
             PondPediaCustomTheme ( darkTheme = false ) {
                 SignInScreen(
                     state = authState,
@@ -56,8 +64,13 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController, viewModel: Au
                     navigateToSignUpScreen = {
                         navController.navigate(AuthScreens.SignUp.route)
                     },
-                    onGoogleSignInClick = {},
-                    onEmailPasswordSignInClick = { _, _ -> },
+                    navigateToHomeScreen = {
+//                        navController.navigate(Graph.HOME)
+                        NavigateToHomeScreen(
+                            navController = navController
+                        )
+                    },
+                    viewModel = signInViewModel,
                     onEvent = viewModel::onEvent
                 )
             }
@@ -77,11 +90,39 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController, viewModel: Au
                     navigateToSignInScreen = {
                         navController.navigate(AuthScreens.SignIn.route)
                     },
-                    onEmailPasswordSignUpClick = { _, _ -> },
                     onEvent = viewModel::onEvent
                 )
             }
         }
+        composable(
+            route = Screen.VerifyEmailScreen.route
+        ) {
+            VerifyEmailScreen(
+                navigateToHomeScreen = {
+                    navController.navigate(Graph.HOME) {
+                        popUpTo(navController.graph.id) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
+        }
+
+        composable(
+            route = Screen.ProfileScreen.route
+        ) {
+            ProfileScreen()
+        }
+    }
+
+}
+
+fun NavigateToHomeScreen(
+    navController: NavHostController
+) = navController.navigate(Graph.HOME) {
+    Log.d("MainActivity", "Navigate to Home Screen")
+    popUpTo(navController.graph.id) {
+        inclusive = true
     }
 }
 

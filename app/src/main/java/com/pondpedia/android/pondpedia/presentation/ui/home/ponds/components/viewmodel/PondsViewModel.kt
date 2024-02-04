@@ -3,6 +3,7 @@ package com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.vi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pondpedia.android.pondpedia.core.util.DateGenerator
+import com.pondpedia.android.pondpedia.core.util.Resource
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.CategoryEntity
 import com.pondpedia.android.pondpedia.domain.model.pond_management.Pond
 import com.pondpedia.android.pondpedia.domain.use_case.ponds.AddPondUseCase
@@ -17,6 +18,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -44,10 +46,6 @@ class PondsViewModel @Inject constructor(
     private val _categories = getCategoryListUseCase().map { it }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private val _ponds = combine(_sortType, _selectedCategoryIndex) { sortType, selectedCategoryIndex ->
-        getPondListUseCase(sortType, "-")
-    }.flatMapLatest { it }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private val _pond= _selectedPondId.flatMapLatest { selectedPondId ->
         getPondByIdUseCase(selectedPondId)
@@ -56,17 +54,19 @@ class PondsViewModel @Inject constructor(
 
 
     private val _state = MutableStateFlow(PondsState())
-    private val _stateTwo = combine(_state, _sortType, _selectedCategoryIndex, _categories, _ponds) { state, sortType, selectedCategoryIndex, categories, ponds ->
+    private val _ponds = MutableStateFlow(emptyList<Pond>())
+
+    private val _stateTwo = combine(_state, _sortType, _selectedCategoryIndex, _categories) { state, sortType, selectedCategoryIndex, categories ->
         state.copy(
             sortType = sortType,
             selectedCategoryIndex = selectedCategoryIndex,
             categories = categories,
-            ponds = ponds
         )
     }.stateIn(this.viewModelScope, SharingStarted.WhileSubscribed(5000), PondsState())
-    val state = combine(_stateTwo, _pond) { state, pond ->
+    val state = combine(_stateTwo, _pond, _ponds) { state, pond, ponds ->
         state.copy(
-            pond = pond
+            pond = pond,
+            ponds = ponds
         )
     }.stateIn(this.viewModelScope, SharingStarted.WhileSubscribed(5000), PondsState())
 
@@ -99,26 +99,47 @@ class PondsViewModel @Inject constructor(
                     description = description,
                     createdDate = createdDate,
                     updatedDate = updatedDate,
-                    farmerId = farmerId
+                    farmerId = farmerId.toString()
                 )
 
                 viewModelScope.launch(Dispatchers.IO) {
-                    addPondUseCase(pond = pond )
-                }
+                    _state.update {
+                        it.copy(isLoading = true)
+                    }
+                    val result = addPondUseCase(pond = pond)
+                    _state.update {
+                        it.copy(isLoading = false)
+                    }
 
-                _state.update {
-                    it.copy(
-                        isAddingPond = false,
-                        name = "",
-                        area = "",
-                        depth = "",
-                        pondType = "",
-                        waterType = "",
-                        description = "",
-                        createdDate = DateGenerator.getCurrentDateTime(),
-                        updatedDate = DateGenerator.getCurrentDateTime(),
-                        farmerId = 0,
-                    )
+                    when(result) {
+                        is Resource.Success -> {
+                            _state.update {
+                                it.copy(isSuccess = true)
+                            }
+
+                            _state.update {
+                                it.copy(
+                                    isAddingPond = false,
+                                    name = "",
+                                    area = "",
+                                    depth = "",
+                                    pondType = "",
+                                    waterType = "",
+                                    description = "",
+                                    createdDate = DateGenerator.getCurrentDateTime(),
+                                    updatedDate = DateGenerator.getCurrentDateTime(),
+                                    farmerId = 0,
+                                )
+                            }
+                        }
+
+                        is Resource.Error -> _state.update {
+                            it.copy(isError = true, errorMessage = result.message ?: "Terjadi kesalahan")
+                        }
+
+                        else -> {}
+                    }
+
                 }
             }
             is PondsEvent.DeletePond -> {
@@ -198,6 +219,21 @@ class PondsViewModel @Inject constructor(
                 ) }
             }
 
+            PondsEvent.DismissCommonDialog -> {
+                _state.update { it.copy(
+                    isError = false,
+                    isSuccess = false,
+                    errorMessage = ""
+                ) }
+            }
+
+            PondsEvent.ReFetchPonds -> {
+                viewModelScope.launch {
+                    _ponds.value = combine(_sortType, _selectedCategoryIndex) { sortType, selectedCategoryIndex ->
+                        getPondListUseCase(sortType, "-")
+                    }.flatMapLatest { it }.first()
+                }
+            }
         }
     }
     suspend fun upsertCategory(categoryEntity: CategoryEntity){

@@ -8,11 +8,8 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class PondPediaApplication: Application() {
-    val dataStore: DataStore<Preferences> by preferencesDataStore(name = "pondpedia_datastore")
-    lateinit var pondPediaDataStore: PondPediaDataStore
 
     override fun onCreate() {
         super.onCreate()
-        pondPediaDataStore = PondPediaDataStore(dataStore)
     }
 }

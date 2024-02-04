@@ -38,6 +38,7 @@ import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.vie
 @Composable
 fun HomeScreen(
     homeState: PondPediaAppState = rememberPondPediaAppState(),
+    navigateToAuthScreen: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val homeDestination = homeState.currentHomeScreenDestination
@@ -61,7 +62,8 @@ fun HomeScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     Scaffold(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
@@ -96,7 +98,8 @@ fun HomeScreen(
         },
         floatingActionButton = {
             if (homeState.shouldShowFloatingActionButton) {
-                FloatingActionButtonCompose(onEvent = viewModel::onEvent )
+//                FloatingActionButtonCompose(onEvent = viewModel::onEvent )
+                FloatingActionButtonCompose(onNavigateToDestination = homeState:: navigateToHomeScreenDestination)
             }
         },
     ) { innerPadding ->
@@ -113,6 +116,7 @@ fun HomeScreen(
                     homeState = homeState,
                     pondsState = pondsState,
                     onEvent = viewModel::onEvent,
+                    navigateToAuthScreen = navigateToAuthScreen
                 )
             }
         }

@@ -1,7 +1,10 @@
 package com.pondpedia.android.pondpedia.domain.model.pond_management
 
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toLowerCase
 import com.pondpedia.android.pondpedia.core.util.DateGenerator
 import com.pondpedia.android.pondpedia.data.local.entity.pond_management.PondEntity
+import com.pondpedia.android.pondpedia.data.remote.dto.pond.PondRequest
 import java.time.LocalDateTime
 
 data class Pond(
@@ -26,7 +29,7 @@ data class Pond(
 
     val updatedDate: String = DateGenerator.getCurrentDateTime(),
 
-    val farmerId: Long = 0,
+    val farmerId: String = "",
 ) {
     fun toPondEntity(): PondEntity {
         return PondEntity(
@@ -40,7 +43,20 @@ data class Pond(
             description = description,
             createdDate = createdDate,
             updatedDate = updatedDate,
-            farmerId = farmerId.toLong()
+            farmerId = farmerId
+        )
+    }
+
+    fun toPondRequest(): PondRequest {
+        return PondRequest(
+            name = name,
+            user = farmerId,
+            area = area.toInt(),
+            depth = depth.toInt(),
+            pondType = pondType,
+            waterType = waterType,
+            location = location,
+            description = description,
         )
     }
 }

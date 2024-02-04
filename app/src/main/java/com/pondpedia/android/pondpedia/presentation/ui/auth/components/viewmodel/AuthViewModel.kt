@@ -1,17 +1,13 @@
 package com.pondpedia.android.pondpedia.presentation.ui.auth.components.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.firebase.auth.AuthCredential
-import com.pondpedia.android.pondpedia.domain.model.Response.*
+import com.pondpedia.android.pondpedia.core.util.Resource
+import com.pondpedia.android.pondpedia.data.remote.dto.auth.AuthResponse
+import com.pondpedia.android.pondpedia.data.remote.dto.auth.login.LoginRequest
+import com.pondpedia.android.pondpedia.data.remote.dto.auth.register.RegisterRequest
 import com.pondpedia.android.pondpedia.domain.repository.AuthRepository
-import com.pondpedia.android.pondpedia.domain.repository.OneTapSignInResponse
-import com.pondpedia.android.pondpedia.domain.repository.SignInWithGoogleResponse
 import com.pondpedia.android.pondpedia.domain.use_case.auth.signup.ValidateEmailUseCase
 import com.pondpedia.android.pondpedia.domain.use_case.auth.signup.ValidateInformationSourceUseCase
 import com.pondpedia.android.pondpedia.domain.use_case.auth.signup.ValidateNameUseCase
@@ -30,12 +26,12 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val repo: AuthRepository,
-    val oneTapClient: SignInClient,
     private val validateNameUseCase: ValidateNameUseCase,
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePhoneNumberUseCase: ValidatePhoneNumberUseCase,
@@ -46,28 +42,35 @@ class AuthViewModel @Inject constructor(
     private val validateTermsUseCase: ValidateTermsUseCase
 ): ViewModel() {
 
+    ////////////////////////////| Custom API Authentication |////////////////////////////
+
+    private val _response = MutableStateFlow(AuthResponse())
+    val response = _response.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AuthResponse())
+
+    ////////////////////////////| Custom API Authentication Function |////////////////////////////
+
+    fun googleAuthRegister(){}
+
+    ////////////////////////////| Firebase Email and Password Authentication |////////////////////////////
+
+    init {
+        getAuthState()
+    }
+
+    fun getAuthState() = repo.getAuthState(viewModelScope)
+
+    val isEmailVerified get() = repo.currentUser?.isEmailVerified ?: false
+
+    ////////////////////////////| Normal ViewModel Things |////////////////////////////
+
     private val _state = MutableStateFlow(AuthState())
     val state = _state.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AuthState())
 
     private val validationEventChannel = Channel<ValidationEvent>()
     val validationEvents = validationEventChannel.receiveAsFlow()
 
-    val isUserAuthenticated get() = repo.isUserAuthenticatedInFirebase
 
-    var oneTapSignInResponse by mutableStateOf<OneTapSignInResponse>(Success(null))
-        private set
-    var signInWithGoogleResponse by mutableStateOf<SignInWithGoogleResponse>(Success(false))
-        private set
-
-    fun oneTapSignIn() = viewModelScope.launch {
-        oneTapSignInResponse = Loading
-        oneTapSignInResponse = repo.oneTapSignInWithGoogle()
-    }
-
-    fun signInWithGoogle(googleCredential: AuthCredential) = viewModelScope.launch {
-        oneTapSignInResponse = Loading
-        signInWithGoogleResponse = repo.firebaseSignInWithGoogle(googleCredential)
-    }
+    ////////////////////////////| Normal ViewModel OnEvent |////////////////////////////
 
     fun onEvent(event: AuthEvent) {
         when(event) {
@@ -163,12 +166,41 @@ class AuthViewModel @Inject constructor(
                 }
             }
             is AuthEvent.SignIn -> {
-                Log.d("AuthViewModel", "OnEvent(SignIn) being Called")
-
+                signIn()
             }
             is AuthEvent.SignUp -> {
-                Log.d("AuthViewModel", "OnEvent(SignUp) being Called")
                 signUp()
+            }
+            is AuthEvent.Reset -> {
+                _state.update {
+                    it.copy(
+                        name = "",
+                        phoneNumber = "",
+                        email = "",
+                        password = "",
+                        repeatedPassword = "",
+                        occupation = "",
+                        informationSource = ""
+                    )
+                }
+            }
+
+            is AuthEvent.DismissSignUpCommonDialog -> {
+                _state.update {
+                    it.copy(
+                        isSignUpSuccessful = false,
+                        isSignUpError = false,
+                    )
+                }
+            }
+
+            AuthEvent.DismissSignInCommonDialog -> {
+                _state.update {
+                    it.copy(
+                        isSignInSuccessful = false,
+                        isSignInError = false,
+                    )
+                }
             }
         }
     }
@@ -205,21 +237,105 @@ class AuthViewModel @Inject constructor(
                 informationSourceError = informationSourceResult.errorMessage,
 //                acceptedTermsError = acceptedTermsResult.errorMessage,
             ) }
-
-            Log.d("AuthViewModel", state.value.name)
-            Log.d("AuthViewModel", state.value.email)
-            Log.d("AuthViewModel", state.value.phoneNumber)
-            Log.d("AuthViewModel", state.value.password)
-            Log.d("AuthViewModel", state.value.repeatedPassword)
-            Log.d("AuthViewModel", state.value.occupation)
-            Log.d("AuthViewModel", state.value.informationSource)
-            Log.d("AuthViewModel", state.value.acceptedTerms.toString())
             return
         }
+
+        Log.d("AuthViewModel", state.value.name)
+        Log.d("AuthViewModel", state.value.email)
+        Log.d("AuthViewModel", state.value.phoneNumber)
+        Log.d("AuthViewModel", state.value.password)
+        Log.d("AuthViewModel", state.value.repeatedPassword)
+        Log.d("AuthViewModel", state.value.occupation)
+        Log.d("AuthViewModel", state.value.informationSource)
+        Log.d("AuthViewModel", state.value.acceptedTerms.toString())
+
         viewModelScope.launch {
-            validationEventChannel.send(ValidationEvent.Success)
+            _state.update { it.copy(
+                isSignUpLoading = true
+            ) }
+            val body = RegisterRequest(
+                name = state.value.name,
+                username = state.value.email.substringBefore("@"),
+                phoneNumber = state.value.phoneNumber,
+                email = state.value.email,
+                password = state.value.password,
+                occupation = state.value.occupation,
+            )
+            val result = repo.register(body)
+            _state.update { it.copy(
+                isSignUpLoading = false
+            ) }
+            when(result) {
+                is Resource.Success -> {
+                    _state.update { it.copy(
+                        isSignUpSuccessful = true,
+                        signUpSuccess = result.data ?: "Terjadi kesalahan"
+                    ) }
+                }
+                is Resource.Error -> {
+                    _state.update { it.copy(
+                        isSignUpError = true,
+                        signUpError = result.message ?: "Terjadi kesalahan"
+                    ) }
+                }
+                else -> {}
+            }
         }
     }
+
+    private fun signIn() {
+        val emailResult = validateEmailUseCase(state.value.email)
+        val passwordResult = validatePasswordUseCase(state.value.password)
+
+        val hasError = listOf(
+            emailResult,
+            passwordResult,
+        ).any {!it.successful}
+
+        if (hasError) {
+            _state.update { it.copy(
+                emailError = emailResult.errorMessage,
+                passwordError = passwordResult.errorMessage,
+            ) }
+            return
+        }
+
+        Log.d("AuthViewModel", state.value.email)
+        Log.d("AuthViewModel", state.value.password)
+
+        viewModelScope.launch {
+            _state.update { it.copy(
+                isSignInLoading = true
+            ) }
+            val body = LoginRequest(
+                email = state.value.email,
+                password = state.value.password,
+            )
+            val result = repo.login(body)
+            _state.update { it.copy(
+                isSignInLoading = false
+            ) }
+            when(result) {
+                is Resource.Success -> {
+                    _state.update { it.copy(
+                        isSignInSuccessful = true,
+                        signInSuccess = result.data ?: "Berhasil masuk"
+                    ) }
+                }
+                is Resource.Error -> {
+                    _state.update { it.copy(
+                        isSignInError = true,
+                        signInError = result.message ?: "Terjadi kesalahan"
+                    ) }
+                }
+                else -> {}
+            }
+        }
+    }
+
+    fun isUserLoggedIn() = runBlocking { repo.isUserLoggedIn() }
+
+    fun checkTokenValidity() = runBlocking { repo.checkTokenValidity() }
 
     sealed interface ValidationEvent {
         data object Success: ValidationEvent
