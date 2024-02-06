@@ -90,8 +90,15 @@ class PondDetailsRepositoryImpl(
                 Resource.Success(Unit)
             }
 
-            is NetworkResponse.Error -> {
-                Resource.Error(result.body?.errors?.first()?.message ?: "Gagal menambahkan data air")
+            is NetworkResponse.ServerError -> {
+                val response = result.body
+                Resource.Error(response?.errors?.first()?.message ?: "Gagal menambahkan data air")
+            }
+            is NetworkResponse.NetworkError -> {
+                Resource.Error("Cek kembali koneksi internet anda dan ulang kembali")
+            }
+            is NetworkResponse.UnknownError -> {
+                Resource.Error("Terjadi kesalahan pada sistem, silahkan coba lagi nanti")
             }
         }
     }

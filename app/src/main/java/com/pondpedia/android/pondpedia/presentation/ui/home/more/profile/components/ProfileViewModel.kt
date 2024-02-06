@@ -6,21 +6,26 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pondpedia.android.pondpedia.core.util.Resource
-import com.pondpedia.android.pondpedia.data.repository.toUser
+import com.pondpedia.android.pondpedia.domain.model.auth.Farmer
 import com.pondpedia.android.pondpedia.domain.model.auth.Response.Loading
 import com.pondpedia.android.pondpedia.domain.model.auth.Response.Success
 import com.pondpedia.android.pondpedia.domain.repository.AuthRepository
+import com.pondpedia.android.pondpedia.domain.repository.ProfileRepository
 import com.pondpedia.android.pondpedia.domain.repository.ReloadUserResponse
 import com.pondpedia.android.pondpedia.domain.repository.RevokeAccessResponse
 import com.pondpedia.android.pondpedia.domain.repository.SendEmailVerificationResponse
 import com.pondpedia.android.pondpedia.domain.repository.SignOutResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val repo: AuthRepository
+    private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository
 ): ViewModel() {
 
     var signOutResponse by mutableStateOf<SignOutResponse>(Success(false))
@@ -30,30 +35,37 @@ class ProfileViewModel @Inject constructor(
     var reloadUserResponse by mutableStateOf<ReloadUserResponse>(Success(false))
         private set
 
+    private val _currentUser = MutableStateFlow(Farmer())
+    val currentUser = _currentUser.asStateFlow()
+
     fun reloadUser() = viewModelScope.launch {
         reloadUserResponse = Loading
-        reloadUserResponse = repo.reloadFirebaseUser()
+        reloadUserResponse = authRepository.reloadFirebaseUser()
     }
 
-    val isEmailVerified get() = repo.currentUser?.isEmailVerified ?: false
+    val isEmailVerified get() = authRepository.currentUser?.isEmailVerified ?: false
 
     var sendEmailVerificationResponse by mutableStateOf<SendEmailVerificationResponse>(Success(false))
         private set
 
     fun sendEmailVerification() = viewModelScope.launch {
         sendEmailVerificationResponse = Loading
-        sendEmailVerificationResponse = repo.sendEmailVerification()
+        sendEmailVerificationResponse = authRepository.sendEmailVerification()
     }
 
-
-    val currentUser get() = repo.currentUser
+    fun getCurrentUser() {
+        viewModelScope.launch {
+            val user = async { profileRepository.getUser() }
+            _currentUser.value = user.await().data ?: Farmer()
+        }
+    }
 
     fun signOut(
         onSuccess: () -> Unit = {},
         onError: (String) -> Unit = {}
     ) {
         viewModelScope.launch {
-            when (val result = repo.signOut()) {
+            when (val result = authRepository.signOut()) {
                 is Resource.Success -> onSuccess.invoke()
                 is Resource.Error -> onError.invoke(result.message ?: "Gagal keluar")
                 else -> {}
@@ -63,6 +75,6 @@ class ProfileViewModel @Inject constructor(
 
     fun revokeAccess() = viewModelScope.launch {
         revokeAccessResponse = Loading
-        revokeAccessResponse = repo.revokeAccess()
+        revokeAccessResponse = authRepository.revokeAccess()
     }
 }

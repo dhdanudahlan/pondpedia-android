@@ -67,8 +67,8 @@ fun DetailsScreen(
 
     val items = listOf(
         PondNavigationItem.Overview,
-        PondNavigationItem.Commodity,
-        PondNavigationItem.Feeding,
+        //PondNavigationItem.Commodity,
+        //PondNavigationItem.Feeding,
         PondNavigationItem.Water,
         PondNavigationItem.AddCommodity,
         PondNavigationItem.AddRecords
@@ -172,18 +172,18 @@ fun DetailsScreen(
                                 isAddCommoditySheetOpen = true
                             }
                         ) {
-                            Icon(
+                            /*Icon(
                                 imageVector = Icons.Default.Anchor,
                                 contentDescription = "Add Commodity"
-                            )
+                            )*/
                         }
                         IconButton(
                             onClick = {}
                         ) {
-                            Icon(
+                            /*Icon(
                                 imageVector = Icons.Default.BrandingWatermark,
                                 contentDescription = "Add Category"
-                            )
+                            )*/
                         }
                     },
                     floatingActionButton = {

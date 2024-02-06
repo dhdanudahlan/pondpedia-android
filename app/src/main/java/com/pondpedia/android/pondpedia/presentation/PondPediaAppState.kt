@@ -40,9 +40,7 @@ class PondPediaAppState(
         @Composable get() = when (currentDestination?.route) {
             Graph.HOME -> Screens.Ponds
             Screens.Ponds.route -> Screens.Ponds
-            Screens.Updates.route -> Screens.Updates
             Screens.Menu.route -> Screens.Menu
-            Screens.Explore.route -> Screens.Explore
             Screens.More.route -> Screens.More
             else -> null
         }
@@ -68,9 +66,7 @@ class PondPediaAppState(
 
     val homeScreenDestinations: List<Screens> = listOf(
         Screens.Ponds,
-        Screens.Updates,
         Screens.Menu,
-        Screens.Explore,
         Screens.More,
     )
 

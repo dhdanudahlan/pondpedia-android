@@ -54,6 +54,9 @@ import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.vie
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.components.viewmodel.PondsState
 import com.pondpedia.android.pondpedia.presentation.ui.home.ponds.screens.pond_details.components.PondTab
 import com.pondpedia.android.pondpedia.presentation.theme.Black
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun PondOverviewScreen(
@@ -167,7 +170,7 @@ fun PondDetailsCard(pondDetailsState: PondDetailsState) {
                     maxLines = 1,
                 )
                 Text(
-                    text = pondDetailsState.pondRecords.firstOrNull()?.cycle ?: "-1",
+                    text = pondDetailsState.pondRecords.firstOrNull()?.cycle ?: "0",
                     fontWeight = FontWeight.Light,
                     color = MaterialTheme.colorScheme.onBackground,
                     style = TextStyle(fontStyle = FontStyle.Italic),
@@ -187,7 +190,7 @@ fun PondDetailsCard(pondDetailsState: PondDetailsState) {
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = pondDetailsState.pond.updatedDate,
+                        text = pondDetailsState.pond.updatedDate.convertToDateTime(),
                         fontWeight = FontWeight.ExtraLight,
                         color = MaterialTheme.colorScheme.onBackground,
                         overflow = TextOverflow.Ellipsis,
@@ -207,8 +210,8 @@ fun DetailsTabScreen(
     var tabIndex by remember { mutableStateOf(0) }
     val pondTabs =
         listOf(
-            PondTab.PondTabCommodity,
-            PondTab.PondTabFeeding,
+            //PondTab.PondTabCommodity,
+            //PondTab.PondTabFeeding,
             PondTab.PondTabWater,
         )
 
@@ -443,4 +446,14 @@ fun DetailsScreenWater(
 private fun String.convertToDateOnly(): String {
     val date = this.split("T")
     return date.first()
+}
+
+private fun String.convertToDateTime(): String {
+    if (this.isBlank()) return ""
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSX")
+    val instant = Instant.from(formatter.parse(this))
+
+    // Format the date in the desired output format
+    val outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    return outputFormatter.format(instant.atZone(ZoneId.systemDefault()))
 }

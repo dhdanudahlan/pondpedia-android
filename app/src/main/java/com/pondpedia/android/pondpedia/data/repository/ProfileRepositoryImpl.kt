@@ -57,8 +57,7 @@ class ProfileRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getUser(): Resource<Farmer> {
-        return try {
-            when(val result = api.getUser()) {
+        return when(val result = api.getUser()) {
                 is NetworkResponse.Success -> {
                     val response = result.body.user?.toFarmer()
                     if (response != null) {
@@ -72,8 +71,5 @@ class ProfileRepositoryImpl @Inject constructor(
                 }
             }
 
-        } catch (e: Exception) {
-            Resource.Error(e.localizedMessage.orEmpty())
         }
     }
-}
