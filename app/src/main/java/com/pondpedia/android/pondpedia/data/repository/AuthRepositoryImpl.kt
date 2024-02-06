@@ -237,9 +237,15 @@ class AuthRepositoryImpl @Inject constructor(
                 Resource.Success(response.message)
             }
 
-            is NetworkResponse.Error -> {
+            is NetworkResponse.ServerError -> {
                 val response = result.body
                 Resource.Error(response?.message.orEmpty(), null)
+            }
+            is NetworkResponse.NetworkError -> {
+                Resource.Error("Cek kembali koneksi internet anda dan ulang kembali")
+            }
+            is NetworkResponse.UnknownError -> {
+                Resource.Error("Terjadi kesalahan pada sistem, silahkan coba lagi nanti")
             }
         }
     }
@@ -259,10 +265,16 @@ class AuthRepositoryImpl @Inject constructor(
                     Resource.Error("Terjadi kesalahan membuat thread", null)
                 }
             }
-            is NetworkResponse.Error -> {
+            is NetworkResponse.ServerError -> {
                 val response = result.body
                 Resource.Error(response?.errors?.first()?.message.orEmpty(), null)
-                }
+            }
+            is NetworkResponse.NetworkError -> {
+                Resource.Error("Cek kembali koneksi internet anda dan ulang kembali")
+            }
+            is NetworkResponse.UnknownError -> {
+                Resource.Error("Terjadi kesalahan pada sistem, silahkan coba lagi nanti")
+            }
         }
     }
 
