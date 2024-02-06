@@ -66,16 +66,18 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.firebase.auth.FirebaseUser
 import com.pondpedia.android.pondpedia.R
+import com.pondpedia.android.pondpedia.components.MediumSpacer
 import com.pondpedia.android.pondpedia.components.SmallSpacer
 import com.pondpedia.android.pondpedia.core.util.Constants.DISPLAY_NAME
 import com.pondpedia.android.pondpedia.core.util.Constants.EMAIL
 import com.pondpedia.android.pondpedia.core.util.Constants.PHOTO_URL
 import com.pondpedia.android.pondpedia.core.util.Constants.WELCOME_MESSAGE
+import com.pondpedia.android.pondpedia.domain.model.auth.Farmer
 
 @Composable
 fun ProfileContent(
     padding: PaddingValues,
-    user: FirebaseUser?,
+    user: Farmer,
     sendEmailVerification: () -> Unit,
 ) {
 
@@ -92,23 +94,18 @@ fun ProfileContent(
             mutableStateOf<String?>(null)
         }
         var photoUrl by rememberSaveable{
-            mutableStateOf<Uri?>(null)
+            mutableStateOf<String?>(null)
         }
         var emailVerified by rememberSaveable{
             mutableStateOf<Boolean>(false)
         }
-        var uid by rememberSaveable{
-            mutableStateOf<String?>(null)
-        }
-
         val scrollState = rememberScrollState()
 
-        user?.let {
-            name = it.displayName
+        user.let {
+            name = it.name
             email = it.email
-            photoUrl = it.photoUrl
-            emailVerified = it.isEmailVerified
-            uid = it.uid
+            photoUrl = it.profilePicture
+            emailVerified = it.verified
         }
         Column(
             modifier = Modifier
@@ -163,7 +160,7 @@ fun ProfileContent(
                     modifier = Modifier.height(100.dp),
                     contentAlignment = Alignment.BottomEnd
                 ) {
-                    Card(
+                    /*Card(
 //                        colors = CardDefaults.cardColors(
 //                            containerColor = MaterialTheme.colorScheme.primaryContainer
 //                        )
@@ -183,7 +180,7 @@ fun ProfileContent(
                                 fontWeight = FontWeight.Bold
                             )
                         }
-                    }
+                    }*/
                 }
             }
             // Box B (Bottom) - Dark Gray
@@ -204,7 +201,6 @@ fun ProfileContent(
                         displayName = name,
                         email = email,
                         emailVerified = emailVerified,
-                        uid = uid,
                         sendEmailVerification = sendEmailVerification
                     )
                 }
@@ -217,7 +213,6 @@ fun ProfileMainCard(
     displayName: String? = null,
     email: String? = null,
     emailVerified: Boolean = false,
-    uid: String? = null,
     sendEmailVerification: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -242,14 +237,7 @@ fun ProfileMainCard(
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Normal
             )
-            SmallSpacer()
-            Text(
-                text = uid ?: "Placeholder.uid",
-                fontSize = 6.sp,
-                fontWeight = FontWeight.Thin,
-                fontStyle = FontStyle.Italic
-            )
-            SmallSpacer()
+            MediumSpacer()
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -291,7 +279,7 @@ fun ProfileMainCard(
 fun ProfileContentPreview() {
     ProfileContent(
         padding = PaddingValues(16.dp),
-        user = null,
+        user = Farmer(),
         sendEmailVerification = {}
     )
 }

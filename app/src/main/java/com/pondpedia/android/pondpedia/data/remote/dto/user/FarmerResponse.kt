@@ -5,28 +5,28 @@ import com.pondpedia.android.pondpedia.domain.model.auth.Farmer
 
 
 data class FarmerResponse(
-    val id: String,
-    val assistantId: String,
-    val name: String,
-    val username: String,
+    val id: String = "",
+    val assistantId: String = "",
+    val name: String = "",
+    val username: String = "",
     @field:SerializedName("phone_number")
-    val phoneNumber: String,
+    val phoneNumber: String = "",
     @field:SerializedName("profile_picture")
-    val profilePicture: Any?,
-    val occupation: String,
+    val profilePicture: String? = "",
+    val occupation: String = "",
     @field:SerializedName("uses_social_login")
-    val usesSocialLogin: Boolean,
-    val education: Any?,
-    val gender: Any?,
-    val birthdate: String,
-    val birthplace: Any?,
-    val domicile: Any?,
-    val bio: Any?,
-    val roles: List<String>,
-    val email: String,
+    val usesSocialLogin: Boolean = false,
+    val education: String? = "",
+    val gender: String? = "",
+    val birthdate: String = "",
+    val birthplace: String? = "",
+    val domicile: String? = "",
+    val bio: String? = "",
+    val roles: List<String> = emptyList(),
+    val email: String = "",
     @field:SerializedName("_verified")
-    val verified: Boolean,
-    val loginAttempts: Long,
+    val verified: Boolean = false,
+    val loginAttempts: Long = 0,
 ) {
     fun toFarmer() = Farmer(
         id = id,
