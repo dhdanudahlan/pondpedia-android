@@ -256,7 +256,7 @@ fun SignInScreenLightMode(
                         }
 
                         Spacer(modifier = Modifier.height(3.dp))
-                        Box(
+                        /*Box(
                             modifier = Modifier.fillMaxWidth(),
                             contentAlignment = Alignment.Center
                         ) {
@@ -332,7 +332,7 @@ fun SignInScreenLightMode(
                                     maxLines = 1
                                 )
                             }
-                        }
+                        }*/
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
