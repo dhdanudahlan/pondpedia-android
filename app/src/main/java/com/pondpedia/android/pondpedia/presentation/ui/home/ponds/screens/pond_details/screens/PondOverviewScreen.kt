@@ -207,8 +207,8 @@ fun DetailsTabScreen(
     var tabIndex by remember { mutableStateOf(0) }
     val pondTabs =
         listOf(
-            PondTab.PondTabCommodity,
-            PondTab.PondTabFeeding,
+            //PondTab.PondTabCommodity,
+            //PondTab.PondTabFeeding,
             PondTab.PondTabWater,
         )
 
