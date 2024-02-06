@@ -75,37 +75,39 @@ class PondsRepositoryImpl(
     }
 
     override suspend fun addPond(pond: Pond, pondRecords: PondRecords, categoryList: List<String>): Resource<Unit> {
-        try {
-            val farmerId = tokenManager.getUserId().first().orEmpty()
-            val updatedPond = pond.copy(farmerId = farmerId)
+        val farmerId = tokenManager.getUserId().first().orEmpty()
+        val updatedPond = pond.copy(farmerId = farmerId)
 
-            val result = api.createPond(
-                request = updatedPond.toPondRequest()
-            )
+        val result = api.createPond(
+            request = updatedPond.toPondRequest()
+        )
 
-            when(result) {
-                is NetworkResponse.Success -> {
-                    val newCategoryList = categoryList.toMutableList()
-                    newCategoryList.add("-")
+        when(result) {
+            is NetworkResponse.Success -> {
+                val newCategoryList = categoryList.toMutableList()
+                newCategoryList.add("-")
 
-                    pondsDao.createPondWithRecordsAndCategories(
-                        pondEntity = pond.toPondEntity(),
-                        pondRecordsEntity = pondRecords.toPondRecordsEntity(),
-                        categoryList = newCategoryList
-                    )
+                pondsDao.createPondWithRecordsAndCategories(
+                    pondEntity = pond.toPondEntity(),
+                    pondRecordsEntity = pondRecords.toPondRecordsEntity(),
+                    categoryList = newCategoryList
+                )
 
-                    return Resource.Success(Unit)
-                }
-                is NetworkResponse.Error -> {
-                    val message = result.body?.errors?.first()?.message ?: "Terjadi kesalahan"
-                    return Resource.Error(message = message)
-                }
+                return Resource.Success(Unit)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return Resource.Error(message = e.message ?: "Terjadi kesalahan")
+            is NetworkResponse.ServerError -> {
+                val response = result.body
+                return Resource.Error(response?.errors?.first()?.message ?: "Gagal menambahkan kolam", null)
+            }
+            is NetworkResponse.NetworkError -> {
+                return Resource.Error("Cek kembali koneksi internet anda dan ulang kembali")
+            }
+            is NetworkResponse.UnknownError -> {
+                return Resource.Error("Terjadi kesalahan pada sistem, silahkan coba lagi nanti")
+            }
         }
     }
+
 
     override suspend fun addCategory(category: Category) {
         pondsDao.upsertCategory(category.toCategoryEntity())

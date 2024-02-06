@@ -150,7 +150,7 @@ fun AuthScreenLightMode(
                             Text(text = stringResource(id = R.string.signup))
                         }
 
-                        TextButton(
+                        /*TextButton(
                             onClick = onGuestSignIn,
                             modifier = Modifier
                                 .fillMaxWidth(),
@@ -159,7 +159,7 @@ fun AuthScreenLightMode(
                             Text(
                                 text = stringResource(id = R.string.signin_guest),
                             )
-                        }
+                        }*/
                     }
                 }
             }

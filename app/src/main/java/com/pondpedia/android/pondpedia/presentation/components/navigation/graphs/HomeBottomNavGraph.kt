@@ -41,9 +41,7 @@ fun HomeBottomNavGraph(
             onPondListDisplayed = /*pondsViewModel::getPondList*/{},
             onEvent = onEvent
         )
-        updatesNavGraph(homeState = homeState)
         menuNavGraph(homeState = homeState)
-        exploreNavGraph(homeState = homeState)
         moreNavGraph(
             homeState = homeState,
             navigateToAuthScreen = navigateToAuthScreen
@@ -87,6 +85,12 @@ fun NavGraphBuilder.pondsNavGraph(
         )
     }
 }
+
+@Deprecated(
+    message = "At the moment, we are not using this screen",
+    replaceWith = ReplaceWith("Nothing need to be replaced"),
+    level = DeprecationLevel.ERROR
+)
 fun NavGraphBuilder.updatesNavGraph(
     homeState: PondPediaAppState,
 ) {
@@ -96,6 +100,12 @@ fun NavGraphBuilder.updatesNavGraph(
         }
     }
 }
+
+@Deprecated(
+    message = "At the moment, we are not using this screen",
+    replaceWith = ReplaceWith("Nothing need to be replaced"),
+    level = DeprecationLevel.ERROR
+)
 fun NavGraphBuilder.exploreNavGraph(
     homeState: PondPediaAppState,
 ) {

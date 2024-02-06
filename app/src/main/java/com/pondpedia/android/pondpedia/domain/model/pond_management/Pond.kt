@@ -27,7 +27,7 @@ data class Pond(
 
     val createdDate: String = DateGenerator.getCurrentDateTime(),
 
-    val updatedDate: String = DateGenerator.getCurrentDateTime(),
+    val updatedDate: String = "",
 
     val farmerId: String = "",
 ) {
