@@ -231,48 +231,41 @@ class AuthRepositoryImpl @Inject constructor(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), auth.currentUser == null)
 
     override suspend fun register(request: RegisterRequest): Resource<String> {
-        return try {
-            when (val result = api.register(request)) {
-                is NetworkResponse.Success -> {
-                    val response = result.body
-                    Resource.Success(response.message)
-                }
-                is NetworkResponse.Error -> {
-                    val response = result.body
-                    Resource.Error(response?.message.orEmpty(), null)
-                }
+        return when (val result = api.register(request)) {
+            is NetworkResponse.Success -> {
+                val response = result.body
+                Resource.Success(response.message)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Resource.Error(e.message.orEmpty(), null)
+
+            is NetworkResponse.Error -> {
+                val response = result.body
+                Resource.Error(response?.message.orEmpty(), null)
+            }
         }
     }
+
 
     override suspend fun login(request: LoginRequest): Resource<String> {
-        return try {
-            when (val result = api.login(request)) {
-                is NetworkResponse.Success -> {
-                    val response = result.body
-                    tokenManager.saveToken(response.token)
-                    tokenManager.saveUserId(response.user?.id.orEmpty())
+        return when (val result = api.login(request)) {
+            is NetworkResponse.Success -> {
+                val response = result.body
+                tokenManager.saveToken(response.token)
+                tokenManager.saveUserId(response.user?.id.orEmpty())
 
-                    val isThreadCreated = createThread()
-                    if (isThreadCreated) {
-                        Resource.Success(response.message)
-                    } else {
-                        Resource.Error("Terjadi kesalahan membuat thread", null)
-                    }
-                }
-                is NetworkResponse.Error -> {
-                    val response = result.body
-                    Resource.Error(response?.errors?.first()?.message.orEmpty(), null)
+                val isThreadCreated = createThread()
+                if (isThreadCreated) {
+                    Resource.Success(response.message)
+                } else {
+                    Resource.Error("Terjadi kesalahan membuat thread", null)
                 }
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Resource.Error(e.message.orEmpty(), null)
+            is NetworkResponse.Error -> {
+                val response = result.body
+                Resource.Error(response?.errors?.first()?.message.orEmpty(), null)
+                }
         }
     }
+
 
     override suspend fun isUserLoggedIn(): Boolean {
         return (tokenManager.getToken().first()?.isNotEmpty() ?: false)
