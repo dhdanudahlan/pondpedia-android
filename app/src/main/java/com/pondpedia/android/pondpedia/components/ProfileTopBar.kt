@@ -102,17 +102,6 @@ fun ProfileTopBar(
                         openMenu = !openMenu
                     }
                 )
-                DropdownMenuItem(
-                    text = {
-                        Text(
-                            text = stringResource(R.string.revoke_access_item)
-                        )
-                    },
-                    onClick = {
-                        revokeAccess()
-                        openMenu = !openMenu
-                    }
-                )
             }
         }
     )
