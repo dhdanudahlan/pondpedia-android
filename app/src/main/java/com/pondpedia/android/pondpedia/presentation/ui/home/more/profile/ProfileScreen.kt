@@ -27,6 +27,8 @@ fun ProfileScreen(
     navigateToAuthScreen: () -> Unit = {},
 ) {
 
+    viewModel.getCurrentUser()
+
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
