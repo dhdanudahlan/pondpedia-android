@@ -17,8 +17,8 @@ android {
         applicationId = "com.pondpedia.android.pondpedia"
         minSdk = 28
         targetSdk = 34
-        versionCode = 7
-        versionName = "1.2.5"
+        versionCode = 8
+        versionName = "1.2.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
