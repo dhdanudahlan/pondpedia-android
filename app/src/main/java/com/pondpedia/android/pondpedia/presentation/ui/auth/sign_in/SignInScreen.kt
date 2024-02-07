@@ -150,6 +150,7 @@ fun SignInScreenLightMode(
         onDismissRequest = {
             if (!state.isSignInError) {
                 navigateToHomeScreen()
+                onEvent(AuthEvent.ResetSignInState)
             } else {
                 onEvent(AuthEvent.DismissSignInCommonDialog)
             }

@@ -202,6 +202,19 @@ class AuthViewModel @Inject constructor(
                     )
                 }
             }
+
+            AuthEvent.ResetSignInState -> {
+                _state.update {
+                    it.copy(
+                        isSignInError = false,
+                        isSignInSuccessful = false,
+                        signInError = "",
+                        signInSuccess = "",
+                        email = "",
+                        password = ""
+                    )
+                }
+            }
         }
     }
 
