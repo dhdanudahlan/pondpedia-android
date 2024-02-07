@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,9 +37,9 @@ fun AddPondManagementRecordsTabScreen(
     val pondTabs =
         listOf(
             AddPondManagementRecordsTab.AddPondManagementRecordsTabWater,
-            AddPondManagementRecordsTab.AddPondManagementRecordsTabFeeding,
-            AddPondManagementRecordsTab.AddPondManagementRecordsTabCommodityGrowth,
-            AddPondManagementRecordsTab.AddPondManagementRecordsTabCommodityHealth,
+            //AddPondManagementRecordsTab.AddPondManagementRecordsTabFeeding,
+            //AddPondManagementRecordsTab.AddPondManagementRecordsTabCommodityGrowth,
+            //AddPondManagementRecordsTab.AddPondManagementRecordsTabCommodityHealth,
         )
 
     Scaffold { innerPadding ->
@@ -48,7 +49,7 @@ fun AddPondManagementRecordsTabScreen(
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            ScrollableTabRow(
+            TabRow(
                 selectedTabIndex = tabIndex,
                 modifier = Modifier.fillMaxWidth()
             ) {
