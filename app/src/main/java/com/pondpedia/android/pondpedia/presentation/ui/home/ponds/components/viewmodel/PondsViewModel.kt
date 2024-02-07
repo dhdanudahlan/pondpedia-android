@@ -146,7 +146,10 @@ class PondsViewModel @Inject constructor(
                 val pondId = event.selectedPondId
 
                 viewModelScope.launch(Dispatchers.IO) {
-                    deletePondByIdUseCase(pondId)
+                    when(deletePondByIdUseCase(pondId)) {
+                        is Resource.Success -> _ponds.value = _ponds.value.filter { it.pondId != pondId }
+                        else -> {}
+                    }
                 }
             }
             PondsEvent.HideDialog -> {
