@@ -171,9 +171,11 @@ class AuthViewModel @Inject constructor(
             is AuthEvent.SignUp -> {
                 signUp()
             }
-            is AuthEvent.Reset -> {
+            is AuthEvent.ResetSignUpState -> {
                 _state.update {
                     it.copy(
+                        isSignUpSuccessful = false,
+                        isSignUpError = false,
                         name = "",
                         phoneNumber = "",
                         email = "",
@@ -199,6 +201,19 @@ class AuthViewModel @Inject constructor(
                     it.copy(
                         isSignInSuccessful = false,
                         isSignInError = false,
+                    )
+                }
+            }
+
+            AuthEvent.ResetSignInState -> {
+                _state.update {
+                    it.copy(
+                        isSignInError = false,
+                        isSignInSuccessful = false,
+                        signInError = "",
+                        signInSuccess = "",
+                        email = "",
+                        password = ""
                     )
                 }
             }
