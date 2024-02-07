@@ -24,6 +24,7 @@ class PondsRepositoryImpl(
     private val pondDetailsDao: PondDetailsDao,
     private val tokenManager: TokenManager
 ): PondsRepository {
+
     override fun getPondsByCategory(
         sortType: SortType,
         categoryName: String
@@ -117,8 +118,16 @@ class PondsRepositoryImpl(
         pondsDao.insertPondCategoryCrossRef(pondCategoryCrossRef)
     }
 
-    override suspend fun deletePondById(pondId: Long) {
-        pondsDao.deletePond(pondId)
+    override suspend fun deletePondById(pondId: Long): Resource<Unit> {
+        return when (api.deletePond(pondId.toString())) {
+            is NetworkResponse.Success -> {
+                pondsDao.deletePondById(pondId)
+                Resource.Success(Unit)
+            }
+            is NetworkResponse.Error -> {
+                Resource.Error("Gagal menghapus kolam")
+            }
+        }
     }
 
     override suspend fun deleteCategoryName(categoryName: String) {

@@ -71,7 +71,7 @@ interface PondPediaApiService {
     @DELETE("ponds/{id}")
     suspend fun deletePond(
         @Path("id") id: String
-    ): NetworkResponse<Nothing, BaseError>
+    ): NetworkResponse<Unit, BaseError>
 
     @POST("ponds/{id}/water")
     suspend fun addWaterRecord(
