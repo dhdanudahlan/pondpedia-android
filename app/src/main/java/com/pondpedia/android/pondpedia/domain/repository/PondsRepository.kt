@@ -39,7 +39,7 @@ interface PondsRepository {
 
     suspend fun deletePondById(
         pondId: Long
-    )
+    ): Resource<Unit>
 
     suspend fun deleteCategoryName(
         categoryName: String

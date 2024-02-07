@@ -153,7 +153,7 @@ fun PondItemSquareCard(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = pond.createdDate,
+                    text = pond.createdDate.convertToDateOnly(),
                     fontWeight = FontWeight.Normal,
 //                    color = MaterialTheme.colorScheme.onBackground,
                     overflow = TextOverflow.Ellipsis,
@@ -269,4 +269,9 @@ fun PondItemHexagonCard(
         }
     }
 
+}
+
+private fun String.convertToDateOnly(): String {
+    val date = this.split("T")
+    return date.first()
 }

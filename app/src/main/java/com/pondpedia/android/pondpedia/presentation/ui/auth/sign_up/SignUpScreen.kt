@@ -127,6 +127,7 @@ fun SignUpScreenLightMode(
         onDismissRequest = {
             if (!state.isSignUpError) {
                 navigateToSignInScreen()
+                onEvent(AuthEvent.ResetSignUpState)
             } else {
                 onEvent(AuthEvent.DismissSignUpCommonDialog)
             }
@@ -418,7 +419,6 @@ fun SignUpScreenLightMode(
                                 keyboard?.hide()
                                 onEvent(AuthEvent.SignUp)
                                 //viewModel.signUpWithEmailAndPassword(email.text, password.text, name.text)
-                                onEvent(AuthEvent.Reset)
                             }
                         ) {
                             Text(text = stringResource(id = R.string.signup))

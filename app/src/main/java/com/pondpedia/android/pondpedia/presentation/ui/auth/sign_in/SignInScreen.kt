@@ -144,12 +144,13 @@ fun SignInScreenLightMode(
         message = if (state.isSignInError) {
             state.signInError ?: "Terjadi Kesalahan"
         } else {
-            state.signInError ?: "Berhasil masuk, selamat datang!"
+            state.signInSuccess ?: "Berhasil masuk, selamat datang!"
         },
         isShowDialog = state.isSignInError || state.isSignInSuccessful,
         onDismissRequest = {
             if (!state.isSignInError) {
                 navigateToHomeScreen()
+                onEvent(AuthEvent.ResetSignInState)
             } else {
                 onEvent(AuthEvent.DismissSignInCommonDialog)
             }

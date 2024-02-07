@@ -206,7 +206,7 @@ fun PondDetailsCard(pondDetailsState: PondDetailsState) {
 fun DetailsTabScreen(
     pondDetailsState: PondDetailsState,
 ) {
-    var selectedPondTab by remember { mutableStateOf(PondTab.PondTabCommodity) }
+    var selectedPondTab by remember { mutableStateOf(PondTab.PondTabWater) }
     var tabIndex by remember { mutableStateOf(0) }
     val pondTabs =
         listOf(
